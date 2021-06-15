@@ -1353,7 +1353,17 @@ def converting_units():
     k = random.choice([0.001, 0.01, 0.1, 1, 5, 10, 50, 100, 500, 1000])
 
     value = n * k
-    prefix_1 = prefixes
+    prefix_1 = random.choice(prefixes)
+    okay = False
+    while not okay:
+        prefix_2 = random.choice(prefixes)
+        if prefix_2 != prefix_1:
+            okay = True
+
+
+    right_answer =
+
+
 
 
 
