@@ -1,5 +1,5 @@
 import random
-
+from random import randint
 
 def test():
     global ans, right_answers, input_message
@@ -1339,13 +1339,13 @@ def factoring_quadratics():
 
 def convert_units():
     global ans, right_answers, input_message, prompt
+    DELTA_RANGE = 4
     prefixes_dict = {'p': -12, 'n': -9, 'mc': -6, 'm': -3,
                      'c': -2, 'd': -1, 'u': 0,
                      'k': 3, 'M': 6, 'G': 9, 'T': 12}
 
     prefixes = list(prefixes_dict.keys())
     prefixes.remove('u')
-    print(prefixes)
 
     units = ['g', 'm', 's', 'N', 'J', 'W', 'A', 'Hz']
 
@@ -1355,16 +1355,16 @@ def convert_units():
     k = random.choice([0.001, 0.01, 0.1, 1, 5, 10, 50, 100, 500, 1000])
 
     value = n * k
-    prefix_1 = random.choice(prefixes)
     okay = False
     while not okay:
+        prefix_1 = random.choice(prefixes)
         prefix_2 = random.choice(prefixes)
         if prefix_2 != prefix_1:
-            okay = True
+            delta = prefixes_dict[prefix_1] - prefixes_dict[prefix_2]
+            if abs(delta) < DELTA_RANGE:
+                okay = True
 
-    delta = prefixes_dict[prefix_2] - prefixes_dict[prefix_1]
-
-    right_answers = [value * 10**delta]
+    right_answers = [str(value * 10**delta)]
 
     if prefix_1 == 'u':
         prefix_1 = ''
