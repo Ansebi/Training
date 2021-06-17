@@ -1,5 +1,4 @@
 import random
-from random import randint
 
 
 def test():
@@ -1337,13 +1336,16 @@ def factoring_quadratics():
     prompt = 'HINT: a(x-x1)(x-x2)'
 
 
-global ans, right_answers, input_message, prompt
-def converting_units():
+
+def convert_units():
+    global ans, right_answers, input_message, prompt
     prefixes_dict = {'p': -12, 'n': -9, 'mc': -6, 'm': -3,
                      'c': -2, 'd': -1, 'u': 0,
                      'k': 3, 'M': 6, 'G': 9, 'T': 12}
 
-    prefixes = prefixes_dict.keys().remove('u')
+    prefixes = list(prefixes_dict.keys())
+    prefixes.remove('u')
+    print(prefixes)
 
     units = ['g', 'm', 's', 'N', 'J', 'W', 'A', 'Hz']
 
@@ -1360,8 +1362,18 @@ def converting_units():
         if prefix_2 != prefix_1:
             okay = True
 
+    delta = prefixes_dict[prefix_2] - prefixes_dict[prefix_1]
 
-    right_answer =
+    right_answers = [value * 10**delta]
+
+    if prefix_1 == 'u':
+        prefix_1 = ''
+    if prefix_2 == 'u':
+        prefix_2 = ''
+
+    prompt = 'Convert the following values to the new units:'
+    input_message =  str(value) + ' ' + prefix_1 + unit + ' = ... ' + prefix_2 + unit + '\n'
+
 
 
 
@@ -1412,7 +1424,7 @@ exercises_list = [
     "Factoring Quadratics",
     "Multiply Two Digits",
     "Multiplication Table",
-    "Converting Units"
+    "Convert Units"
 ]
 
 exercises_dictionary = {
@@ -1458,5 +1470,5 @@ exercises_dictionary = {
     "Factoring Quadratics": factoring_quadratics,
     "Multiply Two Digits": multiply_two_digits,
     "Multiplication Table": multiplication_table,
-    "Converting Units": converting_units
+    "Convert Units": convert_units
 }
