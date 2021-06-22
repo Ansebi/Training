@@ -103,5 +103,57 @@ def quadratics_composer():
     quadratics_composer.total_set=total_set
 
 
-                
+def re_based_decimal_fixer(input_number_string):
+    """Converts fractions like 6.25000007 (4 zeros ore above) to
+    the normal, not that overly precise form like 6.25
+    * Takes and returns a string."""
+    import re
+    result = False
+    intermediate_zeros = False
+    z0 = re.search('\\.+(0000)+0*[1-9]*', input_number_string)
+    if z0:
+        result = str(round(float(input_number_string)))
+
+    if not result:
+        z3 = re.search('\\.+[1-9]*(0000)+0*[1-9]*', input_number_string)
+        if z3:
+            for i in range(1, len(input_number_string) + 1):
+                str_i = input_number_string[:i]
+                z30 = re.search('\\.+[1-9]*(0000)+', str_i)
+                if z30:
+                    result = str_i[:-4]
+                    break
+
+    if not result:
+        for i in range(1, len(input_number_string) + 1):
+            str_i = input_number_string[:i]
+            z01 = re.search('\\.+[1-9]*(0)+[1-9]+', str_i)
+            z02 = re.search('\\.+[1-9]*(00)+[1-9]+', str_i)
+            z03 = re.search('\\.+[1-9]*(000)+[1-9]+', str_i)
+            if any([z01, z02, z03]):
+                intermediate_zeros = True
+
+            if intermediate_zeros:
+                z2 = re.search('\\.+[1-9]*0+[1-9]+0+', str_i)
+                if z2:
+                    result = str_i[:-1]
+                    print('ONE')
+                    break
+
+    if not result:
+        z13 = re.search('(\\.000)+0*', input_number_string)
+        if z13:
+            result = int(round(float(input_number_string)))
+        else:
+            for i in range(1, len(input_number_string) + 1):
+                str_i = input_number_string[:i]
+                z1 = re.search('\\.+[1-9]*0+', str_i)
+                if z1:
+                    result = str_i[:-1]
+                    break
+
+    if not result:
+        result = input_number_string
+
+    return result
                 
