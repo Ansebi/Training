@@ -1358,8 +1358,8 @@ def convert_units():
 
     value = n * k
     fixer = supportive_module.re_based_decimal_fixer
-    if value // 1 == 0:
-        value = str(value)
+    if not value % 1:
+        value = str(int(value))
     else:
         value = fixer(str(value))
 
