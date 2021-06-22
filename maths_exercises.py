@@ -1340,7 +1340,8 @@ def factoring_quadratics():
 def convert_units():
     import supportive_module
     global ans, right_answers, input_message, prompt
-    DELTA_RANGE = 4
+    DELTA_RANGE = 4 #a power of 10 the range between the units to convert
+
     prefixes_dict = {'p': -12, 'n': -9, 'mc': -6, 'm': -3,
                      'c': -2, 'd': -1, 'u': 0,
                      'k': 3, 'M': 6, 'G': 9, 'T': 12}
