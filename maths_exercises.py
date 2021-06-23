@@ -1336,7 +1336,6 @@ def factoring_quadratics():
     prompt = 'HINT: a(x-x1)(x-x2)'
 
 
-
 def convert_units():
     import supportive_module
     global ans, right_answers, input_message, prompt
@@ -1381,20 +1380,11 @@ def convert_units():
                 okay = True
 
     right_answer = float(value) * 10**delta
+    right_answer = e_remover(right_answer)
     if not right_answer % 1:
         right_answer = int(right_answer)
-
-
-    if 'e' in str(right_answer):
-        right_answer = "{:.16f}".format(right_answer)
-        fixed = False
-        while not fixed:
-            if right_answer[-1] == '0':
-                right_answer = right_answer[:-1]
-
     right_answer = str(right_answer)
     right_answers = [right_answer]
-
 
     if prefix_1 == 'u':
         prefix_1 = ''
@@ -1407,10 +1397,6 @@ def convert_units():
 
 
 
-
-
-
-# lists***lists***lists***lists***lists***lists***lists***lists***
 exercises_list = [
     "Test",
     "Add negatives",
