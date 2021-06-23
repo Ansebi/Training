@@ -140,4 +140,6 @@ def e_remover(value):
         while not fixed:
             if value[-1] == '0':
                 value = value[:-1]
+            else:
+                fixed = True
     return value
