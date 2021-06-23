@@ -1340,7 +1340,7 @@ def factoring_quadratics():
 def convert_units():
     import supportive_module
     global ans, right_answers, input_message, prompt
-    DELTA_RANGE = 4 #a power of 10 the range between the units to convert
+    DELTA_RANGE = 25 #a power of 10 the range between the units to convert
 
     prefixes_dict = {'p': -12, 'n': -9, 'mc': -6, 'm': -3,
                      'c': -2, 'd': -1, 'u': 0,
@@ -1354,9 +1354,17 @@ def convert_units():
     unit = random.choice(units)
 
     n = random.randint(1, 100)
-    k = random.choice([0.001, 0.01, 0.1, 1, 5, 10, 50, 100, 500, 1000])
+    k = random.choice([0.000001, 0.000005,
+                       0.00001, 0.00005,
+                       0.0005, 0.005, 0.01, 0.5,
+                       0.0001, 0.001, 0.01, 0.1,
+                       1, 5, 10, 50, 100, 500,
+                       1000, 5000, 10000, 50000])
 
     value = n * k
+    e_remover = supportive_module.e_remover
+    value = e_remover(value)
+
     fixer = supportive_module.re_based_decimal_fixer
     if not value % 1:
         value = str(int(value))
@@ -1376,7 +1384,7 @@ def convert_units():
     if not right_answer % 1:
         right_answer = int(right_answer)
 
-    right_answer = str(right_answer)
+
     if 'e' in str(right_answer):
         right_answer = "{:.16f}".format(right_answer)
         fixed = False

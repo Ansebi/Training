@@ -156,4 +156,14 @@ def re_based_decimal_fixer(input_number_string):
         result = input_number_string
 
     return result
+
+def e_remover(value):
+    if 'e' in str(value):
+        value = "{:.16f}".format(value)
+        fixed = False
+        while not fixed:
+            if value[-1] == '0':
+                value = value[:-1]
+    return value
+
                 
