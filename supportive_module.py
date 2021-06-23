@@ -110,7 +110,7 @@ def re_based_decimal_fixer(input_number_string):
     import re
     result = False
     intermediate_zeros = False
-    z0 = re.search('\\.+(0000)+0*[1-9]*', input_number_string)
+    z0 = re.search('[1-9]*\\.+(0000)+0*[1-9]*', input_number_string)
     if z0:
         result = str(round(float(input_number_string)))
 
