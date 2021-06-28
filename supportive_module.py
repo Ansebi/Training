@@ -101,7 +101,7 @@ def quadratics_composer():
     quadratics_composer.total_set = total_set
 
 
-def re_based_decimal_fixer(input_number_string):
+def re_based_decimal_fixer_zero(input_number_string):
     """Converts fractions like 6.25000007 (4 zeros ore above) to
     the normal, not that overly precise form like 6.25
     * Takes and returns a string."""
@@ -142,4 +142,5 @@ def e_remover(value):
                 value = value[:-1]
             else:
                 fixed = True
+    value = str(value)
     return value
