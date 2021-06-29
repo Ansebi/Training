@@ -1365,10 +1365,13 @@ def convert_units():
     value = e_remover(value)
 
     fixer = supportive_module.re_based_decimal_fixer_zero
-    if value % 1 == 0:
+    if not float(value) % 1:
         value = str(int(value))
     else:
         value = fixer(str(value))
+
+    auto_round = supportive_module.auto_round
+    value = e_remover(auto_round(value))
 
     okay = False
     while not okay:
@@ -1386,6 +1389,7 @@ def convert_units():
     else:
         right_answer = e_remover(right_answer)
 
+    right_answer = e_remover(auto_round(right_answer))
     right_answers = [right_answer]
 
     if prefix_1 == 'u':
@@ -1394,7 +1398,7 @@ def convert_units():
         prefix_2 = ''
 
     prompt = 'Convert the following values to the new units:'
-    input_message =  str(value) + ' ' + prefix_1 + unit + ' = ... ' + prefix_2 + unit + '\n'
+    input_message = str(value) + ' ' + prefix_1 + unit + ' = ... ' + prefix_2 + unit + '\n'
 
 
 exercises_list = [
