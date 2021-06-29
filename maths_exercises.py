@@ -1383,12 +1383,6 @@ def convert_units():
                 okay = True
 
     right_answer = float(value) * 10**delta
-    if not right_answer % 1:
-        right_answer = int(right_answer)
-        right_answer = str(right_answer)
-    else:
-        right_answer = e_remover(right_answer)
-
     right_answer = e_remover(auto_round(right_answer))
     right_answers = [right_answer]
 
