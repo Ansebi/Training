@@ -142,14 +142,14 @@ def e_remover(value, string_output=True):
                 value = value[:-1]
             else:
                 fixed = True
-    if not value % 1:
+    if not float(value) % 1:
         value = int(value)
     if string_output:
         value = str(value)
     return value
 
 
-def auto_round(number):
+def auto_round(number, ignore_zeros=True):
     """accepts strings like 0.369999999997654, returns adequate versions"""
     MAX_REPS = 4
     number = float(number)
@@ -182,11 +182,18 @@ def auto_round(number):
     hit_a_cluster = False
     point_pos = len(number_string)
 
+    if ignore_zeros:
+        def zero_condition(x):
+            return x != '0'
+    else:
+        def zero_condition(x):
+            return True
+
     for i in range(len(number_string)):
         digit = number_string[i]
         if digit == '.':
             point_pos = i
-        if digit == prev_digit:
+        if digit == prev_digit and zero_condition(digit):
             if not hit_a_cluster:
                 hit_a_cluster = True
                 round_pos_i = i - 1

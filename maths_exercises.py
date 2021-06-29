@@ -1365,13 +1365,8 @@ def convert_units():
     value = e_remover(value)
 
     fixer = supportive_module.re_based_decimal_fixer_zero
-    if not float(value) % 1:
-        value = str(int(value))
-    else:
-        value = fixer(str(value))
-
     auto_round = supportive_module.auto_round
-    value = e_remover(auto_round(value))
+    value = e_remover(auto_round(fixer(value)))
 
     okay = False
     while not okay:
