@@ -1,5 +1,5 @@
-again = 'NO'
-while again == 'NO':
+repeat = True
+while repeat:
     import winsound
     import time
     import random
