@@ -158,7 +158,7 @@ def auto_round(number, ignore_zeros=True, string_output=True):
     class NotInRangeError(Exception):
         """the value is not supported (too large or too small)"""
 
-        def __init__(self, message= 'the value has to be between 10**-13 and 10**13'):
+        def __init__(self, message= 'the value has to be between 10**-14 and 10**14'):
             self.message = message
             super().__init__(self.message)
 

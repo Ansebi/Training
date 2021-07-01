@@ -1336,19 +1336,30 @@ def factoring_quadratics():
     prompt = 'HINT: a(x-x1)(x-x2)'
 
 
-def convert_units():
+def convert_units(RUS=True):
     import supportive_module
     global ans, right_answers, input_message, prompt
     DELTA_RANGE = 10 #a power of 10 the range between the units to convert
+    MAX_ZEROS = 5
 
     prefixes_dict = {'p': -12, 'n': -9, 'mc': -6, 'm': -3,
                      'c': -2, 'd': -1, 'u': 0,
                      'k': 3, 'M': 6, 'G': 9, 'T': 12}
 
+    prefixes_dict_RUS = {'м': -3, 'c': -2, 'д': -1, 'u': 0, 'к': 3}
+
+    if RUS:
+        prefixes_dict = prefixes_dict_RUS
+
     prefixes = list(prefixes_dict.keys())
     prefixes.remove('u')
 
     units = ['g', 'm', 's', 'N', 'J', 'W', 'A', 'Hz']
+
+    units_RUS = ['м']
+
+    if RUS:
+        units = units_RUS
 
     unit = random.choice(units)
 
@@ -1375,17 +1386,21 @@ def convert_units():
         if prefix_2 != prefix_1:
             delta = prefixes_dict[prefix_1] - prefixes_dict[prefix_2]
             if abs(delta) < DELTA_RANGE:
-                okay = True
+                right_answer = float(value) * 10 ** delta
+                if '0' * (MAX_ZEROS - 1) not in e_remover(right_answer):
+                    okay = True
 
-    right_answer = float(value) * 10**delta
 
-    right_answers = [right_answer,
-                     e_remover(right_answer),
-                     auto_round(e_remover(right_answer)),
-                     e_remover(auto_round(e_remover(right_answer))),
-                     fixer(e_remover(auto_round(e_remover(right_answer)))),
-                     e_remover(fixer(e_remover(auto_round(e_remover(right_answer)))))]
+    right_answer =\
+        e_remover(
+                fixer(
+                    e_remover(
+                        auto_round(
+                            e_remover(
+                                right_answer
+                            )))))
 
+    right_answers = [right_answer]
     if prefix_1 == 'u':
         prefix_1 = ''
     if prefix_2 == 'u':

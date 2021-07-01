@@ -42,8 +42,6 @@ with open('testing', 'r') as testing_backup:
     testing_backup.close()
     try:
         subject_number = testing.replace('\n', '').split(' ')[0]
-        print('Subject Number:', subject_number)
-        print(len(subject_number))
         exercise_number = int(testing.replace('\n', '').split(' ')[1])
     except:
         print('PROBLEM WITH READING THE PREVIOUS TEST NUMBER')
@@ -68,7 +66,7 @@ if not user_response:
 
     while True:
 
-        print(subject_number, subject_name)
+        print(subject_number, subject_name, 'exercise', exercise_number)
         exercise = exercises_dictionary[exercises_list[exercise_number]]
         exercise()
         print(subject_exercises.input_message)
