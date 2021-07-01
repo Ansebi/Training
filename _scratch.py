@@ -29,7 +29,6 @@ def re_based_decimal_fixer_zero(input_number_string):
 
     return result
 
-fixer = re_based_decimal_fixer_zero
 
 def e_remover(value, string_output=True):
     if 'e' in str(value):
@@ -41,12 +40,13 @@ def e_remover(value, string_output=True):
             else:
                 fixed = True
     if not float(value) % 1:
-        value = int(value)
+        value = int(float(value))
     if string_output:
         value = str(value)
     return value
 
-def auto_round(number, ignore_zeros=True):
+
+def auto_round(number, ignore_zeros=True, string_output=True):
     """accepts strings like 0.369999999997654, returns adequate versions"""
     MAX_REPS = 4
     number = float(number)
@@ -62,7 +62,7 @@ def auto_round(number, ignore_zeros=True):
         def __str__(self):
             return self.message
 
-    if not 10**-13 < number < 10**13:
+    if not 10**-14 < number < 10**14:
         raise NotInRangeError
 
     # magnitude = None
@@ -105,58 +105,17 @@ def auto_round(number, ignore_zeros=True):
 
     if round_pos:
         result = round(number, round_pos - point_pos)
-        if not result % 1:
-            result = int(result)
     else:
         result = number
 
-    return result
+    if not result % 1:
+        result = int(result)
 
-def re_based_decimal_fixer_zero(input_number_string):
-    """Converts fractions like 6.25000007 (4 zeros ore above) to
-    the normal, not that overly precise form like 6.25
-    * Takes and returns a string."""
-    import re
-    result = False
-    z0 = re.search('[1-9]+\\.(000)+0*[1-9]*', input_number_string)
-    if z0:
-        result = str(round(float(input_number_string)))
-
-    if not result:
-        for i in range(1, len(input_number_string) + 1):
-            str_i = input_number_string[:i]
-            z1 = re.search('\\.[1-9]+(000)', str_i)
-            if z1:
-                result = str_i[:-3]
-                break
-
-    if not result:
-        for i in range(1, len(input_number_string) + 1):
-            str_i = input_number_string[:i]
-            z2 = re.search('\\.[1-9]*0+[1-9]+0+', str_i)
-            if z2:
-                result = str_i[:-1]
-                break
-
-    if not result:
-        result = input_number_string
-
-    return result
-
-
-def e_remover(value, string_output=True):
-    if 'e' in str(value):
-        value = "{:.16f}".format(value)
-        fixed = False
-        while not fixed:
-            if value[-1] == '0':
-                value = value[:-1]
-            else:
-                fixed = True
-    if not float(value) % 1:
-        value = int(value)
     if string_output:
-        value = str(value)
-    return value
+        result = str(result)
 
-print(e_remover(auto_round(fixer('0.0000000052'))))
+    return result
+
+
+fixer = re_based_decimal_fixer_zero
+print(auto_round(78.000000))

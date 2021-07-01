@@ -135,7 +135,7 @@ def re_based_decimal_fixer_zero(input_number_string):
 
 def e_remover(value, string_output=True):
     if 'e' in str(value):
-        value = "{:.16f}".format(value)
+        value = "{:.16f}".format(float(value))
         fixed = False
         while not fixed:
             if value[-1] == '0':
@@ -143,13 +143,13 @@ def e_remover(value, string_output=True):
             else:
                 fixed = True
     if not float(value) % 1:
-        value = int(value)
+        value = int(float(value))
     if string_output:
         value = str(value)
     return value
 
 
-def auto_round(number, ignore_zeros=True):
+def auto_round(number, ignore_zeros=True, string_output=True):
     """accepts strings like 0.369999999997654, returns adequate versions"""
     MAX_REPS = 4
     number = float(number)
@@ -208,9 +208,13 @@ def auto_round(number, ignore_zeros=True):
 
     if round_pos:
         result = round(number, round_pos - point_pos)
-        if not result % 1:
-            result = int(result)
     else:
         result = number
+
+    if not result % 1:
+        result = int(result)
+
+    if string_output:
+        result = str(result)
 
     return result
