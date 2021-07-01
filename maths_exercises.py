@@ -1345,7 +1345,6 @@ def convert_units(RUS=True):
     prefixes_dict = {'p': -12, 'n': -9, 'mc': -6, 'm': -3,
                      'c': -2, 'd': -1, 'u': 0,
                      'k': 3, 'M': 6, 'G': 9, 'T': 12}
-
     prefixes_dict_RUS = {'м': -3, 'c': -2, 'д': -1, 'u': 0, 'к': 3}
 
     if RUS:
@@ -1355,7 +1354,6 @@ def convert_units(RUS=True):
     prefixes.remove('u')
 
     units = ['g', 'm', 's', 'N', 'J', 'W', 'A', 'Hz']
-
     units_RUS = ['м']
 
     if RUS:
