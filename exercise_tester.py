@@ -6,16 +6,16 @@ if not os.path.exists('testing'):
 def choose_the_subject(subject_number):
     if subject_number == '1':
         import maths_exercises
-        choosing_the_subject.subject_exercises = maths_exercises
-        choosing_the_subject.subject_name = 'Maths'
+        choose_the_subject.subject_exercises = maths_exercises
+        choose_the_subject.subject_name = 'Maths'
     elif subject_number == '2':
         import russian_exercises
-        choosing_the_subject.subject_exercises = russian_exercises
-        choosing_the_subject.subject_name = 'Russian'
+        choose_the_subject.subject_exercises = russian_exercises
+        choose_the_subject.subject_name = 'Russian'
     elif subject_number == '3':
         import english_exercises
-        choosing_the_subject.subject_exercises = english_exercises
-        choosing_the_subject.subject_name = 'English'
+        choose_the_subject.subject_exercises = english_exercises
+        choose_the_subject.subject_name = 'English'
     else:
         subject_number = random.choice(['1', '2', '3'])
         choose_the_subject(subject_number)
@@ -40,8 +40,13 @@ def choose_the_subject(subject_number):
 with open('testing', 'r') as testing_backup:
     testing = testing_backup.read()
     testing_backup.close()
-    subject_number = testing.replace('\n', '').split(' ')[0]
-    exercise_number = testing.replace('\n','').split(' ')[1]
+    try:
+        subject_number = testing.replace('\n', '').split(' ')[0]
+        print('Subject Number:', subject_number)
+        print(len(subject_number))
+        exercise_number = int(testing.replace('\n', '').split(' ')[1])
+    except:
+        print('PROBLEM WITH READING THE PREVIOUS TEST NUMBER')
 
 print('         PRESS ENTER TO CONTINUE WITH ' + testing)
 print('         INPUT ANYTHING TO CHOOSE THE EXERCISE')
@@ -50,7 +55,6 @@ user_response = input()
 
 
 if not user_response:
-
     choose_the_subject(subject_number)
     subject_name = choose_the_subject.subject_name
     subject_exercises = choose_the_subject.subject_exercises
@@ -63,10 +67,12 @@ if not user_response:
     # assigning exercise dictionary end
 
     while True:
-        exercise = exercises_list[exercise_number]
+
+        print(subject_number, subject_name)
+        exercise = exercises_dictionary[exercises_list[exercise_number]]
         exercise()
-        print(exercise.input_message)
-        print(exercise.right_answer)
+        print(subject_exercises.input_message)
+        print([i for i in subject_exercises.right_answers])
         input()
 
 

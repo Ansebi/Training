@@ -1378,8 +1378,11 @@ def convert_units():
                 okay = True
 
     right_answer = float(value) * 10**delta
-    right_answer = e_remover(auto_round(right_answer))
-    right_answers = [right_answer]
+
+    right_answers = [right_answer,
+                     auto_round(right_answer),
+                     e_remover(auto_round(right_answer)),
+                     fixer(e_remover(auto_round(right_answer)))]
 
     if prefix_1 == 'u':
         prefix_1 = ''

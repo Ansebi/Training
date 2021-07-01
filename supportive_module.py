@@ -165,7 +165,7 @@ def auto_round(number, ignore_zeros=True):
         def __str__(self):
             return self.message
 
-    if not 10**-13 < number < 10**13:
+    if not 10**-14 < number < 10**14:
         raise NotInRangeError
 
     # magnitude = None
