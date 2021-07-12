@@ -212,7 +212,7 @@ def auto_round(number, ignore_zeros=True, string_output=True):
         result = number
 
     if not result % 1:
-        result = int(result)
+        result = round(int(number), round_pos - point_pos)
 
     if string_output:
         result = str(result)
