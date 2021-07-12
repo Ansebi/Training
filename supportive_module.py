@@ -149,10 +149,10 @@ def e_remover(value, string_output=True):
     return value
 
 
-def auto_round(number, ignore_zeros=True, string_output=True):
+def auto_round(number, ignore_zeros=True, string_output=True, restrict=False):
     """accepts strings like 0.369999999997654, returns adequate versions"""
     MAX_REPS = 4
-    number = float(number)
+    #number = float(number)
 
 
     class NotInRangeError(Exception):
@@ -165,8 +165,9 @@ def auto_round(number, ignore_zeros=True, string_output=True):
         def __str__(self):
             return self.message
 
-    if not 10**-14 < number < 10**14:
-        raise NotInRangeError
+    if restrict:
+        if not 10**-14 < float(number) < 10**14:
+            raise NotInRangeError
 
     # magnitude = None
     # for power in range(-13, 14):
@@ -181,6 +182,7 @@ def auto_round(number, ignore_zeros=True, string_output=True):
     round_pos = None
     hit_a_cluster = False
     point_pos = len(number_string)
+    test = ''
 
     if ignore_zeros:
         def zero_condition(x):
@@ -194,20 +196,22 @@ def auto_round(number, ignore_zeros=True, string_output=True):
         if digit == '.':
             point_pos = i
         if digit == prev_digit and zero_condition(digit):
+            test += 'A'
             if not hit_a_cluster:
                 hit_a_cluster = True
                 round_pos_i = i - 1
             counter += 1
         else:
+            test += 'B'
             if digit != '.':
                 counter = 1
                 hit_a_cluster = False
                 prev_digit = digit
         if counter >= MAX_REPS:
             round_pos = round_pos_i
-
+        test += str(counter) +'(' + digit + ')'
     if round_pos:
-        result = round(number, round_pos - point_pos)
+        result = round(float(number), round_pos - point_pos)
     else:
         result = number
 
