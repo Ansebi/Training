@@ -118,4 +118,4 @@ def auto_round(number, ignore_zeros=True, string_output=True):
 
 
 fixer = re_based_decimal_fixer_zero
-print(auto_round(78.000000))
+print(e_remover(auto_round(fixer('78.0000000'))))

@@ -64,13 +64,15 @@ if not user_response:
     exercises_list = subject_exercises.exercises_list
     # assigning exercise dictionary end
 
+    counter =0
     while True:
-
+        counter += 1
         print(subject_number, subject_name, 'exercise', exercise_number)
         exercise = exercises_dictionary[exercises_list[exercise_number]]
         exercise()
         print(subject_exercises.input_message)
         print([i for i in subject_exercises.right_answers])
+        print('attempt number:', counter)
         input()
 
 

@@ -1336,40 +1336,50 @@ def factoring_quadratics():
     prompt = 'HINT: a(x-x1)(x-x2)'
 
 
-def convert_units(RUS=True):
+def convert_units(EASY_RUS=True):
     import supportive_module
     global ans, right_answers, input_message, prompt
     DELTA_RANGE = 10 #a power of 10 the range between the units to convert
-    MAX_ZEROS = 5
+    MAX_ZEROS = 7
+    MAX_ZEROS_EASY = 5
+    MAX_SIGNIFICANT_FIGURES = 100
+
+    magnitudes = [0.000001, 0.000005,
+                  0.00001, 0.00005,
+                  0.0005, 0.005, 0.01, 0.5,
+                  0.0001, 0.001, 0.01, 0.1,
+                  1, 5, 10, 50, 100, 500,
+                  1000, 5000, 10000, 50000]
+    magnitudes_EASY = [0.005, 0.01, 0.5,
+                       0.001, 0.01, 0.1,
+                       1, 5, 10, 50, 100, 500,
+                       1000, 5000]
 
     prefixes_dict = {'p': -12, 'n': -9, 'mc': -6, 'm': -3,
                      'c': -2, 'd': -1, 'u': 0,
                      'k': 3, 'M': 6, 'G': 9, 'T': 12}
     prefixes_dict_RUS = {'м': -3, 'c': -2, 'д': -1, 'u': 0, 'к': 3}
 
-    if RUS:
-        prefixes_dict = prefixes_dict_RUS
-
-    prefixes = list(prefixes_dict.keys())
-    prefixes.remove('u')
 
     units = ['g', 'm', 's', 'N', 'J', 'W', 'A', 'Hz']
     units_RUS = ['м']
 
-    if RUS:
+    if EASY_RUS:
         units = units_RUS
+        prefixes_dict = prefixes_dict_RUS
+        magnitudes = magnitudes_EASY
+        MAX_ZEROS = MAX_ZEROS_EASY
+
+    prefixes = list(prefixes_dict.keys())
+    prefixes.remove('u')
 
     unit = random.choice(units)
 
-    n = random.randint(1, 100)
-    k = random.choice([0.000001, 0.000005,
-                       0.00001, 0.00005,
-                       0.0005, 0.005, 0.01, 0.5,
-                       0.0001, 0.001, 0.01, 0.1,
-                       1, 5, 10, 50, 100, 500,
-                       1000, 5000, 10000, 50000])
+    n = random.randint(1, MAX_SIGNIFICANT_FIGURES)
+    k = random.choice(magnitudes)
 
     value = n * k
+    value = str(value)
     e_remover = supportive_module.e_remover
     value = e_remover(value)
 
@@ -1385,7 +1395,7 @@ def convert_units(RUS=True):
             delta = prefixes_dict[prefix_1] - prefixes_dict[prefix_2]
             if abs(delta) < DELTA_RANGE:
                 right_answer = float(value) * 10 ** delta
-                if '0' * (MAX_ZEROS - 1) not in e_remover(right_answer):
+                if '0' * MAX_ZEROS not in e_remover(right_answer):
                     okay = True
 
 
