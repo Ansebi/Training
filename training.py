@@ -138,6 +138,7 @@ while repeat:
             # ans=maths_exercises.ans
             ans = input(subject_exercises.input_message)
             right_answers = subject_exercises.right_answers
+            right_answers = [str(i) for i in right_answers]
             input_message = subject_exercises.input_message
 
             if ans in right_answers:
