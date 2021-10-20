@@ -1422,12 +1422,12 @@ def large_division():
     #c = a * b
     ok = False
     while not ok:
-        a1 = random.choice(1, 1, 1, 5, 10, 100, 101, 1001)
+        a1 = random.choice([1, 1, 1, 5, 10, 100, 101, 1001])
         a2 = random.randint(1, 101)
         a3 = random.randint(1, 10)
         a = a1 * a2 * a3
         b1 = random.randint(1, 100)
-        b2 = random.choice(1, 1, 1, 5, 10, 100, 101)
+        b2 = random.choice([1, 1, 1, 5, 10, 100, 101])
         b = b1 * b2
         if 500 < a < 10000:
             if 90 < b < 1000:
