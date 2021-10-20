@@ -1417,6 +1417,27 @@ def convert_units(EASY_RUS=True):
     prompt = 'Convert the following values to the new units:'
     input_message = str(value) + ' ' + prefix_1 + unit + ' = ... ' + prefix_2 + unit + '\n'
 
+def large_division():
+    global ans, right_answers, input_message, prompt
+    #c = a * b
+    ok = False
+    while not ok:
+        a1 = random.choice(1, 1, 1, 5, 10, 100, 101, 1001)
+        a2 = random.randint(1, 101)
+        a3 = random.randint(1, 10)
+        a = a1 * a2 * a3
+        b1 = random.randint(1, 100)
+        b2 = random.choice(1, 1, 1, 5, 10, 100, 101)
+        b = b1 * b2
+        if 500 < a < 10000:
+            if 90 < b < 1000:
+                ok = True
+    c = a * b
+    prompt = 'Divide the following, the answer is a whole number:'
+    input_message = f'{c} / {b} = ... \n'
+    right_answers = [a]
+
+
 
 exercises_list = [
     "Test",
@@ -1461,7 +1482,8 @@ exercises_list = [
     "Factoring Quadratics",
     "Multiply Two Digits",
     "Multiplication Table",
-    "Convert Units"
+    "Convert Units",
+    "Large Division"
 ]
 
 exercises_dictionary = {
@@ -1507,5 +1529,6 @@ exercises_dictionary = {
     "Factoring Quadratics": factoring_quadratics,
     "Multiply Two Digits": multiply_two_digits,
     "Multiplication Table": multiplication_table,
-    "Convert Units": convert_units
+    "Convert Units": convert_units,
+    "Large Division": large_division
 }
