@@ -56,7 +56,7 @@ def round_decimals():
     n = round(random.uniform(-1000, 1000), random.randint(5, 7))
     dp = random.randint(0, 4)
     right_answer = round(n, dp)
-    if not right_answer % 1:
+    if not dp:
         right_answer = int(right_answer)
     right_answer = str(right_answer)
     right_answers = [right_answer]
