@@ -1,25 +1,25 @@
-repeat = True
-while repeat:
-    import winsound
-    import time
-    import random
-    import os
-    import datetime
-    import image_module
-    # import data_fixer
-    import sys
+import winsound
+import time
+import random
+import os
+import sys
+import datetime
+import image_module
 
 
+# import data_fixer
+
+
+def main():
     def global_():
         pass
 
-
-### ENTRANCE
+    ### ENTRANCE
     if not os.path.exists('last_user'):
         with open('last_user', 'w'):
             pass
 
-    with open('last_user', 'r')as last_user_backup:
+    with open('last_user', 'r') as last_user_backup:
         last_user = last_user_backup.read()
         print('\n' * 8 + '         Hello, ' + last_user + '!' + '\n' * 10)
         last_user_backup.close()
@@ -28,15 +28,15 @@ while repeat:
     if user_name == '' or user_name == last_user:
         user_name = last_user
     else:
-        with open('last_user', 'w')as last_user_backup:
+        with open('last_user', 'w') as last_user_backup:
             last_user_backup.write(user_name)
             last_user_backup.close()
     print('Okay,', user_name)
     time.sleep(0.3)
     os.system('cls' if os.name == 'nt' else 'clear')
-### ENTRANCE END
+    ### ENTRANCE END
 
-### CHOOSE THE SUBJECT
+    ### CHOOSE THE SUBJECT
     print('\n' * 8 + '         ' + user_name + ', please choose the subject:' + '\n')
     print('1. Maths')
     print('2. Russian')
@@ -58,18 +58,14 @@ while repeat:
             choosing_the_subject.subject_exercises = english_exercises
             choosing_the_subject.subject_name = 'English'
         else:
-            subject = random.choice(['1','2','3'])
+            subject = random.choice(['1', '2', '3'])
             choosing_the_subject(subject)
 
-
     choosing_the_subject(subject)
-    subject_exercises =  choosing_the_subject.subject_exercises
+    subject_exercises = choosing_the_subject.subject_exercises
     subject_name = choosing_the_subject.subject_name
     os.system('cls' if os.name == 'nt' else 'clear')
-### CHOOSE THE SUBJECT END
-
-
-
+    ### CHOOSE THE SUBJECT END
 
     # assigning exercise dictionary
     exercises_dictionary = subject_exercises.exercises_dictionary
@@ -107,17 +103,12 @@ while repeat:
     global_.score = 0
     constants = []
 
-
-    # constants end
-
     def start():
         global_.start = datetime.datetime.now()
         global_.start_simple_time_format = time.time()
 
-
     def clear():
         os.system('cls' if os.name == 'nt' else 'clear')
-
 
     # core process definition
     def core():
@@ -235,7 +226,6 @@ while repeat:
                 print('tasks complete:', str(i) + '/' + str(global_.number_of_tasks))
                 the_core_of_the_core()
 
-
     # core process definition end
     core()
 
@@ -262,8 +252,12 @@ while repeat:
     print()
     # input('PRESS ENTER TO CONTINUE')
     exit_input = input('PRESS ANY KEY TO CONTINUE\n')
-    if exit_input in ['bye', 'see ya', 'exit', 'EXIT', 'Goodbye', 'Hasta la vista', 'farewell', 'Hasta la vista',
-                      'dosviduli']:
+    if exit_input.lower() in [
+        'bye', 'see ya', 'exit', 'goodbye', 'hasta la vista', 'farewell', 'dosviduli', 'off', 'finish']:
         sys.exit()
     else:
         os.system('cls' if os.name == 'nt' else 'clear')
+
+
+while True:
+    main()

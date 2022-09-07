@@ -1,6 +1,7 @@
 import random
 from random import randint
 
+
 def test():
     global ans, right_answers, input_message
     right_answer = "test"
@@ -55,6 +56,8 @@ def round_decimals():
     n = round(random.uniform(-1000, 1000), random.randint(5, 7))
     dp = random.randint(0, 4)
     right_answer = round(n, dp)
+    if not right_answer % 1:
+        right_answer = int(right_answer)
     right_answer = str(right_answer)
     right_answers = [right_answer]
     input_message = str(n) + " rounded by " + str(10 ** (-dp)) + "(" + str(dp) + " d.p.) = "
@@ -1336,7 +1339,7 @@ def factoring_quadratics():
     prompt = 'HINT: a(x-x1)(x-x2)'
 
 
-def convert_units(EASY_RUS=True):
+def convert_units(EASY_RUS=False):
     import supportive_module
     global ans, right_answers, input_message, prompt
     DELTA_RANGE = 10 #a power of 10 the range between the units to convert
