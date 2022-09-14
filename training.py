@@ -1,31 +1,37 @@
+# import libraries:
 import winsound
 import time
 import random
 import os
 import sys
 import datetime
+# import modules:
 import image_module
-
-
+import maths_exercises
+import russian_exercises
+import english_exercises
+from score_counter import score_counter
 # import data_fixer
 
+DEFAULT_TARGET_SCORE = 1000
+DEFAULT_FIXED_TIME_SEC = 60
+DEFAULT_FIXED_NUMBER_OF_TASKS = 15
 
-def main():
-    def global_():
-        pass
 
-    ### ENTRANCE
+def global_():
+    pass
+
+def training():
+    """ENTRANCE"""
     if not os.path.exists('last_user'):
         with open('last_user', 'w'):
             pass
-
     with open('last_user', 'r') as last_user_backup:
         last_user = last_user_backup.read()
         print('\n' * 8 + '         Hello, ' + last_user + '!' + '\n' * 10)
         last_user_backup.close()
-    user_switcher = 'OFF'
     user_name = input('PRESS ENTER\nor sign as a different fighter: ')
-    if user_name == '' or user_name == last_user:
+    if not user_name:
         user_name = last_user
     else:
         with open('last_user', 'w') as last_user_backup:
@@ -34,43 +40,31 @@ def main():
     print('Okay,', user_name)
     time.sleep(0.3)
     os.system('cls' if os.name == 'nt' else 'clear')
-    ### ENTRANCE END
+    """ENTRANCE END"""
 
-    ### CHOOSE THE SUBJECT
+    """CHOOSE THE SUBJECT"""
+    dict_subjects = {'1': {'subject_exercises': maths_exercises,
+                      'subject_name': 'Maths'},
+                     '2': {'subject_exercises': russian_exercises,
+                      'subject_name': 'Russian'},
+                     '3': {'subject_exercises': english_exercises,
+                           'subject_name': 'English'}}
     print('\n' * 8 + '         ' + user_name + ', please choose the subject:' + '\n')
-    print('1. Maths')
-    print('2. Russian')
-    print('3. English')
+    for n, val in dict_subjects.items():
+        print(f"{n}. {val['subject_name']}")
     print('\n' * 4)
-    subject = input('Your choice:   ')
+    subject = input('Your choice:  ')
 
-    def choosing_the_subject(subject):
-        if subject == '1':
-            import maths_exercises
-            choosing_the_subject.subject_exercises = maths_exercises
-            choosing_the_subject.subject_name = 'Maths'
-        elif subject == '2':
-            import russian_exercises
-            choosing_the_subject.subject_exercises = russian_exercises
-            choosing_the_subject.subject_name = 'Russian'
-        elif subject == '3':
-            import english_exercises
-            choosing_the_subject.subject_exercises = english_exercises
-            choosing_the_subject.subject_name = 'English'
-        else:
-            subject = random.choice(['1', '2', '3'])
-            choosing_the_subject(subject)
-
-    choosing_the_subject(subject)
-    subject_exercises = choosing_the_subject.subject_exercises
-    subject_name = choosing_the_subject.subject_name
+    if subject not in dict_subjects:
+        subject = random.choice(list(dict_subjects.keys()))
+    subject_name = dict_subjects[subject]['subject_name']
+    subject_exercises = dict_subjects[subject]['subject_exercises']
     os.system('cls' if os.name == 'nt' else 'clear')
-    ### CHOOSE THE SUBJECT END
+    """CHOOSE THE SUBJECT END"""
 
-    # assigning exercise dictionary
+    # assign exercise dictionary
     exercises_dictionary = subject_exercises.exercises_dictionary
     exercises_list = subject_exercises.exercises_list
-    # assigning exercise dictionary end
 
     for i in range(1, len(exercises_list)):
         if i < 10:
@@ -97,8 +91,8 @@ def main():
     global_.time_elapsed = 0
     global_.correct = 0
     global_.incorrect = 0
-    global_.fixed_time = 60
-    global_.number_of_tasks = 15
+    global_.fixed_time = DEFAULT_FIXED_TIME_SEC
+    global_.number_of_tasks = DEFAULT_FIXED_NUMBER_OF_TASKS
     global_.percentage = 0
     global_.score = 0
     constants = []
@@ -116,21 +110,13 @@ def main():
 
         # the core of the core defined:
         def the_core_of_the_core():
-
-            the_exercise()
-
-            print('points:', global_.score, end='')
-            print('       accuracy:', global_.percentage, '%', '\n' * 2)
-            try:
-                print(subject_exercises.prompt)
-            except:
-                pass
-
-            # ans=maths_exercises.ans
-            ans = input(subject_exercises.input_message)
-            right_answers = subject_exercises.right_answers
+            right_answers, input_message, prompt = the_exercise()
             right_answers = [str(i) for i in right_answers]
-            input_message = subject_exercises.input_message
+            print(f"points: {global_.score}       accuracy: {global_.percentage}%")
+            print('\n')
+            if prompt:
+                print(prompt)
+            ans = input(input_message)
 
             if ans in right_answers:
                 global_.correct += 1
@@ -151,53 +137,39 @@ def main():
                 print('points:', global_.score, end='')
                 print('       accuracy:', global_.percentage, '%', '\n' * 2)
                 print('the correct answer is:')
-                if type(right_answers[0]) == float:
-                    if right_answers[0] % 1 == 0:
-                        right_answer = int(right_answers[0])
-                    else:
-                        right_answer = right_answers[0]
-                else:
-                    right_answer = right_answers[0]
+                right_answer = right_answers[0]
                 print(input_message + str(right_answer))
-                print()
-
-                input('\nTry again :( Press ENTER\n')
+                print('\n')
+                input('Try again :( Press ENTER\n')
                 os.system('cls' if os.name == 'nt' else 'clear')
 
             global_.percentage = round((global_.correct / (global_.correct + global_.incorrect) * 100), 1)
-
             global_.minutes_elapsed = int(str(datetime.datetime.now() - global_.start)[2:4])
             global_.seconds_elapsed = int(round(float(str(datetime.datetime.now() - global_.start)[5:10]), 0))
 
-            import score_counter
-            score_counter = score_counter.score_counter
-            score_counter(
-                global_.score,
+            score = score_counter(
                 global_.percentage,
                 global_.minutes_elapsed,
                 global_.seconds_elapsed,
                 global_.correct,
                 global_.incorrect)
-            global_.score = score_counter.score
-
+            global_.score = score
             global_.time_elapsed = time.time() - global_.start_simple_time_format
-
         # the core of the core defined end
 
         print(exercise_name, '\n')
+
         if training_type == '3':
             global_.target_score_input = input('Specify the target score: ')
             try:
                 global_.target_score = int(global_.target_score_input)
             except:
-                global_.target_score = 1000
-
+                global_.target_score = DEFAULT_TARGET_SCORE
             clear()
             start()
             while global_.score < global_.target_score:
                 print(exercise_name, '    ', end='')
                 print('score:', str(global_.score) + '/' + str(global_.target_score))
-
                 the_core_of_the_core()
 
         elif training_type == '2':
@@ -260,4 +232,4 @@ def main():
 
 
 while True:
-    main()
+    training()

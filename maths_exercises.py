@@ -1,17 +1,19 @@
 import random
 from random import randint
+import supportive_module
+from supportive_module import factorize
 
 
 def test():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
     right_answer = "test"
     right_answers = [right_answer]
     input_message = "test: "
-    # ans=input(input_message)
+    return right_answers, input_message, prompt
 
 
 def add_negatives():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     n = random.randint(10, 100)
     if random.randint(0, 1) == 1:
@@ -30,11 +32,13 @@ def add_negatives():
     right_answers = [right_answer]
     input_message = str(n * n_sign) + "+" + str(m * m_sign) + " = " if m_sign == 1 else str(n * n_sign) + str(
         m * m_sign) + " = "
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def round_whole_numbers():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     n = random.randint(1, 1000000)
     if random.randint(0, 1) == 1:
@@ -47,11 +51,13 @@ def round_whole_numbers():
     right_answer = str(right_answer)
     right_answers = [right_answer]
     input_message = str(n * n_sign) + " rounded by " + str(m) + " = "
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def round_decimals():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     n = round(random.uniform(-1000, 1000), random.randint(5, 7))
     dp = random.randint(0, 4)
@@ -61,11 +67,13 @@ def round_decimals():
     right_answer = str(right_answer)
     right_answers = [right_answer]
     input_message = str(n) + " rounded by " + str(10 ** (-dp)) + "(" + str(dp) + " d.p.) = "
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def multiply_decimals():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     n = random.randint(0, 100)
     if random.randint(0, 1) == 1:
@@ -77,33 +85,38 @@ def multiply_decimals():
     right_answer = round(n_sign * n * m, 4)
     right_answers = [str(right_answer)]
     input_message = str(n * n_sign) + " * " + str(m) + " = "
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def multiplication_table():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
     # n*m
     n = random.randint(1, 11)
     m = random.randint(1, 11)
     right_answer = n * m
     right_answers = [str(right_answer)]
     input_message = str(n) + " * " + str(m) + " = "
+    return right_answers, input_message, prompt
+
 
 
 def multiply_two_digits():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
     # n*m
     n = random.randint(10, 100)
     m = random.randint(2, 11)
     right_answer = n * m
     right_answers = [str(right_answer)]
     input_message = str(n) + " * " + str(m) + " = "
+    return right_answers, input_message, prompt
+
 
 
 def multiply_hundreds():
     # 26.05.2018 edition
-
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     m, n = 1, 1
     if random.choice([0, 0, 1, 1, 1]) == 0:
@@ -122,13 +135,12 @@ def multiply_hundreds():
     right_answers = [str(right_answer)]
     input_message = str(n * n_sign) + " * " + str(m) + " = " if m_sign == 1 else str(n * n_sign) + " * (" + str(
         m * m_sign) + ") = "
+    return right_answers, input_message, prompt
 
-
-# ans=input(input_message)
 
 
 def find_sum():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     input_message = ""
     right_answer = 0
@@ -145,11 +157,12 @@ def find_sum():
         input_message += str(" " + str(input_message_raw[counter]) + " ")
     input_message = "sum(" + input_message + ")= "
     right_answers = [str(right_answer)]
-    # ans=input(input_message)
+    return right_answers, input_message, prompt
+
 
 
 def powers():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     # constants:
     low, high, mode, how_narrow_is_option_2, option_2_probability = 0, 15, 2, 3, 70
@@ -176,26 +189,12 @@ def powers():
     right_answer = str(n ** m)
     right_answers = [right_answer]
     input_message = str(str(n) + " to the power of " + str(m) + " = ")
-    # ans=input(input_message)
+    return right_answers, input_message, prompt
+
 
 
 def factorization():
-    global ans, input_message, right_answers
-
-    def factorize(n):
-        factorization.results = []
-        i = 0
-        divisor = 2
-
-        while n > 1:
-            if n % divisor == 0:
-                factorization.results.append(divisor)
-                n = n / divisor
-                divisor = 2
-            else:
-                divisor += 1
-
-                # generating proper muliples to form a number for further factorization
+    right_answers, input_message, prompt = None, None, None
 
     prime_numbers_up_to_100 = [
         2, 3, 5, 7, 11, 13, 17, 19, 23,
@@ -203,23 +202,23 @@ def factorization():
         61, 67, 71, 73, 79, 83, 89, 97]
 
     n_1 = random.choice(prime_numbers_up_to_100[0:3])
-    if random.randint(0, 1) == 1:
+    if random.randint(0, 1):
         n_2 = random.choice(prime_numbers_up_to_100[0:3])
     else:
         n_2 = 1
-    if random.randint(0, 1) == 1:
+    if random.randint(0, 1):
         n_3 = random.choice(prime_numbers_up_to_100[0:3])
     else:
         n_3 = 1
-    if random.randint(0, 1) == 1:
+    if random.randint(0, 1):
         n_4 = random.choice(prime_numbers_up_to_100[0:3])
     else:
         n_4 = 1
-    if random.randint(0, 1) == 1:
+    if random.randint(0, 1):
         n_5 = random.choice(prime_numbers_up_to_100[0:4])
     else:
         n_5 = 1
-    if random.randint(0, 1) == 1:
+    if random.randint(0, 1):
         n_6 = random.choice(prime_numbers_up_to_100[0:6])
     else:
         n_6 = 1
@@ -240,11 +239,13 @@ def factorization():
     right_answer = factorization.results
     right_answers = [right_answer]
     input_message = str("factorize " + str(n) + ":  " + str(n) + " = ")
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def linear_equations():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
     # ax+b=c
     a = random.randint(1, 9)
     a_sign = 1 if random.randint(0, 1) > 0 else -1
@@ -272,11 +273,13 @@ def linear_equations():
 
     input_message = a_input_message + "x" + b_input_message + "=" + str(c) + "\nx = "
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def linear_equations_lvl_2():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
     # ax/d+b=c
     right_answer = 0.1
     while right_answer % 1 != 0:
@@ -301,11 +304,13 @@ def linear_equations_lvl_2():
 
     input_message = a_input_message + "x/" + str(d) + b_input_message + "=" + str(c) + "\nx = "
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def division_remainders():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     divisor = random.randint(1, 11)
     remainder = random.randint(0, divisor - 1)
@@ -324,12 +329,14 @@ def division_remainders():
 
     input_message = str(divident) + ":" + str(divisor) + " = "
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def fraction_reduction():
     import supportive_module
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     common_factor = random.randint(1, 11)
     n_1 = random.randint(1, 13)
@@ -346,11 +353,13 @@ def fraction_reduction():
 
     input_message = str(n_1 * common_factor) + "/" + str(n_2 * common_factor) + "= "
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def fractions_to_decimals():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     # generating numerator
     switch = random.randint(0, 2)
@@ -372,11 +381,13 @@ def fractions_to_decimals():
     right_answer = numerator / denominator
     right_answers = [right_answer]
     input_message = "convert to decimals:" + str(numerator) + "/" + str(denominator) + "= "
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def add_decimals_easy():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     if random.randint(1, 5) > 2:
         n = random.randint(0, 10)
@@ -411,11 +422,13 @@ def add_decimals_easy():
         right_answer = int(right_answer)
     right_answer = str(right_answer)
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def percent_of():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     switch = random.randint(1, 7)
     if switch <= 4:
@@ -445,11 +458,13 @@ def percent_of():
         right_answer = int(right_answer)
     right_answer = str(right_answer)
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def percent_of_no_calculation():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     switch = random.randint(1, 5)
     # print("switch =",switch)
@@ -477,11 +492,13 @@ def percent_of_no_calculation():
     right_answer = str(n) + "*" + coeff
     right_answers = [right_answer]
     input_message = str(percent) + "% of " + str(n) + " = "
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def percent_change():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     switch = random.randint(1, 7)
     if switch <= 4:
@@ -519,10 +536,12 @@ def percent_change():
     right_answers = [right_answer]
     input_message = "It was " + str(n) + "." + crease + str(percent) + "%. Now it equals "
     x = float(input(input_message))
+    return right_answers, input_message, prompt
+
 
 
 def roots():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     # constants:
     low, high, mode, how_narrow_is_option_2, option_2_probability = 0, 17, 2, 3, 40
@@ -560,10 +579,12 @@ def roots():
     input_message = str(degree_of_the_root + " root of " + str(n) + " = ")
     right_answers = [right_answer]
     x = int(input(input_message))
+    return right_answers, input_message, prompt
+
 
 
 def logs():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     mode = random.randint(1, 3)
     base = random.randint(2, 13)
@@ -605,12 +626,14 @@ def logs():
 
     right_answer = str(right_answer)
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def adding_fractions_easy():
     import supportive_module
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     # a/b+c/d
 
@@ -651,12 +674,14 @@ def adding_fractions_easy():
 
     input_message = str(a) + "/" + str(b) + " + " + str(c) + "/" + str(d) + " = "
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def division_mixed_fractions_easy():
     import supportive_module
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     # composing apropriate numbers
     n1 = random.choice([1, random.choice([2, 3, 5])])
@@ -685,12 +710,14 @@ def division_mixed_fractions_easy():
 
     input_message = str(divident) + "/" + str(divisor) + " = "
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def division_mixed_fractions():
     import supportive_module
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     # composing apropriate numbers
     divident = random.choice(
@@ -715,11 +742,13 @@ def division_mixed_fractions():
 
     input_message = str(divident) + "/" + str(divisor) + " = "
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def compare_two_numbers_easy():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     option1 = round(random.randint(-1000, 1000) * 10 ** random.randint(-4, 4), 6)
     option2 = round(random.randint(-100, 100) * 10 ** random.randint(-4, 3), 6)
@@ -737,12 +766,14 @@ def compare_two_numbers_easy():
     print(str(n1) + " ... " + str(n2) + "\n")
     input_message = str(n1) + " "
     right_answers = [right_answer]
-    # ans=input(input_message)
+
     print(str(n2))
+    return right_answers, input_message, prompt
+
 
 
 def multilply_two_digits():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     if random.randint(0, 1) == 1:
         n1 = random.randint(3, 13)
@@ -754,11 +785,13 @@ def multilply_two_digits():
     right_answer = str(n1 * n2)
     right_answers = [right_answer]
     input_message = str(n1) + " * " + str(n2) + " = "
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def factorizing_square_of_sum():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     alphabet_small = ['a', 'b', 'c', 'd', 'e', 'f', 'g',
                       'h', 'i', 'j', 'k', 'l', 'm', 'n',
@@ -789,11 +822,13 @@ def factorizing_square_of_sum():
                      '+' + n2_square_string + letter2 + letter2_power + ' = ')
 
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def complete_square_easy():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     n1 = random.randint(1, 13)
     n1_string = str(n1) if n1 != 1 else ""
@@ -809,11 +844,13 @@ def complete_square_easy():
                      '+' + str(n2 ** 2) + ' = ')
 
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def complete_square_a1():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     n1 = random.randint(1, 13)
     n1_string = str(n1) if n1 != 1 else ""
@@ -829,11 +866,13 @@ def complete_square_a1():
                      '+' + '...' + ' = ')
 
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def complete_square_a2():
-    global ans, right_answers, input_message, prompt
+    right_answers, input_message, prompt = None, None, None
 
     # (a+b)2=a2+2ab+b2
 
@@ -869,11 +908,13 @@ def complete_square_a2():
                      str(2 * n1 * n2) + 'x' + b2 + ' = ')
     prompt = 'HINT: answer in the form of (a+b)2+n'
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def complete_square_a2_easy():
-    global ans, right_answers, input_message, prompt
+    right_answers, input_message, prompt = None, None, None
 
     # (a+b)2=a2+2ab+b2
 
@@ -910,11 +951,13 @@ def complete_square_a2_easy():
     input_message += '(' + n1_string + 'x' + the_sign + str(n2) + ')2'
     prompt = 'HINT: answer in the form of (a+b)2+n'
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def complete_square_a3():
-    global ans, right_answers, input_message, prompt
+    right_answers, input_message, prompt = None, None, None
 
     the_multiplier = randint(2, 5)
 
@@ -931,11 +974,13 @@ def complete_square_a3():
 
     right_answers = [right_answer]
     prompt = 'represent as: a(x+b)2'
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def complete_square_a4():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     the_multiplier = randint(2, 5)
 
@@ -952,11 +997,13 @@ def complete_square_a4():
 
     right_answers = [right_answer]
     prompt = 'represent as: a(x+b)2'
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def complete_square_a5():
-    global ans, right_answers, input_message, prompt
+    right_answers, input_message, prompt = None, None, None
 
     the_multiplier = randint(2, 5)
 
@@ -984,11 +1031,13 @@ def complete_square_a5():
     right_answers = [right_answer]
 
     prompt = 'represent as: a(x+b)2+c'
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def star_count_easy():
-    global ans, right_answers, input_message
+    right_answers, input_message, prompt = None, None, None
 
     max_n = 9
     max_len = 20
@@ -1007,11 +1056,13 @@ def star_count_easy():
         input_message = ('*' * n1 + '\n') * n2 + ' = '
     right_answer = str(product)
     right_answers = [right_answer]
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def estimate():
-    global ans, right_answers, input_message, prompt
+    right_answers, input_message, prompt = None, None, None
 
     total_n = randint(3, 8)
     max_species = 4
@@ -1027,35 +1078,36 @@ def estimate():
     g.question = ''
     g.estimate = 0
 
+    def item_n(bottom, ceiling, max_repeat, i):
+        locals()['item_' + str(i)] = randint(bottom, ceiling)
+        item_i = locals()['item_' + str(i)]
+        if g.items_remaining > 0:
+            locals()['n_item_' + str(i)] = randint(min_repeat, g.items_remaining)
+            n_item_i = locals()['n_item_' + str(i)]
+            g.items_remaining -= n_item_i
+        else:
+            locals()['n_item_' + str(i)] = 0
+            n_item_i = locals()['n_item_' + str(i)]
+
+        g.question += ((str(item_i) + '   ') * n_item_i)
+        the_order = 10 ** (len(str(item_i)) - 1)
+        item_i_estimate = int(round(item_i / the_order, 0)) * the_order
+        g.estimate += item_i_estimate * n_item_i
+
     for i in range(1, max_species + 1):
-        def item_n(bottom, ceiling, max_repeat, i):
-            locals()['item_' + str(i)] = randint(bottom, ceiling)
-            item_i = locals()['item_' + str(i)]
-            if g.items_remaining > 0:
-                locals()['n_item_' + str(i)] = randint(min_repeat, g.items_remaining)
-                n_item_i = locals()['n_item_' + str(i)]
-                g.items_remaining -= n_item_i
-            else:
-                locals()['n_item_' + str(i)] = 0
-                n_item_i = locals()['n_item_' + str(i)]
-
-            g.question += ((str(item_i) + '   ') * n_item_i)
-            the_order = 10 ** (len(str(item_i)) - 1)
-            item_i_estimate = int(round(item_i / the_order, 0)) * the_order
-            g.estimate += item_i_estimate * n_item_i
-
         item_n(bottom, ceiling, max_repeat, i)
+
     input_message = g.question + '\n' * 2
     right_answer = str(g.estimate)
     right_answers = [right_answer]
-    prompt = 'Estimate the sum,1 s.f. each:'
-    print(prompt)
-    print()
-    # ans=input(input_message)
+    prompt = 'Estimate the sum, 1 s.f. each:'
+
+    return right_answers, input_message, prompt
+
 
 
 def complex_roots():
-    global ans, right_answers, input_message, prompt
+    right_answers, input_message, prompt = None, None, None
     primes_list = [2, 3, 5, 7, 11, 13, 17, 19, 23]
     proper_condition = False
     while proper_condition == False:
@@ -1076,12 +1128,14 @@ def complex_roots():
     right_answer = str(to_be_squarred)
     right_answer += 'r2(' + str(prime) + ')'
     right_answers = [right_answer]
-    # ans=input(input_message)
+
     # prompt='type r2(x) of square root of x'
+    return right_answers, input_message, prompt
+
 
 
 def quadratic_equations_easy():
-    global ans, right_answers, input_message, prompt
+    right_answers, input_message, prompt = None, None, None
 
     import supportive_module
     quadratics_composer = supportive_module.quadratics_composer
@@ -1133,11 +1187,13 @@ def quadratic_equations_easy():
 
     input_message = ax2 + bx + c + '=0\n'
 
-    # ans=input(input_message)
+
+    return right_answers, input_message, prompt
+
 
 
 def quadratic_equations_calculator():
-    global ans, right_answers, input_message, prompt
+    right_answers, input_message, prompt = None, None, None
 
     a1 = randint(-10, -1)
     a2 = randint(1, 10)
@@ -1205,12 +1261,11 @@ def quadratic_equations_calculator():
     # input_message=prompt
     # input_message+='\n'
     input_message = ax2 + bx + c + '=0\n'
-
-    # ans=input(input_message)
+    return right_answers, input_message, prompt
 
 
 def value_function_quadratic():
-    global ans, right_answers, input_message, prompt
+    right_answers, input_message, prompt = None, None, None
     x_v1 = randint(-9, 9)
     x_v2 = randint(-2, 0)
     x_v3 = randint(-5, -1)
@@ -1265,14 +1320,11 @@ def value_function_quadratic():
     input_message = 'f(x)=' + ax2 + bx + c
     input_message += '\n'
     input_message += 'f(' + str(x) + ')='
-
-    # ans=input(input_message)
+    return right_answers, input_message, prompt
 
 
 def factoring_quadratics():
-    global ans, right_answers, input_message, prompt
-
-    import supportive_module
+    right_answers, input_message, prompt = None, None, None
     quadratics_composer = supportive_module.quadratics_composer
     x1 = 0
     x2 = 0
@@ -1337,12 +1389,13 @@ def factoring_quadratics():
 
     input_message = ax2 + bx + c + '='
     prompt = 'HINT: a(x-x1)(x-x2)'
+    return right_answers, input_message, prompt
+
 
 
 def convert_units(EASY_RUS=False):
-    import supportive_module
-    global ans, right_answers, input_message, prompt
-    DELTA_RANGE = 10 #a power of 10 the range between the units to convert
+    right_answers, input_message, prompt = None, None, None
+    DELTA_RANGE = 10  # a power of 10 the range between the units to convert
     MAX_ZEROS = 7
     MAX_ZEROS_EASY = 5
     MAX_SIGNIFICANT_FIGURES = 100
@@ -1401,7 +1454,6 @@ def convert_units(EASY_RUS=False):
                 if '0' * MAX_ZEROS not in e_remover(right_answer):
                     okay = True
 
-
     right_answer =\
         e_remover(
                 fixer(
@@ -1419,9 +1471,11 @@ def convert_units(EASY_RUS=False):
 
     prompt = 'Convert the following values to the new units:'
     input_message = str(value) + ' ' + prefix_1 + unit + ' = ... ' + prefix_2 + unit + '\n'
+    return right_answers, input_message, prompt
+
 
 def large_division():
-    global ans, right_answers, input_message, prompt
+    right_answers, input_message, prompt = None, None, None
     #c = a * b
     ok = False
     while not ok:
@@ -1439,6 +1493,7 @@ def large_division():
     prompt = 'Divide the following, the answer is a whole number:'
     input_message = f'{c} / {b} = ... \n'
     right_answers = [a]
+    return right_answers, input_message, prompt
 
 
 

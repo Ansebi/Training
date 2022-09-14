@@ -1,19 +1,16 @@
-def factorize(n):
-    if n < 0:
-        print()
-        print("error: works with positive input only!")
-        print()
-    global results
-    divisor = 2
+def factorize(n: int) -> list:
+    """generate proper multiples to form a number for further factorization"""
     results = []
-    while n > 1:
+    i = 0
+    divisor = 2
+    while abs(n) > 1:
         if n % divisor == 0:
             results.append(divisor)
             n = n / divisor
             divisor = 2
         else:
             divisor += 1
-    factorize.results = results
+    return results
 
 
 def crossout(a, b):
@@ -34,11 +31,10 @@ def crossout(a, b):
                     b_count += 1
             if switch == 0:
                 a_count += 1
-            if a == []:
+            if not a:
                 a = [1]
-            if b == []:
+            if not b:
                 b = [1]
-
     c = 1
     for i in a:
         c = c * i
@@ -47,27 +43,15 @@ def crossout(a, b):
     for i in b:
         c = c * i
     b = c
-    # for the external use
-    crossout.top, crossout.bottom = a, b
-    # end for the external use
+    return a, b
 
 
 def fraction_simplifier(numerator, denominator):
-    n = numerator
-    factorize(n)
-    factorized_numerator = results
-    n = denominator
-    factorize(n)
-    factorized_denominator = results
-
-    crossout(factorized_numerator, factorized_denominator)
-
-    # for the external use
-    if crossout.bottom == 1:
-        fraction_simplifier.output = str(crossout.top)
+    top, bottom = crossout(factorize(numerator), factorize(denominator))
+    if bottom == 1:
+        return str(crossout.top)
     else:
-        fraction_simplifier.output = str(crossout.top) + "/" + str(crossout.bottom)
-    # end for the external use
+        return str(crossout.top) + "/" + str(crossout.bottom)
 
 
 def quadratics_composer():
@@ -98,7 +82,7 @@ def quadratics_composer():
                             particular_set.append(int(x2))
                             total_set.append(particular_set)
 
-    quadratics_composer.total_set = total_set
+    return total_set
 
 
 def re_based_decimal_fixer_zero(input_number_string):
