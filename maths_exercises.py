@@ -1,5 +1,6 @@
 import random
 from random import randint
+import numpy as np
 import supportive_module
 from supportive_module import factorize
 
@@ -36,7 +37,6 @@ def add_negatives():
     return right_answers, input_message, prompt
 
 
-
 def round_whole_numbers():
     right_answers, input_message, prompt = None, None, None
 
@@ -55,7 +55,6 @@ def round_whole_numbers():
     return right_answers, input_message, prompt
 
 
-
 def round_decimals():
     right_answers, input_message, prompt = None, None, None
 
@@ -69,7 +68,6 @@ def round_decimals():
     input_message = str(n) + " rounded by " + str(10 ** (-dp)) + "(" + str(dp) + " d.p.) = "
 
     return right_answers, input_message, prompt
-
 
 
 def multiply_decimals():
@@ -89,7 +87,6 @@ def multiply_decimals():
     return right_answers, input_message, prompt
 
 
-
 def multiplication_table():
     right_answers, input_message, prompt = None, None, None
     # n*m
@@ -101,7 +98,6 @@ def multiplication_table():
     return right_answers, input_message, prompt
 
 
-
 def multiply_two_digits():
     right_answers, input_message, prompt = None, None, None
     # n*m
@@ -111,7 +107,6 @@ def multiply_two_digits():
     right_answers = [str(right_answer)]
     input_message = str(n) + " * " + str(m) + " = "
     return right_answers, input_message, prompt
-
 
 
 def multiply_hundreds():
@@ -138,7 +133,6 @@ def multiply_hundreds():
     return right_answers, input_message, prompt
 
 
-
 def find_sum():
     right_answers, input_message, prompt = None, None, None
 
@@ -158,7 +152,6 @@ def find_sum():
     input_message = "sum(" + input_message + ")= "
     right_answers = [str(right_answer)]
     return right_answers, input_message, prompt
-
 
 
 def powers():
@@ -190,7 +183,6 @@ def powers():
     right_answers = [right_answer]
     input_message = str(str(n) + " to the power of " + str(m) + " = ")
     return right_answers, input_message, prompt
-
 
 
 def factorization():
@@ -243,7 +235,6 @@ def factorization():
     return right_answers, input_message, prompt
 
 
-
 def linear_equations():
     right_answers, input_message, prompt = None, None, None
     # ax+b=c
@@ -277,7 +268,6 @@ def linear_equations():
     return right_answers, input_message, prompt
 
 
-
 def linear_equations_lvl_2():
     right_answers, input_message, prompt = None, None, None
     # ax/d+b=c
@@ -308,6 +298,39 @@ def linear_equations_lvl_2():
     return right_answers, input_message, prompt
 
 
+def systems_easy():
+    """
+    ax + by = n1
+    cy + dz = n2
+    ez + fx = n3
+    """
+    right_answers, input_message, prompt = None, None, None
+
+    a, b, c, d, e, f, x, y, z = np.random.randint(1, 11, 9) * np.random.choice([-1, 1], 9)
+
+    n1 = a * x + b * y
+    n2 = c * y + d * z
+    n3 = e * z + f * x
+
+    def num_to_str(n, in_middle=True):
+        if n < 0:
+            return str(n)
+        else:
+            if in_middle:
+                return f'+ {n}'
+            else:
+                return str(n)
+
+    line1 = f'{a}x {num_to_str(b)}y = {n1}'
+    line2 = f'{c}y {num_to_str(d)}z = {n2}'
+    line3 = f'{e}z {num_to_str(f)}x = {n3}'
+
+    input_message = '\n'.join([line1, line2, line3])+'\n'
+    prompt = 'Find x, y, z. Response Example: 5, -5, 10'
+    right_answers = [f'{x}, {y}, {z}']
+
+    return right_answers, input_message, prompt
+
 
 def division_remainders():
     right_answers, input_message, prompt = None, None, None
@@ -333,7 +356,6 @@ def division_remainders():
     return right_answers, input_message, prompt
 
 
-
 def fraction_reduction():
     import supportive_module
     right_answers, input_message, prompt = None, None, None
@@ -355,7 +377,6 @@ def fraction_reduction():
     right_answers = [right_answer]
 
     return right_answers, input_message, prompt
-
 
 
 def fractions_to_decimals():
@@ -383,7 +404,6 @@ def fractions_to_decimals():
     input_message = "convert to decimals:" + str(numerator) + "/" + str(denominator) + "= "
 
     return right_answers, input_message, prompt
-
 
 
 def add_decimals_easy():
@@ -426,7 +446,6 @@ def add_decimals_easy():
     return right_answers, input_message, prompt
 
 
-
 def percent_of():
     right_answers, input_message, prompt = None, None, None
 
@@ -462,7 +481,6 @@ def percent_of():
     return right_answers, input_message, prompt
 
 
-
 def percent_of_no_calculation():
     right_answers, input_message, prompt = None, None, None
 
@@ -494,7 +512,6 @@ def percent_of_no_calculation():
     input_message = str(percent) + "% of " + str(n) + " = "
 
     return right_answers, input_message, prompt
-
 
 
 def percent_change():
@@ -539,7 +556,6 @@ def percent_change():
     return right_answers, input_message, prompt
 
 
-
 def roots():
     right_answers, input_message, prompt = None, None, None
 
@@ -580,7 +596,6 @@ def roots():
     right_answers = [right_answer]
     x = int(input(input_message))
     return right_answers, input_message, prompt
-
 
 
 def logs():
@@ -630,7 +645,6 @@ def logs():
     return right_answers, input_message, prompt
 
 
-
 def adding_fractions_easy():
     import supportive_module
     right_answers, input_message, prompt = None, None, None
@@ -678,7 +692,6 @@ def adding_fractions_easy():
     return right_answers, input_message, prompt
 
 
-
 def division_mixed_fractions_easy():
     import supportive_module
     right_answers, input_message, prompt = None, None, None
@@ -714,7 +727,6 @@ def division_mixed_fractions_easy():
     return right_answers, input_message, prompt
 
 
-
 def division_mixed_fractions():
     import supportive_module
     right_answers, input_message, prompt = None, None, None
@@ -746,7 +758,6 @@ def division_mixed_fractions():
     return right_answers, input_message, prompt
 
 
-
 def compare_two_numbers_easy():
     right_answers, input_message, prompt = None, None, None
 
@@ -771,7 +782,6 @@ def compare_two_numbers_easy():
     return right_answers, input_message, prompt
 
 
-
 def multilply_two_digits():
     right_answers, input_message, prompt = None, None, None
 
@@ -787,7 +797,6 @@ def multilply_two_digits():
     input_message = str(n1) + " * " + str(n2) + " = "
 
     return right_answers, input_message, prompt
-
 
 
 def factorizing_square_of_sum():
@@ -826,7 +835,6 @@ def factorizing_square_of_sum():
     return right_answers, input_message, prompt
 
 
-
 def complete_square_easy():
     right_answers, input_message, prompt = None, None, None
 
@@ -848,7 +856,6 @@ def complete_square_easy():
     return right_answers, input_message, prompt
 
 
-
 def complete_square_a1():
     right_answers, input_message, prompt = None, None, None
 
@@ -868,7 +875,6 @@ def complete_square_a1():
     right_answers = [right_answer]
 
     return right_answers, input_message, prompt
-
 
 
 def complete_square_a2():
@@ -910,7 +916,6 @@ def complete_square_a2():
     right_answers = [right_answer]
 
     return right_answers, input_message, prompt
-
 
 
 def complete_square_a2_easy():
@@ -955,7 +960,6 @@ def complete_square_a2_easy():
     return right_answers, input_message, prompt
 
 
-
 def complete_square_a3():
     right_answers, input_message, prompt = None, None, None
 
@@ -978,7 +982,6 @@ def complete_square_a3():
     return right_answers, input_message, prompt
 
 
-
 def complete_square_a4():
     right_answers, input_message, prompt = None, None, None
 
@@ -999,7 +1002,6 @@ def complete_square_a4():
     prompt = 'represent as: a(x+b)2'
 
     return right_answers, input_message, prompt
-
 
 
 def complete_square_a5():
@@ -1035,7 +1037,6 @@ def complete_square_a5():
     return right_answers, input_message, prompt
 
 
-
 def star_count_easy():
     right_answers, input_message, prompt = None, None, None
 
@@ -1058,7 +1059,6 @@ def star_count_easy():
     right_answers = [right_answer]
 
     return right_answers, input_message, prompt
-
 
 
 def estimate():
@@ -1105,7 +1105,6 @@ def estimate():
     return right_answers, input_message, prompt
 
 
-
 def complex_roots():
     right_answers, input_message, prompt = None, None, None
     primes_list = [2, 3, 5, 7, 11, 13, 17, 19, 23]
@@ -1131,7 +1130,6 @@ def complex_roots():
 
     # prompt='type r2(x) of square root of x'
     return right_answers, input_message, prompt
-
 
 
 def quadratic_equations_easy():
@@ -1187,9 +1185,7 @@ def quadratic_equations_easy():
 
     input_message = ax2 + bx + c + '=0\n'
 
-
     return right_answers, input_message, prompt
-
 
 
 def quadratic_equations_calculator():
@@ -1392,7 +1388,6 @@ def factoring_quadratics():
     return right_answers, input_message, prompt
 
 
-
 def convert_units(EASY_RUS=False):
     right_answers, input_message, prompt = None, None, None
     DELTA_RANGE = 10  # a power of 10 the range between the units to convert
@@ -1415,7 +1410,6 @@ def convert_units(EASY_RUS=False):
                      'c': -2, 'd': -1, 'u': 0,
                      'k': 3, 'M': 6, 'G': 9, 'T': 12}
     prefixes_dict_RUS = {'м': -3, 'c': -2, 'д': -1, 'u': 0, 'к': 3}
-
 
     units = ['g', 'm', 's', 'N', 'J', 'W', 'A', 'Hz']
     units_RUS = ['м']
@@ -1454,14 +1448,14 @@ def convert_units(EASY_RUS=False):
                 if '0' * MAX_ZEROS not in e_remover(right_answer):
                     okay = True
 
-    right_answer =\
+    right_answer = \
         e_remover(
-                fixer(
-                    e_remover(
-                        auto_round(
-                            e_remover(
-                                right_answer
-                            )))))
+            fixer(
+                e_remover(
+                    auto_round(
+                        e_remover(
+                            right_answer
+                        )))))
 
     right_answers = [right_answer]
     if prefix_1 == 'u':
@@ -1476,7 +1470,7 @@ def convert_units(EASY_RUS=False):
 
 def large_division():
     right_answers, input_message, prompt = None, None, None
-    #c = a * b
+    # c = a * b
     ok = False
     while not ok:
         a1 = random.choice([1, 1, 1, 5, 10, 100, 101, 1001])
@@ -1496,7 +1490,6 @@ def large_division():
     return right_answers, input_message, prompt
 
 
-
 exercises_list = [
     "Test",
     "Add negatives",
@@ -1509,6 +1502,7 @@ exercises_list = [
     "Factorization",
     "Linear equations",
     "Linear equations: level 2",
+    "Systems (easy)",
     "Division: remainders",
     "Fraction reduction",
     "Fractions to decimals",
@@ -1556,6 +1550,7 @@ exercises_dictionary = {
     "Factorization": factorization,
     "Linear equations": linear_equations,
     "Linear equations: level 2": linear_equations_lvl_2,
+    "Systems (easy)": systems_easy,
     "Division: remainders": division_remainders,
     "Fraction reduction": fraction_reduction,
     "Fractions to decimals": fractions_to_decimals,

@@ -76,8 +76,8 @@ while True:
     counter += 1
     print(subject_id, subject_name, 'exercise', exercise_id)
     exercise = exercises_dictionary[exercises_list[int(exercise_id)]]
-    exercise()
-    print(subject_exercises.input_message)
-    print([i for i in subject_exercises.right_answers])
+    right_answers, input_message, prompt = exercise()
+    print(input_message)
+    print([i for i in right_answers])
     print('attempt number:', counter)
     input()

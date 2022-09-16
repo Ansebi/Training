@@ -11,6 +11,7 @@ import maths_exercises
 import russian_exercises
 import english_exercises
 from score_counter import score_counter
+
 # import data_fixer
 
 DEFAULT_TARGET_SCORE = 1000
@@ -20,6 +21,7 @@ DEFAULT_FIXED_NUMBER_OF_TASKS = 15
 
 def global_():
     pass
+
 
 def training():
     """ENTRANCE"""
@@ -44,9 +46,9 @@ def training():
 
     """CHOOSE THE SUBJECT"""
     dict_subjects = {'1': {'subject_exercises': maths_exercises,
-                      'subject_name': 'Maths'},
+                           'subject_name': 'Maths'},
                      '2': {'subject_exercises': russian_exercises,
-                      'subject_name': 'Russian'},
+                           'subject_name': 'Russian'},
                      '3': {'subject_exercises': english_exercises,
                            'subject_name': 'English'}}
     print('\n' * 8 + '         ' + user_name + ', please choose the subject:' + '\n')
@@ -155,6 +157,7 @@ def training():
                 global_.incorrect)
             global_.score = score
             global_.time_elapsed = time.time() - global_.start_simple_time_format
+
         # the core of the core defined end
 
         print(exercise_name, '\n')
