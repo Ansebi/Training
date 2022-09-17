@@ -33,11 +33,11 @@ def augmenter(word):
     return word
 
 
-def test():
+def test(difficulty: int):
     input('Test')
 
 
-def irregular_verbs():
+def irregular_verbs(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     irregular_verbs = []
     with open('./materials/irregular_verbs.csv', 'r') as irregular_verbs_csv:
@@ -54,7 +54,7 @@ def irregular_verbs():
     return right_answers, input_message, prompt
 
 
-def missing_words():
+def missing_words(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     alphabet = "abcdefghijklmnopqrstuvwxyz'ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     sentences_list = []
@@ -97,7 +97,7 @@ def missing_words():
     return right_answers, input_message, prompt
 
 
-def vocabulary():
+def vocabulary(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     vocabulary = []
     with open('./materials/vocabulary.csv', 'r') as vocabulary_csv:
@@ -114,15 +114,17 @@ def vocabulary():
     return right_answers, input_message, prompt
 
 
-exercises_list = [
-    'Test',
-    'Irregular verbs',
-    'Missing words',
-    'Vocabulary'
-]
 exercises_dictionary = {
-    'Test': test,
-    'Irregular verbs': irregular_verbs,
-    'Missing words': missing_words,
-    'Vocabulary': vocabulary
+    'Test': {
+        'function': test,
+        'default_difficulty': 0},
+    'Irregular verbs': {
+        'function': irregular_verbs,
+        'default_difficulty': 0},
+    'Missing words': {
+        'function': missing_words,
+        'default_difficulty': 0},
+    'Vocabulary': {
+        'function': vocabulary,
+        'default_difficulty': 0}
 }

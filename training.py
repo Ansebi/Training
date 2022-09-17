@@ -227,13 +227,13 @@ def training():
     data.write(str(datetime.datetime.now())[11:19] + ';')
     data.write(subject_name + ';')
     data.write(str(str(exercise_name) + ';'))
+    data.write(str(str(difficulty) + ';'))
     data.write(str(str(global_.minutes_elapsed) + ';min;' + str(global_.seconds_elapsed) + ';sec;'))
     data.write(str(str(global_.correct) + ';/;' + str(global_.incorrect + global_.correct) + ';'))
     data.write(str(str(global_.percentage) + '%;' + str(global_.score) + ';\n'))
     data.close()
 
     print()
-    # input('PRESS ENTER TO CONTINUE')
     exit_input = input('PRESS ANY KEY TO CONTINUE\n')
     if exit_input.lower() in [
         'bye', 'see ya', 'exit', 'goodbye', 'hasta la vista', 'farewell', 'dosviduli', 'off', 'finish']:

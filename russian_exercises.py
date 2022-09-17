@@ -3,14 +3,15 @@ import random
 the_20K_words = [i.split(';')[1] for i in open('./materials/russian_20K', 'r')]
 
 
-def test():
+def test(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     right_answer = "test"
     right_answers = [right_answer]
     input_message = "test: "
+    return right_answers, input_message, prompt
 
 
-def adjective_endings():
+def adjective_endings(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     nouns_genders_list = []
     with open('./materials/russian_nouns.csv', 'r') as nouns_merged:
@@ -87,7 +88,7 @@ def adjective_endings():
     return right_answers, input_message, prompt
 
 
-def picture_vocabulary_250():
+def picture_vocabulary_250(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     words = []
     with open('./materials/250 words.csv', 'r') as words_csv:
@@ -106,7 +107,7 @@ def picture_vocabulary_250():
     return right_answers, input_message, prompt
 
 
-def n_nn():
+def n_nn(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     n_nn = open('./materials/n_nn.txt', 'r')
     n_nn_list = []
@@ -122,7 +123,7 @@ def n_nn():
     return right_answers, input_message, prompt
 
 
-def difficult_words():
+def difficult_words(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     difficult_words = []
     difficult_words_csv = open('./materials/difficult_words.csv', 'r')
@@ -138,7 +139,7 @@ def difficult_words():
     return right_answers, input_message, prompt
 
 
-def shuffle_letters():
+def shuffle_letters(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     okay = False
     while not okay:
@@ -155,21 +156,23 @@ def shuffle_letters():
     return right_answers, input_message, prompt
 
 
-# lists***lists***lists***lists***lists***lists***lists***lists***
-exercises_list = [
-    "Test",
-    # "Adjective endings",
-    # "Picture Vocabulary 250"
-    'Н и НН',
-    'Мои сложные слова',
-    'Перестановка букв (UNDER CONSTRUCTION)'
-]
-
 exercises_dictionary = {
-    "Test": test,
-    # "Adjective endings" : adjective_endings,
-    # "Picture Vocabulary 250" : picture_vocabulary_250
-    'Н и НН': n_nn,
-    'Мои сложные слова': difficult_words,
-    'Перестановка букв (UNDER CONSTRUCTION)': shuffle_letters
+    "Test": {
+        'function': test,
+        'default_difficulty': 0},
+    # "Adjective endings" : {
+    #     'function': adjective_endings,
+    #     'default_difficulty': 0},
+    # "Picture Vocabulary 250" : {
+    #     'function': picture_vocabulary_250,
+    #     'default_difficulty': 0},
+    'Н и НН': {
+        'function': n_nn,
+        'default_difficulty': 0},
+    'Мои сложные слова': {
+        'function': difficult_words,
+        'default_difficulty': 0},
+    'Перестановка букв (UNDER CONSTRUCTION)': {
+        'function': shuffle_letters,
+        'default_difficulty': 0}
 }
