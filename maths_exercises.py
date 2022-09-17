@@ -7,7 +7,7 @@ from supportive_module import factorize
 from supportive_module import fraction_simplifier
 
 
-def test():
+def test(difficulty):
     right_answers, input_message, prompt = None, None, None
     right_answer = "test"
     right_answers = [right_answer]
@@ -15,7 +15,7 @@ def test():
     return right_answers, input_message, prompt
 
 
-def add_negatives():
+def add_negatives(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     n = random.randint(10, 100)
@@ -39,7 +39,7 @@ def add_negatives():
     return right_answers, input_message, prompt
 
 
-def round_whole_numbers():
+def round_whole_numbers(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     n = random.randint(1, 1000000)
@@ -57,7 +57,7 @@ def round_whole_numbers():
     return right_answers, input_message, prompt
 
 
-def round_decimals():
+def round_decimals(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     n = round(random.uniform(-1000, 1000), random.randint(5, 7))
@@ -72,7 +72,7 @@ def round_decimals():
     return right_answers, input_message, prompt
 
 
-def multiply_decimals():
+def multiply_decimals(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     n = random.randint(0, 100)
@@ -89,7 +89,7 @@ def multiply_decimals():
     return right_answers, input_message, prompt
 
 
-def multiplication_table():
+def multiplication_table(difficulty):
     right_answers, input_message, prompt = None, None, None
     # n*m
     n = random.randint(1, 11)
@@ -100,7 +100,7 @@ def multiplication_table():
     return right_answers, input_message, prompt
 
 
-def multiply_two_digits():
+def multiply_two_digits(difficulty):
     right_answers, input_message, prompt = None, None, None
     # n*m
     n = random.randint(10, 100)
@@ -111,7 +111,7 @@ def multiply_two_digits():
     return right_answers, input_message, prompt
 
 
-def multiply_hundreds():
+def multiply_hundreds(difficulty):
     # 26.05.2018 edition
     right_answers, input_message, prompt = None, None, None
 
@@ -135,7 +135,7 @@ def multiply_hundreds():
     return right_answers, input_message, prompt
 
 
-def find_sum():
+def find_sum(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     input_message = ""
@@ -156,7 +156,7 @@ def find_sum():
     return right_answers, input_message, prompt
 
 
-def powers():
+def powers(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     # constants:
@@ -187,7 +187,7 @@ def powers():
     return right_answers, input_message, prompt
 
 
-def factorization():
+def factorization(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     prime_numbers_up_to_100 = [
@@ -237,7 +237,7 @@ def factorization():
     return right_answers, input_message, prompt
 
 
-def linear_equations():
+def linear_equations(difficulty):
     right_answers, input_message, prompt = None, None, None
     # ax+b=c
     a = random.randint(1, 9)
@@ -270,7 +270,7 @@ def linear_equations():
     return right_answers, input_message, prompt
 
 
-def linear_equations_lvl_2():
+def linear_equations_lvl_2(difficulty):
     right_answers, input_message, prompt = None, None, None
     # ax/d+b=c
     right_answer = 0.1
@@ -300,7 +300,7 @@ def linear_equations_lvl_2():
     return right_answers, input_message, prompt
 
 
-def systems_easy():
+def systems_easy(difficulty):
     """
     ax + by = n1
     cy + dz = n2
@@ -334,7 +334,7 @@ def systems_easy():
     return right_answers, input_message, prompt
 
 
-def division_remainders():
+def division_remainders(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     divisor = random.randint(1, 11)
@@ -358,7 +358,7 @@ def division_remainders():
     return right_answers, input_message, prompt
 
 
-def fraction_reduction():
+def fraction_reduction(difficulty):
     import supportive_module
     right_answers, input_message, prompt = None, None, None
 
@@ -381,7 +381,7 @@ def fraction_reduction():
     return right_answers, input_message, prompt
 
 
-def fractions_to_decimals():
+def fractions_to_decimals(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     # generating numerator
@@ -408,7 +408,7 @@ def fractions_to_decimals():
     return right_answers, input_message, prompt
 
 
-def add_decimals_easy():
+def add_decimals_easy(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     if random.randint(1, 5) > 2:
@@ -448,7 +448,7 @@ def add_decimals_easy():
     return right_answers, input_message, prompt
 
 
-def percent_of():
+def percent_of(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     switch = random.randint(1, 7)
@@ -483,7 +483,7 @@ def percent_of():
     return right_answers, input_message, prompt
 
 
-def percent_of_no_calculation():
+def percent_of_no_calculation(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     switch = random.randint(1, 5)
@@ -516,7 +516,7 @@ def percent_of_no_calculation():
     return right_answers, input_message, prompt
 
 
-def percent_change():
+def percent_change(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     switch = random.randint(1, 7)
@@ -558,7 +558,7 @@ def percent_change():
     return right_answers, input_message, prompt
 
 
-def roots():
+def roots(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     # constants:
@@ -600,7 +600,7 @@ def roots():
     return right_answers, input_message, prompt
 
 
-def logs():
+def logs(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     mode = random.randint(1, 3)
@@ -647,7 +647,7 @@ def logs():
     return right_answers, input_message, prompt
 
 
-def adding_fractions_easy():
+def adding_fractions_easy(difficulty):
     import supportive_module
     right_answers, input_message, prompt = None, None, None
 
@@ -694,7 +694,7 @@ def adding_fractions_easy():
     return right_answers, input_message, prompt
 
 
-def division_mixed_fractions_easy():
+def division_mixed_fractions_easy(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     # composing apropriate numbers
@@ -726,7 +726,7 @@ def division_mixed_fractions_easy():
     return right_answers, input_message, prompt
 
 
-def division_mixed_fractions():
+def division_mixed_fractions(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     # composing appropriate numbers
@@ -754,7 +754,7 @@ def division_mixed_fractions():
     return right_answers, input_message, prompt
 
 
-def compare_two_numbers_easy():
+def compare_two_numbers_easy(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     option1 = round(random.randint(-1000, 1000) * 10 ** random.randint(-4, 4), 6)
@@ -778,7 +778,7 @@ def compare_two_numbers_easy():
     return right_answers, input_message, prompt
 
 
-def multilply_two_digits():
+def multilply_two_digits(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     if random.randint(0, 1) == 1:
@@ -795,7 +795,7 @@ def multilply_two_digits():
     return right_answers, input_message, prompt
 
 
-def factorizing_square_of_sum():
+def factorizing_square_of_sum(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     alphabet_small = ['a', 'b', 'c', 'd', 'e', 'f', 'g',
@@ -831,7 +831,7 @@ def factorizing_square_of_sum():
     return right_answers, input_message, prompt
 
 
-def complete_square_easy():
+def complete_square_easy(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     n1 = random.randint(1, 13)
@@ -852,7 +852,7 @@ def complete_square_easy():
     return right_answers, input_message, prompt
 
 
-def complete_square_a1():
+def complete_square_a1(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     n1 = random.randint(1, 13)
@@ -873,7 +873,7 @@ def complete_square_a1():
     return right_answers, input_message, prompt
 
 
-def complete_square_a2():
+def complete_square_a2(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     # (a+b)2=a2+2ab+b2
@@ -914,7 +914,7 @@ def complete_square_a2():
     return right_answers, input_message, prompt
 
 
-def complete_square_a2_easy():
+def complete_square_a2_easy(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     # (a+b)2=a2+2ab+b2
@@ -956,7 +956,7 @@ def complete_square_a2_easy():
     return right_answers, input_message, prompt
 
 
-def complete_square_a3():
+def complete_square_a3(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     the_multiplier = randint(2, 5)
@@ -978,7 +978,7 @@ def complete_square_a3():
     return right_answers, input_message, prompt
 
 
-def complete_square_a4():
+def complete_square_a4(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     the_multiplier = randint(2, 5)
@@ -1000,7 +1000,7 @@ def complete_square_a4():
     return right_answers, input_message, prompt
 
 
-def complete_square_a5():
+def complete_square_a5(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     the_multiplier = randint(2, 5)
@@ -1033,7 +1033,7 @@ def complete_square_a5():
     return right_answers, input_message, prompt
 
 
-def star_count_easy():
+def star_count_easy(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     max_n = 9
@@ -1057,7 +1057,7 @@ def star_count_easy():
     return right_answers, input_message, prompt
 
 
-def estimate():
+def estimate(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     total_n = randint(3, 8)
@@ -1101,7 +1101,7 @@ def estimate():
     return right_answers, input_message, prompt
 
 
-def complex_roots():
+def complex_roots(difficulty):
     right_answers, input_message, prompt = None, None, None
     primes_list = [2, 3, 5, 7, 11, 13, 17, 19, 23]
     proper_condition = False
@@ -1128,7 +1128,7 @@ def complex_roots():
     return right_answers, input_message, prompt
 
 
-def quadratic_equations_easy():
+def quadratic_equations_easy(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     import supportive_module
@@ -1184,7 +1184,7 @@ def quadratic_equations_easy():
     return right_answers, input_message, prompt
 
 
-def quadratic_equations_calculator():
+def quadratic_equations_calculator(difficulty):
     right_answers, input_message, prompt = None, None, None
 
     a1 = randint(-10, -1)
@@ -1256,7 +1256,7 @@ def quadratic_equations_calculator():
     return right_answers, input_message, prompt
 
 
-def value_function_quadratic():
+def value_function_quadratic(difficulty):
     right_answers, input_message, prompt = None, None, None
     x_v1 = randint(-9, 9)
     x_v2 = randint(-2, 0)
@@ -1315,7 +1315,7 @@ def value_function_quadratic():
     return right_answers, input_message, prompt
 
 
-def factoring_quadratics():
+def factoring_quadratics(difficulty):
     right_answers, input_message, prompt = None, None, None
     quadratics_composer = supportive_module.quadratics_composer
     x1 = 0
@@ -1384,7 +1384,7 @@ def factoring_quadratics():
     return right_answers, input_message, prompt
 
 
-def convert_units(EASY_RUS=False):
+def convert_units(difficulty):
     right_answers, input_message, prompt = None, None, None
     DELTA_RANGE = 10  # a power of 10 the range between the units to convert
     MAX_ZEROS = 7
@@ -1410,7 +1410,7 @@ def convert_units(EASY_RUS=False):
     units = ['g', 'm', 's', 'N', 'J', 'W', 'A', 'Hz']
     units_RUS = ['м']
 
-    if EASY_RUS:
+    if not difficulty:
         units = units_RUS
         prefixes_dict = prefixes_dict_RUS
         magnitudes = magnitudes_EASY
@@ -1464,7 +1464,7 @@ def convert_units(EASY_RUS=False):
     return right_answers, input_message, prompt
 
 
-def large_division():
+def large_division(difficulty):
     right_answers, input_message, prompt = None, None, None
     # c = a * b
     ok = False
