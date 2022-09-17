@@ -80,9 +80,11 @@ def training():
     except:
         exercise_number = random.randint(1, len(exercises_list) - 1)
     exercise_name = exercises_list[exercise_number]
+    difficulty = exercises_dictionary[exercise_name]['default_difficulty']
     os.system('cls' if os.name == 'nt' else 'clear')
 
     print(exercise_name, '\n')
+    print(f'Difficulty Level: {difficulty}')
     print('1. Fixed number of tasks')
     print('2. Fixed time')
     print('3. Target score')
@@ -97,7 +99,6 @@ def training():
     global_.number_of_tasks = DEFAULT_FIXED_NUMBER_OF_TASKS
     global_.percentage = 0
     global_.score = 0
-    constants = []
 
     def start():
         global_.start = datetime.datetime.now()
@@ -107,12 +108,12 @@ def training():
         os.system('cls' if os.name == 'nt' else 'clear')
 
     # core process definition
-    def core():
+    def core(difficulty):
         the_exercise = exercises_dictionary[exercise_name]
 
         # the core of the core defined:
-        def the_core_of_the_core():
-            right_answers, input_message, prompt = the_exercise()
+        def the_core_of_the_core(difficulty):
+            right_answers, input_message, prompt = the_exercise(difficulty)
             right_answers = [str(i) for i in right_answers]
             print(f"points: {global_.score}       accuracy: {global_.percentage}%")
             print('\n')
@@ -157,12 +158,15 @@ def training():
                 global_.incorrect)
             global_.score = score
             global_.time_elapsed = time.time() - global_.start_simple_time_format
-
         # the core of the core defined end
 
         print(exercise_name, '\n')
-
-        if training_type == '3':
+        if 'set' in training_type:
+            try:
+                _, difficulty = training_type.split(' ')
+            except:
+                difficulty = 0
+        elif training_type == '3':
             global_.target_score_input = input('Specify the target score: ')
             try:
                 global_.target_score = int(global_.target_score_input)
@@ -173,7 +177,7 @@ def training():
             while global_.score < global_.target_score:
                 print(exercise_name, '    ', end='')
                 print('score:', str(global_.score) + '/' + str(global_.target_score))
-                the_core_of_the_core()
+                the_core_of_the_core(difficulty)
 
         elif training_type == '2':
             global_.fixed_time_input = input('Specify the time for training (minutes): ')
@@ -188,7 +192,7 @@ def training():
                 seconds_remaining = int(round(seconds_remaining, 0))
                 print(exercise_name, '    ', end='')
                 print('time remaining:', str(minutes_remaining) + ':' + str(seconds_remaining))
-                the_core_of_the_core()
+                the_core_of_the_core(difficulty)
 
         else:
             global_.number_of_tasks_input = input('Specify the number of tasks: ')
@@ -199,10 +203,10 @@ def training():
             for i in range(global_.number_of_tasks):
                 print(exercise_name, '    ', end='')
                 print('tasks complete:', str(i) + '/' + str(global_.number_of_tasks))
-                the_core_of_the_core()
+                the_core_of_the_core(difficulty)
 
     # core process definition end
-    core()
+    core(difficulty)
 
     print(exercise_name, '\n')
     print(global_.percentage, '%')

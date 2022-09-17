@@ -49,9 +49,9 @@ def crossout(a, b):
 def fraction_simplifier(numerator, denominator):
     top, bottom = crossout(factorize(numerator), factorize(denominator))
     if bottom == 1:
-        return str(crossout.top)
+        return str(top)
     else:
-        return str(crossout.top) + "/" + str(crossout.bottom)
+        return f'{top}/{bottom}'
 
 
 def quadratics_composer():

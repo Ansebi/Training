@@ -2,7 +2,9 @@ import random
 from random import randint
 import numpy as np
 import supportive_module
+from supportive_module import crossout
 from supportive_module import factorize
+from supportive_module import fraction_simplifier
 
 
 def test():
@@ -325,7 +327,7 @@ def systems_easy():
     line2 = f'{c}y {num_to_str(d)}z = {n2}'
     line3 = f'{e}z {num_to_str(f)}x = {n3}'
 
-    input_message = '\n'.join([line1, line2, line3])+'\n'
+    input_message = '\n'.join([line1, line2, line3]) + '\n'
     prompt = 'Find x, y, z. Response Example: 5, -5, 10'
     right_answers = [f'{x}, {y}, {z}']
 
@@ -693,7 +695,6 @@ def adding_fractions_easy():
 
 
 def division_mixed_fractions_easy():
-    import supportive_module
     right_answers, input_message, prompt = None, None, None
 
     # composing apropriate numbers
@@ -708,30 +709,27 @@ def division_mixed_fractions_easy():
     n4 = random.choice([2, 3, 5, 7, 11, 13])
     divisor = n2 * n3 * n4
 
-    fraction_simplifier = supportive_module.fraction_simplifier
-    crossout = supportive_module.crossout
-    fraction_simplifier(divident, divisor)
+    top, bottom = crossout(factorize(divident), factorize(divisor))
+    fraction_reduced = fraction_simplifier(top, bottom)
 
     # converting fraction to a mixed number
-    if crossout.top < crossout.bottom or crossout.bottom == 1:
-        right_answer = fraction_simplifier.output
+    if top < bottom or bottom == 1:
+        right_answer = fraction_reduced
     else:
-        whole = crossout.top // crossout.bottom
-        fraction_top = crossout.top % crossout.bottom
-        right_answer = str(whole) + " " + str(fraction_top) + "/" + str(crossout.bottom)
+        whole = top // bottom
+        fraction_top = top % bottom
+        right_answer = f'{whole} {fraction_top}/{bottom}'
     # end converting fraction to a mixed number
-
-    input_message = str(divident) + "/" + str(divisor) + " = "
+    input_message = f'{divident}/{divisor} = '
     right_answers = [right_answer]
 
     return right_answers, input_message, prompt
 
 
 def division_mixed_fractions():
-    import supportive_module
     right_answers, input_message, prompt = None, None, None
 
-    # composing apropriate numbers
+    # composing appropriate numbers
     divident = random.choice(
         [random.randint(80, 160),
          random.randint(80, 480),
@@ -739,20 +737,18 @@ def division_mixed_fractions():
     )
     divisor = divident // random.randint(1, 10)
 
-    fraction_simplifier = supportive_module.fraction_simplifier
-    crossout = supportive_module.crossout
-    fraction_simplifier(divident, divisor)
+    top, bottom = crossout(factorize(divident), factorize(divisor))
+    fraction_reduced = fraction_simplifier(top, bottom)
 
     # converting fraction to a mixed number
-    if crossout.top < crossout.bottom or crossout.bottom == 1:
-        right_answer = fraction_simplifier.output
+    if top < bottom or bottom == 1:
+        right_answer = fraction_reduced
     else:
-        whole = crossout.top // crossout.bottom
-        fraction_top = crossout.top % crossout.bottom
-        right_answer = str(whole) + " " + str(fraction_top) + "/" + str(crossout.bottom)
+        whole = top // bottom
+        fraction_top = top % bottom
+        right_answer = f'{whole} {fraction_top}/{bottom}'
     # end converting fraction to a mixed number
-
-    input_message = str(divident) + "/" + str(divisor) + " = "
+    input_message = f'{divident}/{divisor} = '
     right_answers = [right_answer]
 
     return right_answers, input_message, prompt
@@ -1490,98 +1486,140 @@ def large_division():
     return right_answers, input_message, prompt
 
 
-exercises_list = [
-    "Test",
-    "Add negatives",
-    "Round whole numbers",
-    "Round decimals",
-    "Multiply decimals",
-    "Multiply hundreds",
-    "Find sum",
-    "Powers",
-    "Factorization",
-    "Linear equations",
-    "Linear equations: level 2",
-    "Systems (easy)",
-    "Division: remainders",
-    "Fraction reduction",
-    "Fractions to decimals",
-    "Add decimals (easy)",
-    "Percent of",
-    "Percent of (no calculation)",
-    "Percent change",
-    "Roots",
-    "Logs",
-    "Adding fractions (easy)",
-    "Division: mixed fractions (easy)",
-    "Division: mixed fractions",
-    "Compare two numbers (easy)",
-    "Multiply two digits",
-    "Factorizing square of sum",
-    "Complete square (easy)",
-    "Complete square A1",
-    "Complete square A2 (easy)",
-    "Complete square A2",
-    "Complete square A3",
-    "Complete square A4",
-    "Complete square A5",
-    "Star count (easy)",
-    "Estimate sum",
-    "Complex roots",
-    "Quadratic equations (easy)",
-    "Quadratic equations (calculator)",
-    "Value of function: Quadratic",
-    "Factoring Quadratics",
-    "Multiply Two Digits",
-    "Multiplication Table",
-    "Convert Units",
-    "Large Division"
-]
-
 exercises_dictionary = {
-    "Test": test,
-    "Add negatives": add_negatives,
-    "Round whole numbers": round_whole_numbers,
-    "Round decimals": round_decimals,
-    "Multiply decimals": multiply_decimals,
-    "Multiply hundreds": multiply_hundreds,
-    "Find sum": find_sum,
-    "Powers": powers,
-    "Factorization": factorization,
-    "Linear equations": linear_equations,
-    "Linear equations: level 2": linear_equations_lvl_2,
-    "Systems (easy)": systems_easy,
-    "Division: remainders": division_remainders,
-    "Fraction reduction": fraction_reduction,
-    "Fractions to decimals": fractions_to_decimals,
-    "Add decimals (easy)": add_decimals_easy,
-    "Percent of": percent_of,
-    "Percent of (no calculation)": percent_of_no_calculation,
-    "Percent change": percent_change,
-    "Roots": roots,
-    "Logs": logs,
-    "Adding fractions (easy)": adding_fractions_easy,
-    "Division: mixed fractions (easy)": division_mixed_fractions_easy,
-    "Division: mixed fractions": division_mixed_fractions,
-    "Compare two numbers (easy)": compare_two_numbers_easy,
-    "Multiply two digits": multilply_two_digits,
-    "Factorizing square of sum": factorizing_square_of_sum,
-    "Complete square (easy)": complete_square_easy,
-    "Complete square A1": complete_square_a1,
-    "Complete square A2 (easy)": complete_square_a2_easy,
-    "Complete square A2": complete_square_a2,
-    "Complete square A3": complete_square_a3,
-    "Complete square A4": complete_square_a4,
-    "Complete square A5": complete_square_a5,
-    "Star count (easy)": star_count_easy,
-    "Estimate sum": estimate,
-    "Complex roots": complex_roots,
-    "Quadratic equations (easy)": quadratic_equations_easy,
-    "Quadratic equations (calculator)": quadratic_equations_calculator,
-    "Value of function: Quadratic": value_function_quadratic,
-    "Factoring Quadratics": factoring_quadratics,
-    "Multiply Two Digits": multiply_two_digits,
-    "Multiplication Table": multiplication_table,
-    "Convert Units": convert_units,
-    "Large Division": large_division
+    "Test": {
+        'function': test,
+        'default_difficulty': 0},
+    "Add negatives": {
+        'function': add_negatives,
+        'default_difficulty': 0},
+    "Round whole numbers": {
+        'function': round_whole_numbers,
+        'default_difficulty': 0},
+    "Round decimals": {
+        'function': round_decimals,
+        'default_difficulty': 0},
+    "Multiply decimals": {
+        'function': multiply_decimals,
+        'default_difficulty': 0},
+    "Multiply hundreds": {
+        'function': multiply_hundreds,
+        'default_difficulty': 0},
+    "Find sum": {
+        'function': find_sum,
+        'default_difficulty': 0},
+    "Powers": {
+        'function': powers,
+        'default_difficulty': 0},
+    "Factorization": {
+        'function': factorization,
+        'default_difficulty': 0},
+    "Linear equations": {
+        'function': linear_equations,
+        'default_difficulty': 0},
+    "Linear equations: level 2": {
+        'function': linear_equations_lvl_2,
+        'default_difficulty': 0},
+    "Systems (easy)": {
+        'function': systems_easy,
+        'default_difficulty': 0},
+    "Division: remainders": {
+        'function': division_remainders,
+        'default_difficulty': 0},
+    "Fraction reduction": {
+        'function': fraction_reduction,
+        'default_difficulty': 0},
+    "Fractions to decimals": {
+        'function': fractions_to_decimals,
+        'default_difficulty': 0},
+    "Add decimals (easy)": {
+        'function': add_decimals_easy,
+        'default_difficulty': 0},
+    "Percent of": {
+        'function': percent_of,
+        'default_difficulty': 0},
+    "Percent of (no calculation)": {
+        'function': percent_of_no_calculation,
+        'default_difficulty': 0},
+    "Percent change": {
+        'function': percent_change,
+        'default_difficulty': 0},
+    "Roots": {
+        'function': roots,
+        'default_difficulty': 0},
+    "Logs": {
+        'function': logs,
+        'default_difficulty': 0},
+    "Adding fractions (easy)": {
+        'function': adding_fractions_easy,
+        'default_difficulty': 0},
+    "Division: mixed fractions (easy)": {
+        'function': division_mixed_fractions_easy,
+        'default_difficulty': 0},
+    "Division: mixed fractions": {
+        'function': division_mixed_fractions,
+        'default_difficulty': 0},
+    "Compare two numbers (easy)": {
+        'function': compare_two_numbers_easy,
+        'default_difficulty': 0},
+    "Multiply two digits": {
+        'function': multilply_two_digits,
+        'default_difficulty': 0},
+    "Factorizing square of sum": {
+        'function': factorizing_square_of_sum,
+        'default_difficulty': 0},
+    "Complete square (easy)": {
+        'function': complete_square_easy,
+        'default_difficulty': 0},
+    "Complete square A1": {
+        'function': complete_square_a1,
+        'default_difficulty': 0},
+    "Complete square A2 (easy)": {
+        'function': complete_square_a2_easy,
+        'default_difficulty': 0},
+    "Complete square A2": {
+        'function': complete_square_a2,
+        'default_difficulty': 0},
+    "Complete square A3": {
+        'function': complete_square_a3,
+        'default_difficulty': 0},
+    "Complete square A4": {
+        'function': complete_square_a4,
+        'default_difficulty': 0},
+    "Complete square A5": {
+        'function': complete_square_a5,
+        'default_difficulty': 0},
+    "Star count (easy)": {
+        'function': star_count_easy,
+        'default_difficulty': 0},
+    "Estimate sum": {
+        'function': estimate,
+        'default_difficulty': 0},
+    "Complex roots": {
+        'function': complex_roots,
+        'default_difficulty': 0},
+    "Quadratic equations (easy)": {
+        'function': quadratic_equations_easy,
+        'default_difficulty': 0},
+    "Quadratic equations (calculator)": {
+        'function': quadratic_equations_calculator,
+        'default_difficulty': 0},
+    "Value of function: Quadratic": {
+        'function': value_function_quadratic,
+        'default_difficulty': 0},
+    "Factoring Quadratics": {
+        'function': factoring_quadratics,
+        'default_difficulty': 0},
+    "Multiply Two Digits": {
+        'function': multiply_two_digits,
+        'default_difficulty': 0},
+    "Multiplication Table": {
+        'function': multiplication_table,
+        'default_difficulty': 0},
+    "Convert Units": {
+        'function': convert_units,
+        'default_difficulty': 0},
+    "Large Division": {
+        'function': large_division,
+        'default_difficulty': 0}
 }
