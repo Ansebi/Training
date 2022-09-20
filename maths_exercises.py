@@ -1480,6 +1480,17 @@ def large_division(difficulty: int):
     return right_answers, input_message, prompt
 
 
+def open_close_brackets(difficulty: int):
+    right_answers, input_message, prompt = None, None, None
+
+    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+
+
+    right_answers = [right_answer]
+
+    return right_answers, input_message, prompt
+
+
 exercises_dictionary = {
     "Test": {
         'function': test,
