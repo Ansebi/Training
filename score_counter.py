@@ -14,7 +14,6 @@ def score_counter(percentage, minutes_elapsed, seconds_elapsed, correct, incorre
     score -= bad_work
     score *= correctness
     score *= speed_impact
-    score /= 10
     score = int(round(score, 0))
 
     return score

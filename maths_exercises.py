@@ -359,25 +359,18 @@ def division_remainders(difficulty: int):
 
 
 def fraction_reduction(difficulty: int):
-    import supportive_module
     right_answers, input_message, prompt = None, None, None
-
     common_factor = random.randint(1, 11)
     n_1 = random.randint(1, 13)
     n_2 = random.randint(1, 13)
-    if n_1 % n_2 == 0:
-        right_answer = str(int(n_1 / n_2))
+    if not n_1 % n_2:
+        right_answer = int(n_1 / n_2)
     else:
         numerator = n_1 * common_factor
         denominator = n_2 * common_factor
-
-        fraction_simplifier = supportive_module.fraction_simplifier
-        fraction_simplifier(numerator, denominator)
-        right_answer = str(fraction_simplifier.output)
-
+        right_answer = fraction_simplifier(numerator, denominator)
     input_message = str(n_1 * common_factor) + "/" + str(n_2 * common_factor) + "= "
     right_answers = [right_answer]
-
     return right_answers, input_message, prompt
 
 
