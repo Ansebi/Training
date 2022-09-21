@@ -22,8 +22,7 @@ def choose_the_subject(subject_number):
         choose_the_subject.subject_exercises = english_exercises
         choose_the_subject.subject_name = 'English'
     else:
-        subject_number = random.choice(['1', '2', '3'])
-        choose_the_subject(subject_number)
+        raise Exception(f'wrong Subject ID: {subject_number}')
 
 # for i in range(1, len(exercises_list)):
 #     if i < 10:

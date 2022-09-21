@@ -204,3 +204,17 @@ def auto_round(number, ignore_zeros=True, string_output=True, restrict=False):
         result = str(result)
 
     return result
+
+
+def num_to_str(n, in_middle=True, remove_one=False):
+    if n < 0:
+        n_str = str(n)
+    else:
+        if in_middle:
+            n_str = f'+ {n}'
+        else:
+            n_str = str(n)
+    if remove_one:
+        if abs(n) == 1:
+            n_str = n_str.replace('1', '')
+    return n_str
