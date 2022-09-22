@@ -1472,7 +1472,7 @@ def large_division(difficulty: int):
     return right_answers, input_message, prompt
 
 
-def open_brackets(difficulty: int):
+def open_close_brackets(difficulty: int):
     """
     forward: n(ax + by) = nax + nby
     backward: nax + nby = n(ax + by)
@@ -1480,25 +1480,31 @@ def open_brackets(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     alphabet = 'abcdefghijkmnpqrstuvwxyz'
     d = abs(difficulty)
-    # mode = random.choice(['forward', 'backward'])
-    mode = 'forward'
+    mode = random.choice(['forward', 'backward'])
     x, y = np.random.choice(list(alphabet), 2, replace=False)
-    okay = False
-    while not okay:
-        a, b, n = np.random.randint(1, 6 + d, 3) * np.random.choice([-1, 1], 3)
-        conditions = [abs(a) != abs(b), abs(n) != 1]
-        okay = True if all(conditions) else False
+    if mode == 'forward':
+        okay = False
+        while not okay:
+            a, b, n = np.random.randint(1, 6 + d, 3) * np.random.choice([-1, 1], 3)
+            conditions = [abs(a) != abs(b), abs(n) != 1]
+            okay = True if all(conditions) else False
+    else:
+        primes = [1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
+        a, b = np.random.choice(primes[:max([d, 6])], 2, replace=False) * np.random.choice([-1, 1], 2)
+        n = random.randint(2, 12) * random.choice([-1, 1])
     na = num_to_str(n * a, in_middle=False, remove_one=True)
     nb = num_to_str(n * b, remove_one=True)
     a = num_to_str(a, in_middle=False, remove_one=True)
     b = num_to_str(b, remove_one=True)
-    n = num_to_str(n, in_middle=False, remove_one=True)
-    state0 = f"{n}({a}{x} {b}{y})"
+    n_str = num_to_str(n, in_middle=False, remove_one=True)
+    state0 = f"{n_str}({a}{x} {b}{y})"
     state1 = f"{na}{x} {nb}{y}"
     prompt = 'Open the brackets. Example: 5(x + 2y) = 5x + 10y'
     if mode == 'backward':
         state0, state1 = state1, state0
+        factor_sign = 'NEGATIVE (-)' if n < 0 else 'POSITIVE (+)'
         prompt = 'Factorize the following. Example: 5x + 10y = 5(x + 2y)'
+        prompt += f'\nThe factor is {factor_sign}'
     input_message = f"{state0} = "
     right_answers = [state1]
 
@@ -1641,7 +1647,7 @@ exercises_dictionary = {
     "Large Division": {
         'function': large_division,
         'default_difficulty': 0},
-    "Open brackets": {
-        'function': open_brackets,
+    "Open brackets | Close brackets": {
+        'function': open_close_brackets,
         'default_difficulty': 6}
 }

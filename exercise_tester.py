@@ -85,10 +85,11 @@ while True:
     print(subject_id, subject_name, 'exercise', exercise_id)
     exercise = exercises_dictionary[exercises_list[int(exercise_id)]]['function']
     right_answers, input_message, prompt = exercise(difficulty=TEST_DIFFICULTY)
+    print(prompt)
     print(input_message)
     print([i for i in right_answers])
     print('attempt number:', counter)
     if WRITE_LOG:
         log = open('test_log.csv', 'a')
-        log.write(f"{pd.Timestamp.now()};{subject_id};{exercise_id};{input_message};{right_answers}\n")
+        log.write(f"{pd.Timestamp.now()};{subject_id};{exercise_id};{prompt};{input_message};{right_answers}\n")
     input()
