@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def factorize(n: int) -> list:
     """generate proper multiples to form a number for further factorization"""
     results = []
@@ -218,3 +221,19 @@ def num_to_str(n, in_middle=True, remove_one=False):
         if abs(n) == 1:
             n_str = n_str.replace('1', '')
     return n_str
+
+
+def generate_target_sum(target: int, n: int, spread: int) -> list:
+    """
+    requires: numpy as np
+    returns: a list of integers
+
+    given the target 5 and n=2 it would propose e.g. [2, 3] which add up to 5
+    range controls the deviation of the generated addends
+    """
+    addends = (np.random.randint(1, max(1, spread+1), n) * np.random.choice([1, -1], n) + target / n).astype(int)
+    delta = target - addends.sum()
+    for i in range(abs(delta)):
+        addends[i % n] += delta//abs(delta)
+    return list(addends)
+
