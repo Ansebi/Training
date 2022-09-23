@@ -321,7 +321,7 @@ def systems_easy(difficulty: int):
 
     input_message = '\n'.join([line1, line2, line3]) + '\n'
     prompt = 'Find x y z. Response Example: 5 -5 10'
-    right_answers = [f'{x}, {y}, {z}']
+    right_answers = [f'{x} {y} {z}', f'{x}, {y}, {z}', f' {x} {y} {z}', f' {x} {y} {z} ']
 
     return right_answers, input_message, prompt
 
