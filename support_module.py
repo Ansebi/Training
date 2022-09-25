@@ -210,6 +210,13 @@ def auto_round(number, ignore_zeros=True, string_output=True, restrict=False):
 
 
 def num_to_str(n, in_middle=True, remove_one=False):
+    """
+    accepts both integers and floats
+    5 in the middle of the line turns into '+ 5'
+    -1.0 turns into '-1'
+    """
+    if not n % 1:
+        n = int(n)
     if n < 0:
         n_str = str(n)
     else:
@@ -223,6 +230,46 @@ def num_to_str(n, in_middle=True, remove_one=False):
     return n_str
 
 
+def get_var_chars(nx: str) -> str:
+    """
+    :param nx: string like '-28.7ab'
+    :return: '-28.7ab' would return 'ab'
+    """
+    num_chars = ' .,-0123456789'
+    var_region = False
+    var_part = ''
+    for i in nx:
+        if i not in num_chars:
+            var_region = True
+        if var_region:
+            var_part += i
+    return var_part
+
+
+def list_to_str(raw_list) -> str:
+    """
+    :param raw_list: a list of floats, integers, numeric strings or strings like '-5x'
+    :return: ['8', '-5x', 2] returns '8 -5x + 2'
+    """
+    processed_list = []
+    for n, i in enumerate(raw_list):
+        var_char = get_var_chars(str(i))
+        contains_variable = True if var_char else False
+        if contains_variable:
+            i = i.replace(var_char, '')
+        try:
+            i = float(i)
+        except:
+            warning = f"Wrong data type of the element: {i}.\n"
+            warning += "Must be a float or an integer, a numeric string at least.\n"
+            warning += "Or something like '5x' or '-4a'. These are supported and are a reason to make this function."
+            print(warning)
+        in_middle = True if n else False
+        i = num_to_str(i, in_middle=in_middle, remove_one=contains_variable) + var_char
+        processed_list.append(i)
+    return ' '.join(processed_list)
+
+
 def generate_target_sum(target: int, n: int, spread: int) -> list:
     """
     requires: numpy as np
@@ -231,6 +278,9 @@ def generate_target_sum(target: int, n: int, spread: int) -> list:
     given the target 5 and n=2 it would propose e.g. [2, 3] which add up to 5
     range controls the deviation of the generated addends
     """
+    if n <= 0:
+        raise Exception('n must be a positive integer, or a zero to return an empty list')
+
     addends = (np.random.randint(1, max(1, spread+1), n) * np.random.choice([1, -1], n) + target / n).astype(int)
     delta = target - addends.sum()
     for i in range(abs(delta)):

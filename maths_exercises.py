@@ -1,11 +1,13 @@
 import random
 from random import randint
 import numpy as np
-import supportive_module
-from supportive_module import crossout
-from supportive_module import factorize
-from supportive_module import fraction_simplifier
-from supportive_module import num_to_str
+import support_module
+from support_module import crossout
+from support_module import factorize
+from support_module import fraction_simplifier
+from support_module import num_to_str
+from support_module import generate_target_sum
+from support_module import list_to_str
 
 
 def test(difficulty: int):
@@ -238,7 +240,7 @@ def factorization(difficulty: int):
     return right_answers, input_message, prompt
 
 
-def linear_equations(difficulty: int):
+def linear_equation(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     # ax+b=c
     a = random.randint(1, 9)
@@ -271,7 +273,7 @@ def linear_equations(difficulty: int):
     return right_answers, input_message, prompt
 
 
-def linear_equations_lvl_2(difficulty: int):
+def linear_equation_lvl_2(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     # ax/d+b=c
     right_answer = 0.1
@@ -633,7 +635,7 @@ def logs(difficulty: int):
 
 
 def adding_fractions_easy(difficulty: int):
-    import supportive_module
+    import support_module
     right_answers, input_message, prompt = None, None, None
 
     # a/b+c/d
@@ -661,8 +663,8 @@ def adding_fractions_easy(difficulty: int):
     numerator = a * d + c * b
     denominator = b * d
 
-    fraction_simplifier = supportive_module.fraction_simplifier
-    crossout = supportive_module.crossout
+    fraction_simplifier = support_module.fraction_simplifier
+    crossout = support_module.crossout
 
     fraction_simplifier(numerator, denominator)
 
@@ -1113,11 +1115,11 @@ def complex_roots(difficulty: int):
     return right_answers, input_message, prompt
 
 
-def quadratic_equations_easy(difficulty: int):
+def quadratic_equation_easy(difficulty: int):
     right_answers, input_message, prompt = None, None, None
 
-    import supportive_module
-    quadratics_composer = supportive_module.quadratics_composer
+    import support_module
+    quadratics_composer = support_module.quadratics_composer
     quadratics_composer()
     total_set = quadratics_composer.total_set
     the_particular_set = random.choice(total_set)
@@ -1169,7 +1171,7 @@ def quadratic_equations_easy(difficulty: int):
     return right_answers, input_message, prompt
 
 
-def quadratic_equations_calculator(difficulty: int):
+def quadratic_equation_calculator(difficulty: int):
     right_answers, input_message, prompt = None, None, None
 
     a1 = randint(-10, -1)
@@ -1302,7 +1304,7 @@ def value_function_quadratic(difficulty: int):
 
 def factoring_quadratics(difficulty: int):
     right_answers, input_message, prompt = None, None, None
-    quadratics_composer = supportive_module.quadratics_composer
+    quadratics_composer = support_module.quadratics_composer
     x1 = 0
     x2 = 0
     a = 1
@@ -1411,11 +1413,11 @@ def convert_units(difficulty: int):
 
     value = n * k
     value = str(value)
-    e_remover = supportive_module.e_remover
+    e_remover = support_module.e_remover
     value = e_remover(value)
 
-    fixer = supportive_module.re_based_decimal_fixer_zero
-    auto_round = supportive_module.auto_round
+    fixer = support_module.re_based_decimal_fixer_zero
+    auto_round = support_module.auto_round
     value = e_remover(auto_round(fixer(value)))
 
     okay = False
@@ -1510,6 +1512,56 @@ def open_close_brackets(difficulty: int):
 
     return right_answers, input_message, prompt
 
+def linear_equation_collect_terms(difficulty: int):
+    d = abs(difficulty)
+    """
+    nax + nbx + ncx + nd + ne + nf = ngx + nhx + njx + nk + nm + np
+    
+    solved as
+    n(a+b+c-g-h-j)x = n(k+m+p-d-e-f)
+    (a+b+c-g-h-j)x = k+m+p-d-e-f
+    or
+    effective_coef * x = effective_const
+    
+    x = effective_const/effective_coef
+    
+    x is pre-defined integer
+    """
+    right_answers, input_message, prompt = None, None, None
+
+    n_coefs = random.randint(1, 3 + d)
+    n_consts = random.randint(1, 3 + d)
+    n_coefs_left = random.randint(0, n_coefs)
+    n_coefs_right = n_coefs - n_coefs_left
+    # n_consts_left = random.randint(0, n_consts)
+    # n_consts_right = n_consts - n_consts_left
+    left_coefs = list(np.random.randint(1, 6 + d, n_coefs_left) * np.random.choice([-1, 1], n_coefs_left))
+    right_coefs = list(np.random.randint(1, 6 + d, n_coefs_right) * np.random.choice([-1, 1], n_coefs_right))
+    x = random.randint(-(7+d), 7+d)
+    effective_coef = sum(left_coefs) - sum(right_coefs)
+    effective_const = x * effective_coef
+    sum_left_cts, sum_right_cts = generate_target_sum(effective_const, 2, 6 + d**2)
+    sum_left_cts *= -1
+    left_cts = generate_target_sum(sum_left_cts, random.randint(1, 2 + d), 5 + d**2)
+    right_cts = generate_target_sum(sum_right_cts, random.randint(1, 2 + d), 5 + d**2)
+    left_xs = [f'{i}x' for i in left_coefs]
+    right_xs = [f'{i}x' for i in right_coefs]
+    left = [i for i in list(left_xs + left_cts) if i]
+    right = [i for i in list(right_xs + right_cts) if i]
+    random.shuffle(left)
+    random.shuffle(right)
+    if not left:
+        left = [0]
+    if not right:
+        right = [0]
+    left = list_to_str(left)
+    right = list_to_str(right)
+    input_message = f'{left} = {right}\nx = '
+    right_answers = [x]
+    prompt = 'Collect the terms and find x.'
+
+    return right_answers, input_message, prompt
+
 
 exercises_dictionary = {
     "Test": {
@@ -1539,11 +1591,11 @@ exercises_dictionary = {
     "Factorization": {
         'function': factorization,
         'default_difficulty': 0},
-    "Linear equations": {
-        'function': linear_equations,
+    "Linear equation": {
+        'function': linear_equation,
         'default_difficulty': 0},
-    "Linear equations: level 2": {
-        'function': linear_equations_lvl_2,
+    "Linear equation: level 2": {
+        'function': linear_equation_lvl_2,
         'default_difficulty': 0},
     "Systems (easy)": {
         'function': systems_easy,
@@ -1623,11 +1675,11 @@ exercises_dictionary = {
     "Complex roots": {
         'function': complex_roots,
         'default_difficulty': 0},
-    "Quadratic equations (easy)": {
-        'function': quadratic_equations_easy,
+    "Quadratic equation (easy)": {
+        'function': quadratic_equation_easy,
         'default_difficulty': 0},
-    "Quadratic equations (calculator)": {
-        'function': quadratic_equations_calculator,
+    "Quadratic equation (calculator)": {
+        'function': quadratic_equation_calculator,
         'default_difficulty': 0},
     "Value of function: Quadratic": {
         'function': value_function_quadratic,
@@ -1649,5 +1701,8 @@ exercises_dictionary = {
         'default_difficulty': 0},
     "Open brackets | Close brackets": {
         'function': open_close_brackets,
-        'default_difficulty': 6}
+        'default_difficulty': 6},
+    "Linear equation: The Gathering": {
+        'function': linear_equation_collect_terms,
+        'default_difficulty': 0}
 }

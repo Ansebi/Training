@@ -8,21 +8,22 @@ if not os.path.exists('testing'):
 TEST_DIFFICULTY = 0
 WRITE_LOG = True
 
+
 def choose_the_subject(subject_number):
-    if subject_number == '1':
+    if subject_number == 1:
         import maths_exercises
         choose_the_subject.subject_exercises = maths_exercises
         choose_the_subject.subject_name = 'Maths'
-    elif subject_number == '2':
+    elif subject_number == 2:
         import russian_exercises
         choose_the_subject.subject_exercises = russian_exercises
         choose_the_subject.subject_name = 'Russian'
-    elif subject_number == '3':
+    elif subject_number == 3:
         import english_exercises
         choose_the_subject.subject_exercises = english_exercises
         choose_the_subject.subject_name = 'English'
     else:
-        raise Exception(f'wrong Subject ID: {subject_number}')
+        raise Exception(f'Wrong Subject ID: {subject_number}')
 
 # for i in range(1, len(exercises_list)):
 #     if i < 10:
