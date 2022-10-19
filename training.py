@@ -46,7 +46,7 @@ def choose_type(exercise_name, difficulty):
     return training_type
 
 
-def core(the_exercise, difficulty):
+def core(the_exercise, difficulty, standard_completion_time_sec):
     right_answers, input_message, prompt = the_exercise(difficulty)
     right_answers = [str(i) for i in right_answers]
     print(f"points: {global_.score}       accuracy: {global_.percentage}%")
@@ -85,6 +85,7 @@ def core(the_exercise, difficulty):
     global_.seconds_elapsed = int(round(float(str(datetime.datetime.now() - global_.start)[5:10]), 0))
 
     score = score_counter(
+        standard_completion_time_sec,
         global_.percentage,
         global_.minutes_elapsed,
         global_.seconds_elapsed,
@@ -152,6 +153,7 @@ def training():
         exercise_number = random.randint(1, len(exercises_list) - 1)
     exercise_name = exercises_list[exercise_number]
     difficulty = exercises_dictionary[exercise_name]['default_difficulty']
+    standard_completion_time_sec = exercises_dictionary[exercise_name]['standard_completion_time_sec']
     clear()
 
 
@@ -186,7 +188,7 @@ def training():
         while global_.score < global_.target_score:
             print(exercise_name, '    ', end='')
             print('score:', str(global_.score) + '/' + str(global_.target_score))
-            core(the_exercise, difficulty)
+            core(the_exercise, difficulty, standard_completion_time_sec)
     elif training_type == '2':
         global_.fixed_time_input = input('Specify the time for training (minutes): ')
         if global_.fixed_time_input != '':
@@ -200,7 +202,7 @@ def training():
             seconds_remaining = int(round(seconds_remaining, 0))
             print(exercise_name, '    ', end='')
             print('time remaining:', str(minutes_remaining) + ':' + str(seconds_remaining))
-            core(the_exercise, difficulty)
+            core(the_exercise, difficulty, standard_completion_time_sec)
     else:
         global_.number_of_tasks_input = input('Specify the number of tasks: ')
         if global_.number_of_tasks_input != '':
@@ -210,7 +212,7 @@ def training():
         for i in range(global_.number_of_tasks):
             print(exercise_name, '    ', end='')
             print('tasks complete:', str(i) + '/' + str(global_.number_of_tasks))
-            core(the_exercise, difficulty)
+            core(the_exercise, difficulty, standard_completion_time_sec)
 
     print(exercise_name, '\n')
     print(global_.percentage, '%')

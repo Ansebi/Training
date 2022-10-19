@@ -219,24 +219,16 @@ def factorization(difficulty: int):
         n_6 = random.choice(prime_numbers_up_to_100[0:6])
     else:
         n_6 = 1
-    # finish generating proper muliples to form a number for further factorization
 
     n = n_1 * n_2 * n_3 * n_4 * n_5 * n_6
 
-    factorize(n)
-
-    # converting factorization results:
-    counter = 0
-    for i in factorization.results:
-        factorization.results[counter] = str(factorization.results[counter])
-        counter += 1
-    factorization.results = "*".join(factorization.results)
-    # finish converting factorization results
-
-    right_answer = factorization.results
+    prime_multiples_list = factorize(n)
+    right_answer = '*'.join([str(i) for i in prime_multiples_list])
     right_answers = [right_answer]
-    input_message = str("factorize " + str(n) + ":  " + str(n) + " = ")
-
+    input_message = f'{n} = '
+    prompt = 'Factorize a number (reveal ascending prime multiples).'
+    prompt += '\n'
+    prompt += 'Example: 60 = 2*2*3*5'
     return right_answers, input_message, prompt
 
 
@@ -541,7 +533,6 @@ def percent_change(difficulty: int):
     right_answer = n + percent_delta * percent_delta_sign
     right_answers = [right_answer]
     input_message = "It was " + str(n) + "." + crease + str(percent) + "%. Now it equals "
-    x = float(input(input_message))
     return right_answers, input_message, prompt
 
 
@@ -583,7 +574,6 @@ def roots(difficulty: int):
 
     input_message = str(degree_of_the_root + " root of " + str(n) + " = ")
     right_answers = [right_answer]
-    x = int(input(input_message))
     return right_answers, input_message, prompt
 
 
@@ -1566,143 +1556,190 @@ def linear_equation_collect_terms(difficulty: int):
 exercises_dictionary = {
     "Test": {
         'function': test,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Add negatives": {
         'function': add_negatives,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 8},
     "Round whole numbers": {
         'function': round_whole_numbers,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Round decimals": {
         'function': round_decimals,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Multiply decimals": {
         'function': multiply_decimals,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Multiply hundreds": {
         'function': multiply_hundreds,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Find sum": {
         'function': find_sum,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Powers": {
         'function': powers,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Factorization": {
         'function': factorization,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Linear equation": {
         'function': linear_equation,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Linear equation: level 2": {
         'function': linear_equation_lvl_2,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Systems (easy)": {
         'function': systems_easy,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 300},
     "Division: remainders": {
         'function': division_remainders,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Fraction reduction": {
         'function': fraction_reduction,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Fractions to decimals": {
         'function': fractions_to_decimals,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Add decimals (easy)": {
         'function': add_decimals_easy,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Percent of": {
         'function': percent_of,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Percent of (no calculation)": {
         'function': percent_of_no_calculation,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Percent change": {
         'function': percent_change,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Roots": {
         'function': roots,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Logs": {
         'function': logs,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Adding fractions (easy)": {
         'function': adding_fractions_easy,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Division: mixed fractions (easy)": {
         'function': division_mixed_fractions_easy,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Division: mixed fractions": {
         'function': division_mixed_fractions,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Compare two numbers (easy)": {
         'function': compare_two_numbers_easy,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Multiply two digits": {
         'function': multilply_two_digits,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Factorizing square of sum": {
         'function': factorizing_square_of_sum,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Complete square (easy)": {
         'function': complete_square_easy,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Complete square A1": {
         'function': complete_square_a1,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Complete square A2 (easy)": {
         'function': complete_square_a2_easy,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Complete square A2": {
         'function': complete_square_a2,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Complete square A3": {
         'function': complete_square_a3,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Complete square A4": {
         'function': complete_square_a4,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Complete square A5": {
         'function': complete_square_a5,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Star count (easy)": {
         'function': star_count_easy,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Estimate sum": {
         'function': estimate,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Complex roots": {
         'function': complex_roots,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Quadratic equation (easy)": {
         'function': quadratic_equation_easy,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Quadratic equation (calculator)": {
         'function': quadratic_equation_calculator,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Value of function: Quadratic": {
         'function': value_function_quadratic,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Factoring Quadratics": {
         'function': factoring_quadratics,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Multiply Two Digits": {
         'function': multiply_two_digits,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Multiplication Table": {
         'function': multiplication_table,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Convert Units": {
         'function': convert_units,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Large Division": {
         'function': large_division,
-        'default_difficulty': 0},
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5},
     "Open brackets | Close brackets": {
         'function': open_close_brackets,
-        'default_difficulty': 6},
+        'default_difficulty': 6,
+        'standard_completion_time_sec': 5},
     "Linear equation: The Gathering": {
         'function': linear_equation_collect_terms,
-        'default_difficulty': 0}
+        'default_difficulty': 0,
+        'standard_completion_time_sec': 5}
 }

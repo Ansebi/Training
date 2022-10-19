@@ -651,3 +651,183 @@ x = ;[-2]
 x = ;[-2]
 2022-09-25 03:29:18.349720;1;46;Collect the terms and find x.;2 = -5x + 3 + 3x -3 + 3x
 x = ;[2]
+2022-10-19 15:52:08.088845;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;100 = ;['2*2*5*5']
+2022-10-19 15:52:23.070680;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;24 = ;['2*2*2*3']
+2022-10-19 15:52:29.549217;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;105 = ;['3*5*7']
+2022-10-19 15:52:30.061455;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;450 = ;['2*3*3*5*5']
+2022-10-19 15:52:30.088354;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;2925 = ;['3*3*5*5*13']
+2022-10-19 15:52:30.122280;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;100 = ;['2*2*5*5']
+2022-10-19 15:52:30.152178;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;105 = ;['3*5*7']
+2022-10-19 15:52:30.183605;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;60 = ;['2*2*3*5']
+2022-10-19 15:52:30.212464;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;15 = ;['3*5']
+2022-10-19 15:52:30.740686;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;100 = ;['2*2*5*5']
+2022-10-19 15:52:31.255950;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;70 = ;['2*5*7']
+2022-10-19 15:52:31.283116;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;175 = ;['5*5*7']
+2022-10-19 15:52:31.315007;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;312 = ;['2*2*2*3*13']
+2022-10-19 15:52:31.344612;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;75 = ;['3*5*5']
+2022-10-19 15:52:31.376820;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;6 = ;['2*3']
+2022-10-19 15:52:31.407753;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;50 = ;['2*5*5']
+2022-10-19 15:52:31.438624;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;108 = ;['2*2*3*3*3']
+2022-10-19 15:52:31.469520;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;200 = ;['2*2*2*5*5']
+2022-10-19 15:52:31.499425;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;1950 = ;['2*3*5*5*13']
+2022-10-19 15:52:31.532311;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;4 = ;['2*2']
+2022-10-19 15:52:31.560780;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;12 = ;['2*2*3']
+2022-10-19 15:52:31.593670;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;420 = ;['2*2*3*5*7']
+2022-10-19 15:52:31.625616;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;450 = ;['2*3*3*5*5']
+2022-10-19 15:52:31.655465;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;50 = ;['2*5*5']
+2022-10-19 15:52:31.685365;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;10 = ;['2*5']
+2022-10-19 15:52:31.715885;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;10 = ;['2*5']
+2022-10-19 15:52:32.545085;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;98 = ;['2*7*7']
+2022-10-19 15:52:33.061183;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;126 = ;['2*3*3*7']
+2022-10-19 15:52:33.090711;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;60 = ;['2*2*3*5']
+2022-10-19 15:52:33.119395;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;27 = ;['3*3*3']
+2022-10-19 15:52:33.148678;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;12 = ;['2*2*3']
+2022-10-19 15:52:33.188444;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;15 = ;['3*5']
+2022-10-19 15:52:33.210746;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;350 = ;['2*5*5*7']
+2022-10-19 15:52:33.242104;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;110 = ;['2*5*11']
+2022-10-19 15:52:33.275381;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;4875 = ;['3*5*5*5*13']
+2022-10-19 15:52:33.303222;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;90 = ;['2*3*3*5']
+2022-10-19 15:52:33.335348;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;10 = ;['2*5']
+2022-10-19 15:52:33.367345;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;48 = ;['2*2*2*2*3']
+2022-10-19 15:52:33.397828;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;1250 = ;['2*5*5*5*5']
+2022-10-19 15:52:35.013630;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;10 = ;['2*5']
+2022-10-19 15:52:35.525725;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;12 = ;['2*2*3']
+2022-10-19 15:52:35.555754;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;45 = ;['3*3*5']
+2022-10-19 15:52:35.584634;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;90 = ;['2*3*3*5']
+2022-10-19 15:52:35.614833;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;110 = ;['2*5*11']
+2022-10-19 15:52:35.646802;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;350 = ;['2*5*5*7']
+2022-10-19 15:52:35.679618;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;735 = ;['3*5*7*7']
+2022-10-19 15:52:35.708712;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;2625 = ;['3*5*5*5*7']
+2022-10-19 15:52:35.740652;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;6 = ;['2*3']
+2022-10-19 15:52:35.767647;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;27 = ;['3*3*3']
+2022-10-19 15:52:35.798634;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;45 = ;['3*3*5']
+2022-10-19 15:52:35.830947;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;9 = ;['3*3']
+2022-10-19 15:52:35.862394;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;27 = ;['3*3*3']
+2022-10-19 15:52:35.891319;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;875 = ;['5*5*5*7']
+2022-10-19 15:52:35.924396;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;6 = ;['2*3']
+2022-10-19 15:52:35.953617;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;60 = ;['2*2*3*5']
+2022-10-19 15:52:35.986607;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;25 = ;['5*5']
+2022-10-19 15:52:36.014842;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;30 = ;['2*3*5']
+2022-10-19 15:52:36.046762;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;45 = ;['3*3*5']
+2022-10-19 15:52:36.077645;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;8 = ;['2*2*2']
+2022-10-19 15:52:36.108930;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;36 = ;['2*2*3*3']
+2022-10-19 15:52:36.142018;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;6 = ;['2*3']
+2022-10-19 15:52:36.171057;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;13750 = ;['2*5*5*5*5*11']
+2022-10-19 15:52:36.199920;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;6 = ;['2*3']
+2022-10-19 15:52:36.229821;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;36 = ;['2*2*3*3']
+2022-10-19 15:52:36.261779;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;10 = ;['2*5']
+2022-10-19 15:52:36.294606;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;468 = ;['2*2*3*3*13']
+2022-10-19 15:52:36.322509;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;12 = ;['2*2*3']
+2022-10-19 15:52:36.355401;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;1375 = ;['5*5*5*11']
+2022-10-19 15:52:36.383562;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;315 = ;['3*3*5*7']
+2022-10-19 15:52:36.418449;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;240 = ;['2*2*2*2*3*5']
+2022-10-19 15:52:36.447115;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;150 = ;['2*3*5*5']
+2022-10-19 15:52:36.478473;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;225 = ;['3*3*5*5']
+2022-10-19 15:52:36.510329;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;70 = ;['2*5*7']
+2022-10-19 15:52:36.542469;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;90 = ;['2*3*3*5']
+2022-10-19 15:52:36.573176;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;84 = ;['2*2*3*7']
+2022-10-19 15:52:36.602496;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;630 = ;['2*3*3*5*7']
+2022-10-19 15:52:36.631434;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;24 = ;['2*2*2*3']
+2022-10-19 15:52:36.662709;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;180 = ;['2*2*3*3*5']
+2022-10-19 15:52:36.696124;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;6 = ;['2*3']
+2022-10-19 15:52:36.725271;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;1625 = ;['5*5*5*13']
+2022-10-19 15:52:36.756170;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;4 = ;['2*2']
+2022-10-19 15:52:36.788240;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;2205 = ;['3*3*5*7*7']
+2022-10-19 15:52:36.816863;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;594 = ;['2*3*3*3*11']
+2022-10-19 15:52:36.848756;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;420 = ;['2*2*3*5*7']
+2022-10-19 15:52:36.880651;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;270 = ;['2*3*3*3*5']
+2022-10-19 15:52:36.909208;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;2940 = ;['2*2*3*5*7*7']
+2022-10-19 15:52:36.940328;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;18 = ;['2*3*3']
+2022-10-19 15:52:36.973415;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;90 = ;['2*3*3*5']
+2022-10-19 15:52:37.002123;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;325 = ;['5*5*13']
+2022-10-19 15:52:37.035187;1;8;Factorize a number (reveal ascending prime multiples).
+Example: 60 = 2*2*3*5;6 = ;['2*3']
