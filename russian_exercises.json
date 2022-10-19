@@ -1,0 +1,31 @@
+{
+    "Test": {
+        "function": "test",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 5},
+
+    "Adjective endings" : {
+        "function": "adjective_endings",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 10},
+
+    "Picture Vocabulary 250" : {
+        "function": "picture_vocabulary_250",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 5},
+
+    "Н и НН": {
+        "function": "n_nn",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 5},
+
+    "Мои сложные слова": {
+        "function": "difficult_words",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 5},
+
+    "Перестановка букв (UNDER CONSTRUCTION)": {
+        "function": "shuffle_letters",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 5}
+}

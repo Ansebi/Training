@@ -112,19 +112,3 @@ def vocabulary(difficulty: int):
     right_answer = the_item[0]
     right_answers = [right_answer]
     return right_answers, input_message, prompt
-
-
-exercises_dictionary = {
-    'Test': {
-        'function': test,
-        'default_difficulty': 0},
-    'Irregular verbs': {
-        'function': irregular_verbs,
-        'default_difficulty': 0},
-    'Missing words': {
-        'function': missing_words,
-        'default_difficulty': 0},
-    'Vocabulary': {
-        'function': vocabulary,
-        'default_difficulty': 0}
-}

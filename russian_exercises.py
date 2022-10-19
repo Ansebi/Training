@@ -154,25 +154,3 @@ def shuffle_letters(difficulty: int):
     right_answer = word
     right_answers = [right_answer]
     return right_answers, input_message, prompt
-
-
-exercises_dictionary = {
-    "Test": {
-        'function': test,
-        'default_difficulty': 0},
-    # "Adjective endings" : {
-    #     'function': adjective_endings,
-    #     'default_difficulty': 0},
-    # "Picture Vocabulary 250" : {
-    #     'function': picture_vocabulary_250,
-    #     'default_difficulty': 0},
-    'Н и НН': {
-        'function': n_nn,
-        'default_difficulty': 0},
-    'Мои сложные слова': {
-        'function': difficult_words,
-        'default_difficulty': 0},
-    'Перестановка букв (UNDER CONSTRUCTION)': {
-        'function': shuffle_letters,
-        'default_difficulty': 0}
-}

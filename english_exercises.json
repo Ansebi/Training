@@ -1,0 +1,21 @@
+{
+    "Test": {
+        "function": "test",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 5},
+
+    "Irregular verbs": {
+        "function": "irregular_verbs",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 5},
+
+    "Missing words": {
+        "function": "missing_words",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 5},
+
+    "Vocabulary": {
+        "function": "vocabulary",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 5}
+}

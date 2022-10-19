@@ -1,4 +1,6 @@
 # import libraries:
+import importlib
+import json
 import winsound
 import time
 import random
@@ -7,9 +9,6 @@ import sys
 import datetime
 # import modules:
 import image_module
-import maths_exercises
-import russian_exercises
-import english_exercises
 from score_counter import score_counter
 
 # import data_fixer
@@ -93,7 +92,7 @@ def core(the_exercise, difficulty, standard_completion_time_sec):
         global_.incorrect)
     global_.score = score
     global_.time_elapsed = time.time() - global_.start_simple_time_format
-    
+
 
 def training():
     """ENTRANCE"""
@@ -117,27 +116,28 @@ def training():
     """ENTRANCE END"""
 
     """CHOOSE THE SUBJECT"""
-    dict_subjects = {'1': {'subject_exercises': maths_exercises,
+    dict_subjects = {'1': {'subject_exercises': 'maths_exercises',
                            'subject_name': 'Maths'},
-                     '2': {'subject_exercises': russian_exercises,
+                     '2': {'subject_exercises': 'russian_exercises',
                            'subject_name': 'Russian'},
-                     '3': {'subject_exercises': english_exercises,
+                     '3': {'subject_exercises': 'english_exercises',
                            'subject_name': 'English'}}
     print('\n' * 8 + '         ' + user_name + ', please choose the subject:' + '\n')
     for n, val in dict_subjects.items():
         print(f"{n}. {val['subject_name']}")
     print('\n' * 4)
-    subject = input('Your choice:  ')
+    subject_id = input('Your choice:  ')
 
-    if subject not in dict_subjects:
-        subject = random.choice(list(dict_subjects.keys()))
-    subject_name = dict_subjects[subject]['subject_name']
-    subject_exercises = dict_subjects[subject]['subject_exercises']
+    if subject_id not in dict_subjects:
+        subject_id = random.choice(list(dict_subjects.keys()))
+    subject_name = dict_subjects[subject_id]['subject_name']
+    subject_exercises = dict_subjects[subject_id]['subject_exercises']
     clear()
     """CHOOSE THE SUBJECT END"""
 
-    # assign exercise dictionary
-    exercises_dictionary = subject_exercises.exercises_dictionary
+    exercises_json = open(f'{subject_exercises}.json', encoding='utf-8')
+    exercises_dictionary = json.load(exercises_json)
+    exercises_json.close()
     exercises_list = list(exercises_dictionary.keys())
 
     for i in range(1, len(exercises_list)):
@@ -156,9 +156,6 @@ def training():
     standard_completion_time_sec = exercises_dictionary[exercise_name]['standard_completion_time_sec']
     clear()
 
-
-
-    # constants
     global_.time_elapsed = 0
     global_.correct = 0
     global_.incorrect = 0
@@ -167,7 +164,9 @@ def training():
     global_.percentage = 0
     global_.score = 0
 
-    the_exercise = exercises_dictionary[exercise_name]['function']
+    exercise_function_name = exercises_dictionary[exercise_name]['function']
+    the_exercise = getattr(importlib.import_module(subject_exercises), exercise_function_name)
+
     training_type = choose_type(exercise_name, difficulty)
     if 'set' in training_type:
         try:

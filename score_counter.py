@@ -5,7 +5,7 @@ def score_counter(
         seconds_elapsed,
         correct,
         incorrect,
-        k=10):
+        k=1):
     calc_time = minutes_elapsed * 60
     calc_time += seconds_elapsed
     calc_time += 1
