@@ -27,5 +27,5 @@
     "Перестановка букв (UNDER CONSTRUCTION)": {
         "function": "shuffle_letters",
         "default_difficulty": 0,
-        "standard_completion_time_sec": 5}
+        "standard_completion_time_sec": 60}
 }

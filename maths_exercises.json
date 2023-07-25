@@ -21,7 +21,7 @@
 
     "Multiply decimals": {
         "function": "multiply_decimals",
-        "default_difficulty": 0,
+        "default_difficulty": 3,
         "standard_completion_time_sec": 5},
 
     "Multiply hundreds": {
@@ -106,7 +106,7 @@
 
     "Adding fractions (easy)": {
         "function": "adding_fractions_easy",
-        "default_difficulty": 0,
+        "default_difficulty": 5,
         "standard_completion_time_sec": 5},
 
     "Division: mixed fractions (easy)": {

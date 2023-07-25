@@ -78,16 +78,35 @@ def round_decimals(difficulty: int):
 def multiply_decimals(difficulty: int):
     right_answers, input_message, prompt = None, None, None
 
-    n = random.randint(0, 100)
+    #n = random.randint(0, 100)
     if random.randint(0, 1) == 1:
         n_sign = -1
     else:
         n_sign = 1
-
-    m = round(random.randint(0, 12) * 10 ** random.randint(-3, 0), 4)
-    right_answer = round(n_sign * n * m, 4)
+        
+    max_digit = 9
+    whole_part_n = np.random.randint(0, max_digit, difficulty + random.choice([0,-1]))
+    whole_part_n = list(whole_part_n)
+    whole_part_n = [str(i) for i in whole_part_n]
+    whole_part_n = ''.join(whole_part_n)
+    whole_part_n = int(whole_part_n)
+    
+    whole_part_m = np.random.randint(0, max_digit, difficulty + random.choice([0,-1]))
+    whole_part_m = list(whole_part_m)
+    whole_part_m = [str(i) for i in whole_part_m]
+    whole_part_m = ''.join(whole_part_m)
+    whole_part_m = int(whole_part_m)
+    
+    n = round(whole_part_n * 10 ** random.randint(-3, -1), 4)
+    m = round(whole_part_m * 10 ** random.randint(-3, -1), 4)
+    
+    right_answer = round(n_sign * n / m, 4)
+    if not right_answer % 1:
+        right_answer = int(right_answer)
+    if not right_answer and n_sign < 0:
+        right_answer = 0
     right_answers = [str(right_answer)]
-    input_message = str(n * n_sign) + " * " + str(m) + " = "
+    input_message = str(n * n_sign) + " / " + str(m) + " = "
 
     return right_answers, input_message, prompt
 
@@ -267,7 +286,7 @@ def linear_equation(difficulty: int):
 
 def linear_equation_lvl_2(difficulty: int):
     right_answers, input_message, prompt = None, None, None
-    # ax/d+b=c
+    # ax/d + b=c
     right_answer = 0.1
     while right_answer % 1 != 0:
         a = random.randint(1, 10) * random.choice([-1, 1])
@@ -289,7 +308,7 @@ def linear_equation_lvl_2(difficulty: int):
     else:
         b_input_message = ""
 
-    input_message = a_input_message + "x/" + str(d) + b_input_message + "=" + str(c) + "\nx = "
+    input_message = a_input_message + "x/" + str(d) + " " + b_input_message + "=" + str(c) + "\nx = "
     right_answers = [right_answer]
 
     return right_answers, input_message, prompt
@@ -531,6 +550,8 @@ def percent_change(difficulty: int):
         crease = "Increase "
 
     right_answer = n + percent_delta * percent_delta_sign
+    if not right_answer % 1:
+        right_answer = int(right_answer)
     right_answers = [right_answer]
     input_message = "It was " + str(n) + "." + crease + str(percent) + "%. Now it equals "
     return right_answers, input_message, prompt
@@ -625,50 +646,74 @@ def logs(difficulty: int):
 
 
 def adding_fractions_easy(difficulty: int):
-    import support_module
     right_answers, input_message, prompt = None, None, None
+    threshold = (difficulty + 1) * 10
+    okay = False
+    mode = random.choice(['+', '+','*', ':'])
+    if mode == '+':
+        while not okay:
+            n11 = random.randint(1, 13)
+            n12 = random.randint(1, 13)
+            n21 = random.randint(1, 13)
+            n22 = random.randint(1, 13)
 
-    # a/b+c/d
+            numerator = n11 * n22 + n21 * n12
+            denominator = n12 * n22
+            top, bottom = crossout(factorize(numerator), factorize(denominator))
+            if top + bottom < threshold:
+                okay = True
+                right_answer = fraction_simplifier(numerator, denominator)
+        input_message = f'{n11}/{n12} + {n21}/{n22} = '
+        right_answers = [right_answer]
+    elif mode == '*':
+        while not okay:
+            n11 = random.randint(1, 13)
+            n12 = random.randint(1, 13)
+            n21 = random.randint(1, 13)
+            n22 = random.randint(1, 13)
 
-    a = random.randint(1, 13)
-    b = random.randint(1, 13)
-    switch = random.randint(0, 2)
-    if switch == 0:
-        c = random.randint(1, 13)
-        d = random.randint(1, 13)
-    elif switch == 1:
-        c = random.choice([random.randint(1, 5), random.randint(1, 13)])
-        d = random.randint(1, 5) * b
-    elif switch == 2:
-        c = random.randint(1, 13)
-        d = random.randint(1, 13) * b
+            numerator = n11 * n21
+            denominator = n12 * n22
+            top, bottom = crossout(factorize(numerator), factorize(denominator))
+            if top + bottom < threshold:
+                okay = True
+                right_answer = fraction_simplifier(numerator, denominator)
+        input_message = f'{n11}/{n12} * {n21}/{n22} = '
+        right_answers = [right_answer]
+    elif mode == ':':
+        while not okay:
+            n11 = random.randint(1, 13)
+            n12 = random.randint(1, 13)
+            n21 = random.randint(1, 13)
+            n22 = random.randint(1, 13)
 
-    if random.randint(0, 1) == 0:
-        a, b, c, d = c, d, a, b
-
-    # off ab_sign=random.choice[-1,1]
-    # off cd_sign=random.choice[-1,1]
-
-    # (a*d+c*b)/(b*d)
-    numerator = a * d + c * b
-    denominator = b * d
-
-    fraction_simplifier = support_module.fraction_simplifier
-    crossout = support_module.crossout
-
-    fraction_simplifier(numerator, denominator)
-
-    if crossout.top < crossout.bottom or crossout.bottom == 1:
-        right_answer = fraction_simplifier.output
+            numerator = n11 * n22
+            denominator = n12 * n21
+            top, bottom = crossout(factorize(numerator), factorize(denominator))
+            if top + bottom < threshold:
+                okay = True
+                right_answer = fraction_simplifier(numerator, denominator)
+        input_message = f'{n11}/{n12} : {n21}/{n22} = '
+        right_answers = [right_answer]
     else:
-        whole = crossout.top // crossout.bottom
-        fraction_top = crossout.top % crossout.bottom
-        right_answer = str(whole) + " " + str(fraction_top) + "/" + str(crossout.bottom)
+        raise Exception('wrong mode')
+        while not okay:
+            n11 = random.randint(1, 13)
+            n12 = random.randint(1, 13)
+            n21 = random.randint(1, 13)
+            n22 = random.randint(1, 13)
 
-    input_message = str(a) + "/" + str(b) + " + " + str(c) + "/" + str(d) + " = "
-    right_answers = [right_answer]
-
+            numerator = n11 * n22 - n21 * n12
+            denominator = n12 * n22
+            top, bottom = crossout(
+                factorize(abs(numerator)), factorize(abs(denominator)))
+            if top + bottom < threshold:
+                okay = True
+                right_answer = fraction_simplifier(numerator, denominator)
+        input_message = f'{n11}/{n12} + {n21}/{n22} = '
+        right_answers = [right_answer]
     return right_answers, input_message, prompt
+
 
 
 def division_mixed_fractions_easy(difficulty: int):
@@ -1110,8 +1155,7 @@ def quadratic_equation_easy(difficulty: int):
 
     import support_module
     quadratics_composer = support_module.quadratics_composer
-    quadratics_composer()
-    total_set = quadratics_composer.total_set
+    total_set = quadratics_composer()
     the_particular_set = random.choice(total_set)
 
     a = the_particular_set[0]
@@ -1298,9 +1342,8 @@ def factoring_quadratics(difficulty: int):
     x1 = 0
     x2 = 0
     a = 1
-    while x1 == 0 or x2 == 0 or a == 1:
-        quadratics_composer()
-        total_set = quadratics_composer.total_set
+    while x1 == 0 or x2 == 0 or a == 1:        
+        total_set = quadratics_composer()
         the_particular_set = random.choice(total_set)
 
         a = the_particular_set[0]

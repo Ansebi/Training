@@ -82,6 +82,9 @@ def core(the_exercise, difficulty, standard_completion_time_sec):
     global_.percentage = round((global_.correct / (global_.correct + global_.incorrect) * 100), 1)
     global_.minutes_elapsed = int(str(datetime.datetime.now() - global_.start)[2:4])
     global_.seconds_elapsed = int(round(float(str(datetime.datetime.now() - global_.start)[5:10]), 0))
+    if global_.seconds_elapsed == 60:
+        global_.minutes_elapsed += 1
+        global_.seconds_elapsed = 0
 
     score = score_counter(
         standard_completion_time_sec,
