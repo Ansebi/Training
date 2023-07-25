@@ -1,17 +1,37 @@
 import random
+import pandas as pd
+import support_module
 
-the_20k = open('./materials/20k_words_dictionary', 'r')
+MATERIALS_FOLDER = './materials'
+THE_20K = open(f'{MATERIALS_FOLDER}/20k_words_dictionary')
+
+SYNONYMS_FILENAME = 'WordnetSynonyms.csv'
+FREQUENCY_FILENAME = 'word-freq-top5000.csv'
+SYNONYMS_MIN_WORD_LEN = 7
 
 
-def g():
-    pass
+def get_synonyms_dict(min_word_len=SYNONYMS_MIN_WORD_LEN):
+    synonyms_path = f'{MATERIALS_FOLDER}/{SYNONYMS_FILENAME}'
+    frequency_path = f'{MATERIALS_FOLDER}/{FREQUENCY_FILENAME}'
+    df_synonyms = pd.read_csv(synonyms_path)
+    df_frequency = pd.read_csv(frequency_path)
+    frequent_words = [word for word in df_frequency.Word if len(word) >= min_word_len]
+    df_frequent_synonyms = df_synonyms[df_synonyms['Word'].isin(frequent_words)]
+    frequent_synonyms_dict = {}
+    for index, row in df_frequent_synonyms.iterrows():
+        word = row['Word']
+        synonyms = row['Synonyms'].split(';')
+        synonyms = [word.split('|') for word in synonyms]
+        synonyms = support_module.flatten(synonyms)
+        frequent_synonyms_dict[word] = synonyms
+    return frequent_synonyms_dict
 
 
-g.the_20k_list = list(the_20k)
+synonyms_dict = get_synonyms_dict(min_word_len=SYNONYMS_MIN_WORD_LEN)
 
 
 def get_random_word(limit):
-    dictionary = g.the_20k_list[:limit]
+    dictionary = THE_20K[:limit]
     random_word = random.choice(dictionary)[:-1]
     return random_word
 
@@ -40,7 +60,7 @@ def test(difficulty: int):
 def irregular_verbs(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     irregular_verbs = []
-    with open('./materials/irregular_verbs.csv', 'r') as irregular_verbs_csv:
+    with open(f'{MATERIALS_FOLDER}/irregular_verbs.csv') as irregular_verbs_csv:
         for i in irregular_verbs_csv:
             i = i.split(';')
             i[2] = i[2][:-1]
@@ -58,7 +78,7 @@ def missing_words(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     alphabet = "abcdefghijklmnopqrstuvwxyz'ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     sentences_list = []
-    sentences = open('./materials/sentences.csv', 'r')
+    sentences = open(f'{MATERIALS_FOLDER}/sentences.csv')
     for i in sentences:
         if i != '\n':
             sentences_list.append(i[:-1])
@@ -100,7 +120,7 @@ def missing_words(difficulty: int):
 def vocabulary(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     vocabulary = []
-    with open('./materials/vocabulary.csv', 'r') as vocabulary_csv:
+    with open(f'{MATERIALS_FOLDER}/vocabulary.csv') as vocabulary_csv:
         for i in vocabulary_csv:
             i = i.split(';')
             i[1] = i[1][:-1]
@@ -111,4 +131,13 @@ def vocabulary(difficulty: int):
     input_message = the_item[1] + '\n'
     right_answer = the_item[0]
     right_answers = [right_answer]
+    return right_answers, input_message, prompt
+
+
+def synonyms(difficulty: int):
+    right_answers, input_message, prompt = None, None, None   
+    word, synonyms_ = random.choice(list(synonyms_dict.items()))
+    prompt = 'Guess a synonym for the following word:'
+    right_answers = synonyms_
+    input_message = f'{word}: '
     return right_answers, input_message, prompt

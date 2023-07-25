@@ -287,3 +287,18 @@ def generate_target_sum(target: int, n: int, spread: int) -> list:
         addends[i % n] += delta//abs(delta)
     return list(addends)
 
+
+def flatten(lst):
+    """
+    Example:
+    lst = [1, 2, [3, [4, 5]], [6, 7, 8], 9, [10, 11]]\n
+    print(flatten(lst))
+    >>> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    """
+    result = []
+    for item in lst:
+        if isinstance(item, list):
+            result.extend(flatten(item))
+        else:
+            result.append(item)
+    return result
