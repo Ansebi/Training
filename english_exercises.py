@@ -1,33 +1,40 @@
 import random
+import json
 import pandas as pd
-import support_module
+
 
 MATERIALS_FOLDER = './materials'
 THE_20K = open(f'{MATERIALS_FOLDER}/20k_words_dictionary')
 
-SYNONYMS_FILENAME = 'WordnetSynonyms.csv'
-FREQUENCY_FILENAME = 'word-freq-top5000.csv'
+SYNONYMS_FILENAME = 'en_thesaurus.jsonl'
+FREQUENCY_FILENAME = 'unigram_freq.csv'
 SYNONYMS_MIN_WORD_LEN = 7
+FREQUENCY_FLOOR = 5000
 
 
-def get_synonyms_dict(min_word_len=SYNONYMS_MIN_WORD_LEN):
-    synonyms_path = f'{MATERIALS_FOLDER}/{SYNONYMS_FILENAME}'
-    frequency_path = f'{MATERIALS_FOLDER}/{FREQUENCY_FILENAME}'
-    df_synonyms = pd.read_csv(synonyms_path)
-    df_frequency = pd.read_csv(frequency_path)
-    frequent_words = [word for word in df_frequency.Word if len(word) >= min_word_len]
-    df_frequent_synonyms = df_synonyms[df_synonyms['Word'].isin(frequent_words)]
-    frequent_synonyms_dict = {}
-    for index, row in df_frequent_synonyms.iterrows():
-        word = row['Word']
-        synonyms = row['Synonyms'].split(';')
-        synonyms = [word.split('|') for word in synonyms]
-        synonyms = support_module.flatten(synonyms)
-        frequent_synonyms_dict[word] = synonyms
-    return frequent_synonyms_dict
 
+synonyms_path = f'{MATERIALS_FOLDER}/{SYNONYMS_FILENAME}'
+frequency_path = f'{MATERIALS_FOLDER}/{FREQUENCY_FILENAME}'
+synonyms_entry_list = [json.loads(entry) for entry in open(synonyms_path)]
+df_frequency = pd.read_csv(frequency_path)
+synonyms_dict = {}
+for n, entry in enumerate(synonyms_entry_list):
+    word = entry['word']
+    pos = entry['pos']
+    synonyms = entry['synonyms']
+    if word in synonyms_dict:
+        synonyms_dict[word]['synonyms'].extend(synonyms)
+        synonyms_dict[word]['pos'].append(pos)
+        synonyms_dict[word]['pos'] = list(set(synonyms_dict[word]['pos']))
+    else:
+        synonyms_dict[word] = {
+            'pos': [pos],
+            'synonyms': synonyms
+        }
 
-synonyms_dict = get_synonyms_dict(min_word_len=SYNONYMS_MIN_WORD_LEN)
+frequent_words = df_frequency[:FREQUENCY_FLOOR]['word'].astype(str)
+frequent_words = [word for word in frequent_words if len(word) >= SYNONYMS_MIN_WORD_LEN]
+frequent_synonyms = [word for word in frequent_words if word in synonyms_dict]
 
 
 def get_random_word(limit):
@@ -135,9 +142,10 @@ def vocabulary(difficulty: int):
 
 
 def synonyms(difficulty: int):
-    right_answers, input_message, prompt = None, None, None   
-    word, synonyms_ = random.choice(list(synonyms_dict.items()))
-    prompt = 'Guess a synonym for the following word:'
-    right_answers = synonyms_
+    right_answers, input_message, prompt = None, None, None  
+    word = random.choice(frequent_synonyms)
+    word_synonyms = synonyms_dict[word]['synonyms']
+    prompt = 'Give a synonym for the following word:'
+    right_answers = word_synonyms
     input_message = f'{word}: '
     return right_answers, input_message, prompt

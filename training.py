@@ -73,8 +73,7 @@ def core(the_exercise, difficulty, standard_completion_time_sec):
         print('points:', global_.score, end='')
         print('       accuracy:', global_.percentage, '%', '\n' * 2)
         print('the correct answer is:')
-        right_answer = right_answers[0]
-        print(input_message + str(right_answer))
+        print(input_message + ';\n'.join(right_answers))
         print('\n')
         input('Try again :( Press ENTER\n')
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -119,12 +118,20 @@ def training():
     """ENTRANCE END"""
 
     """CHOOSE THE SUBJECT"""
-    dict_subjects = {'1': {'subject_exercises': 'maths_exercises',
-                           'subject_name': 'Maths'},
-                     '2': {'subject_exercises': 'russian_exercises',
-                           'subject_name': 'Russian'},
-                     '3': {'subject_exercises': 'english_exercises',
-                           'subject_name': 'English'}}
+    dict_subjects = {
+        '1': {
+            'subject_exercises': 'maths_exercises',
+              'subject_name': 'Maths'
+              },
+        '2': {
+            'subject_exercises': 'russian_exercises',
+            'subject_name': 'Russian'
+            },
+        '3': {
+            'subject_exercises': 'english_exercises',
+              'subject_name': 'English'
+            }
+        }
     print('\n' * 8 + '         ' + user_name + ', please choose the subject:' + '\n')
     for n, val in dict_subjects.items():
         print(f"{n}. {val['subject_name']}")
