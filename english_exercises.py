@@ -4,7 +4,7 @@ import pandas as pd
 
 
 MATERIALS_FOLDER = './materials'
-THE_20K = open(f'{MATERIALS_FOLDER}/20k_words_dictionary')
+THE_20K = list(open(f'{MATERIALS_FOLDER}/20k_words_dictionary'))
 
 SYNONYMS_FILENAME = 'en_thesaurus.jsonl'
 FREQUENCY_FILENAME = 'unigram_freq.csv'
@@ -37,10 +37,8 @@ frequent_words = [word for word in frequent_words if len(word) >= SYNONYMS_MIN_W
 frequent_synonyms = [word for word in frequent_words if word in synonyms_dict]
 
 
-def get_random_word(limit):
-    dictionary = THE_20K[:limit]
-    random_word = random.choice(dictionary)[:-1]
-    return random_word
+def get_random_word(limit, words=THE_20K):
+    return random.choice(words[:limit])[:-1]
 
 
 def augmenter(word):
