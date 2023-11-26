@@ -155,7 +155,7 @@ while current_pos <= max_len:
     print('\n' * 4)
     for line in text_to_show:
         print(prepare_line(line))
-    prompt = '\n>>> Type the first line, filling gaps if needed:\n\n'
+    prompt = '\n>>> Напечатай первую строчку, вставляя буквы по необходимости:\n\n'
 
     attempts_rem = ATTEMPTS
     for attempt in range(ATTEMPTS):
