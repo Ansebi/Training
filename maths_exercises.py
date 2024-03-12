@@ -455,16 +455,16 @@ def add_decimals(difficulty: int):
     elif switch in [2, 3]:
         n = random.randint(0, 10 * (1 + difficulty)) / 10
     else:
-        n = random.randint(10, 100 * (1 + difficulty)) / (10 ** 2)
+        n = random.randint(10 * (1 + difficulty), 100 * (1 + difficulty)) / (10 ** 2)
     n_sign = -1 if random.randint(1, 10) > 4 else 1
 
     if random.randint(1, 3) == 1 and n % 1 != 0:
-        m = random.randint(0, 10)
+        m = random.randint(0, 10 * (1 + difficulty))
     else:
         m = random.choice(
             [
                 random.randint(10, 100 * (1 + difficulty)) / 10,
-                random.randint(10, 100 * (1 + difficulty)) / 100
+                random.randint(10 * (1 + difficulty), 100 * (1 + difficulty)) / 100
             ]
         )
     m_sign = -1 if random.randint(1, 10) > 3 else 1
