@@ -78,6 +78,11 @@
         "function": "add_decimals_easy",
         "default_difficulty": 0,
         "standard_completion_time_sec": 5},
+    
+    "Add decimals": {
+        "function": "add_decimals",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 5},
 
     "Percent of": {
         "function": "percent_of",

@@ -446,6 +446,57 @@ def add_decimals_easy(difficulty: int):
     return right_answers, input_message, prompt
 
 
+def add_decimals(difficulty: int):
+    right_answers, input_message, prompt = None, None, None
+
+    switch = random.randint(1, 5)
+    if switch > 3:
+        n = random.randint(0, 10 * (1 + difficulty))
+    elif switch in [2, 3]:
+        n = random.randint(0, 10 * (1 + difficulty)) / 10
+    else:
+        n = random.randint(10, 100 * (1 + difficulty)) / (10 ** 2)
+    n_sign = -1 if random.randint(1, 10) > 4 else 1
+
+    if random.randint(1, 3) == 1 and n % 1 != 0:
+        m = random.randint(0, 10)
+    else:
+        m = random.choice(
+            [
+                random.randint(10, 100 * (1 + difficulty)) / 10,
+                random.randint(10, 100 * (1 + difficulty)) / 100
+            ]
+        )
+    m_sign = -1 if random.randint(1, 10) > 3 else 1
+
+    n = n * n_sign
+    m = m * m_sign
+
+    if random.randint(0, 1):
+        n, m = m, n
+
+    right_answer = round(n + m, 2)
+
+    if n % 1 == 0:
+        n = int(n)
+    if m % 1 == 0:
+        m = int(m)
+
+    if m >= 0:
+        m_string = '+' + str(m)
+    else:
+        m_string = str(m)
+
+    input_message = str(n) + m_string + " = "
+
+    if right_answer % 1 == 0:
+        right_answer = int(right_answer)
+    right_answer = str(right_answer)
+    right_answers = [right_answer]
+
+    return right_answers, input_message, prompt
+
+
 def percent_of(difficulty: int):
     right_answers, input_message, prompt = None, None, None
 
