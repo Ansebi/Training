@@ -16,7 +16,22 @@ from score_counter import score_counter
 DEFAULT_TARGET_SCORE = 1000
 DEFAULT_FIXED_TIME_SEC = 60
 DEFAULT_FIXED_NUMBER_OF_TASKS = 15
-
+EXIT_LIST = [
+        'bye',
+        'see ya',
+        'exit',
+        'goodbye',
+        'hasta la vista',
+        'farewell',
+        'dosviduli',
+        'off',
+        'finish',
+        'gg',
+        'home',
+        'i am batman',
+        "i'll be back",
+        'nooooo'
+]
 
 def global_():
     pass
@@ -46,6 +61,7 @@ def choose_type(exercise_name, difficulty):
 
 
 def core(the_exercise, difficulty, standard_completion_time_sec):
+    try_again_input = ''
     right_answers, input_message, prompt = the_exercise(difficulty)
     right_answers = [str(i) for i in right_answers]
     print(f"points: {global_.score}       accuracy: {global_.percentage}%")
@@ -62,6 +78,9 @@ def core(the_exercise, difficulty, standard_completion_time_sec):
         input('\nWell done :) Press ENTER\n')
         os.system('cls' if os.name == 'nt' else 'clear')
 
+    elif ans.lower() in EXIT_LIST:
+        global_.incorrect += 1
+        
     else:
         global_.incorrect += 1
         winsound.Beep(200, 300)
@@ -69,14 +88,14 @@ def core(the_exercise, difficulty, standard_completion_time_sec):
         image_module.lose()
         winsound.Beep(120, 1100)
 
-        os.system('cls' if os.name == 'nt' else 'clear')
+        clear()
         print('points:', global_.score, end='')
         print('       accuracy:', global_.percentage, '%', '\n' * 2)
         print('the correct answer is:')
         print(input_message + ';\n'.join(right_answers))
         print('\n')
-        input('Try again :( Press ENTER\n')
-        os.system('cls' if os.name == 'nt' else 'clear')
+        try_again_input = input('Try again :( Press ENTER\n')
+        clear()
 
     global_.percentage = round((global_.correct / (global_.correct + global_.incorrect) * 100), 1)
     global_.minutes_elapsed = int(str(datetime.datetime.now() - global_.start)[2:4])
@@ -94,6 +113,14 @@ def core(the_exercise, difficulty, standard_completion_time_sec):
         global_.incorrect)
     global_.score = score
     global_.time_elapsed = time.time() - global_.start_simple_time_format
+
+    if any(
+        [
+            (ans not in right_answers) and (ans.lower() in EXIT_LIST),
+            try_again_input.lower() in EXIT_LIST
+        ]
+    ):
+        return 'exit'
 
 
 def training():
@@ -197,7 +224,9 @@ def training():
         while global_.score < global_.target_score:
             print(exercise_name, '    ', end='')
             print('score:', str(global_.score) + '/' + str(global_.target_score))
-            core(the_exercise, difficulty, standard_completion_time_sec)
+            state = core(the_exercise, difficulty, standard_completion_time_sec)
+            if state == 'exit':
+                break
     elif training_type == '2':
         global_.fixed_time_input = input('Specify the time for training (minutes): ')
         if global_.fixed_time_input != '':
@@ -211,7 +240,9 @@ def training():
             seconds_remaining = int(round(seconds_remaining, 0))
             print(exercise_name, '    ', end='')
             print('time remaining:', str(minutes_remaining) + ':' + str(seconds_remaining))
-            core(the_exercise, difficulty, standard_completion_time_sec)
+            state = core(the_exercise, difficulty, standard_completion_time_sec)
+            if state == 'exit':
+                break
     else:
         global_.number_of_tasks_input = input('Specify the number of tasks: ')
         if global_.number_of_tasks_input != '':
@@ -221,14 +252,16 @@ def training():
         for i in range(global_.number_of_tasks):
             print(exercise_name, '    ', end='')
             print('tasks complete:', str(i) + '/' + str(global_.number_of_tasks))
-            core(the_exercise, difficulty, standard_completion_time_sec)
-
-    print(exercise_name, '\n')
-    print(global_.percentage, '%')
-    print(global_.minutes_elapsed, 'min', global_.seconds_elapsed, 'sec')
-    print(global_.correct, 'out of', global_.correct + global_.incorrect, '\n')
-    print('Your score:', global_.score, '\n')
-    image_module.numeric_display(global_.score)
+            state = core(the_exercise, difficulty, standard_completion_time_sec)
+            if state == 'exit':
+                break
+    if state != 'exit':
+        print(exercise_name, '\n')
+        print(global_.percentage, '%')
+        print(global_.minutes_elapsed, 'min', global_.seconds_elapsed, 'sec')
+        print(global_.correct, 'out of', global_.correct + global_.incorrect, '\n')
+        print('Your score:', global_.score, '\n')
+        image_module.numeric_display(global_.score)
 
     file_name = 'data_' + user_name + '.csv'
     data = open(file_name, 'a')
@@ -244,13 +277,13 @@ def training():
     data.write(str(str(global_.percentage) + '%;' + str(global_.score) + ';\n'))
     data.close()
 
-    print()
-    exit_input = input('PRESS ANY KEY TO CONTINUE\n')
-    if exit_input.lower() in [
-        'bye', 'see ya', 'exit', 'goodbye', 'hasta la vista', 'farewell', 'dosviduli', 'off', 'finish']:
-        sys.exit()
+    if state != 'exit':
+        print()
+        exit_input = input('PRESS ANY KEY TO CONTINUE\n')
+        if exit_input.lower() in EXIT_LIST:
+            sys.exit()
     else:
-        os.system('cls' if os.name == 'nt' else 'clear')
+        clear()
 
 
 while True:
