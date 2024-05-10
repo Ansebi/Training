@@ -44,6 +44,16 @@
         "default_difficulty": 0,
         "standard_completion_time_sec": 5},
 
+    "Highest Common Factor (HCF)": {
+        "function": "highest_common_factor",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 60},
+
+    "Lowest Common Multiple (LCM)": {
+        "function": "lowest_common_multiple",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 60},
+
     "Linear equation": {
         "function": "linear_equation",
         "default_difficulty": 0,
@@ -54,8 +64,13 @@
         "default_difficulty": 0,
         "standard_completion_time_sec": 5},
 
-    "Systems (easy)": {
-        "function": "systems_easy",
+    "Linear equation: The Gathering": {
+        "function": "linear_equation_collect_terms",
+        "default_difficulty": 0,
+        "standard_completion_time_sec": 30},
+
+    "Simultaneous equations 3 (easy)": {
+        "function": "simultaneous_equations_3",
         "default_difficulty": 0,
         "standard_completion_time_sec": 300},
 
@@ -227,15 +242,10 @@
     "Large Division": {
         "function": "large_division",
         "default_difficulty": 0,
-        "standard_completion_time_sec": 5},
+        "standard_completion_time_sec": 120},
 
     "Open brackets | Close brackets": {
         "function": "open_close_brackets",
         "default_difficulty": 6,
-        "standard_completion_time_sec": 5},
-
-    "Linear equation: The Gathering": {
-        "function": "linear_equation_collect_terms",
-        "default_difficulty": 0,
-        "standard_completion_time_sec": 5}
+        "standard_completion_time_sec": 15}
 }

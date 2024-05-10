@@ -100,13 +100,13 @@ def multiply_decimals(difficulty: int):
     n = round(whole_part_n * 10 ** random.randint(-3, -1), 4)
     m = round(whole_part_m * 10 ** random.randint(-3, -1), 4)
     
-    right_answer = round(n_sign * n / m, 4)
+    right_answer = round(n_sign * n * m, 4)
     if not right_answer % 1:
         right_answer = int(right_answer)
     if not right_answer and n_sign < 0:
         right_answer = 0
     right_answers = [str(right_answer)]
-    input_message = str(n * n_sign) + " / " + str(m) + " = "
+    input_message = str(n * n_sign) + " * " + str(m) + " = "
 
     return right_answers, input_message, prompt
 
@@ -251,6 +251,119 @@ def factorization(difficulty: int):
     return right_answers, input_message, prompt
 
 
+def highest_common_factor(difficulty: int):
+    """
+    default (and expected) difficulty value here is zero
+    """
+    right_answers, input_message, prompt = None, None, None
+    primes = np.array([2, 3, 5, 7, 11, 13])
+    okay = False
+    while not okay:
+        hcf = 1
+        sum_powers = 0
+        for i in primes:
+            power = random.choice([0, 1])
+            if power:
+                from_ = 0
+                if i == 2:
+                    to_ = 12 + difficulty
+                elif i == 3:
+                    to_ = 5
+                else:
+                    to_ = 1
+                power = random.randint(from_, to_)
+            if sum_powers >= 12 + difficulty:
+                break
+            hcf *= i ** power
+            sum_powers += power
+        if 2 + difficulty <= sum_powers <= 12 + difficulty:
+            okay = True
+    
+    okay = False
+    def generate_ab(hcf, difficulty):
+        a_scheme = np.random.randint(0, 2, 4).astype(bool)
+        a_scheme[0] = 1
+        np.random.shuffle(a_scheme)
+        b_scheme = ~ a_scheme
+        mask = np.random.randint(0, 2, 4).astype(bool)
+        a_scheme = a_scheme * mask
+        mask = np.random.randint(0, 2, 4).astype(bool)
+        b_scheme = b_scheme * mask
+        a_difference = primes[:-2] ** np.random.randint(1, 2 + difficulty, 4)
+        a_difference *= a_scheme
+        a_difference[a_difference == 0] = 1
+        b_difference = primes[:-2] ** np.random.randint(1, 2 + difficulty, 4)
+        b_difference *= b_scheme
+        b_difference[b_difference == 0] = 1
+        a = hcf * np.product(a_difference)
+        b = hcf * np.product(b_difference)   
+        return a, b
+    a, b = generate_ab(hcf, difficulty)
+    if a == b:
+        a, b = generate_ab(hcf, difficulty)
+    right_answers = [hcf]
+    input_message = f'Find HCF for {a} and {b}:\n'
+
+    return right_answers, input_message, prompt
+
+
+def lowest_common_multiple(difficulty: int):
+    """
+    default (and expected) difficulty value here is zero
+    """
+    right_answers, input_message, prompt = None, None, None
+    primes = np.array([2, 3, 5, 7, 11, 13])
+    okay = False
+    while not okay:
+        hcf = 1
+        sum_powers = 0
+        for i in primes:
+            power = random.choice([0, 1])
+            if power:
+                from_ = 0
+                if i == 2:
+                    to_ = 4 + difficulty
+                elif i == 3:
+                    to_ = 5
+                else:
+                    to_ = 1
+                power = random.randint(from_, to_)
+            if sum_powers >= 4 + difficulty:
+                break
+            hcf *= i ** power
+            sum_powers += power
+        if 2 + difficulty <= sum_powers <= 4 + difficulty:
+            okay = True
+    
+    okay = False
+    def generate_ab_differences(difficulty):
+        a_scheme = np.random.randint(0, 2, 4).astype(bool)
+        a_scheme[0] = 1
+        np.random.shuffle(a_scheme)
+        b_scheme = ~ a_scheme
+        mask = np.random.randint(0, 2, 4).astype(bool)
+        a_scheme = a_scheme * mask
+        mask = np.random.randint(0, 2, 4).astype(bool)
+        b_scheme = b_scheme * mask
+        a_difference = primes[:-2] ** np.random.randint(1, 2 + difficulty, 4)
+        a_difference *= a_scheme
+        a_difference[a_difference == 0] = 1
+        b_difference = primes[:-2] ** np.random.randint(1, 2 + difficulty, 4)
+        b_difference *= b_scheme
+        b_difference[b_difference == 0] = 1
+        a = np.product(a_difference)
+        b = np.product(b_difference)   
+        return a, b
+    a, b = generate_ab_differences(difficulty)
+    if a == b:
+        a, b = generate_ab_differences(difficulty)
+    lcm = hcf * a * b
+    right_answers = [lcm]
+    input_message = f'Find LCM for {a * hcf} and {b * hcf}:\n'
+
+    return right_answers, input_message, prompt
+
+
 def linear_equation(difficulty: int):
     right_answers, input_message, prompt = None, None, None
     # ax+b=c
@@ -314,7 +427,7 @@ def linear_equation_lvl_2(difficulty: int):
     return right_answers, input_message, prompt
 
 
-def systems_easy(difficulty: int):
+def simultaneous_equations_3(difficulty: int):
     """
     ax + by = n1
     cy + dz = n2
