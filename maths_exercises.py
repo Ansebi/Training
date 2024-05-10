@@ -266,17 +266,17 @@ def highest_common_factor(difficulty: int):
             if power:
                 from_ = 0
                 if i == 2:
-                    to_ = 12 + difficulty
+                    to_ = 8 + difficulty
                 elif i == 3:
                     to_ = 5
                 else:
                     to_ = 1
                 power = random.randint(from_, to_)
-            if sum_powers >= 12 + difficulty:
+            if sum_powers >= 8 + difficulty:
                 break
             hcf *= i ** power
             sum_powers += power
-        if 2 + difficulty <= sum_powers <= 12 + difficulty:
+        if 2 + difficulty <= sum_powers <= 8 + difficulty:
             okay = True
     
     okay = False
