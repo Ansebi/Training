@@ -124,7 +124,7 @@ def multiplication_table(difficulty: int):
 
 def multiply_two_digits(difficulty: int):
     right_answers, input_message, prompt = None, None, None
-    # n*m
+    # n * m
     n = random.randint(10, 100)
     m = random.randint(2, 11)
     right_answer = n * m
@@ -215,7 +215,8 @@ def factorization(difficulty: int):
     prime_numbers_up_to_100 = [
         2, 3, 5, 7, 11, 13, 17, 19, 23,
         29, 31, 37, 41, 43, 47, 53, 59,
-        61, 67, 71, 73, 79, 83, 89, 97]
+        61, 67, 71, 73, 79, 83, 89, 97
+    ]
 
     n_1 = random.choice(prime_numbers_up_to_100[0:3])
     if random.randint(0, 1):
@@ -1710,7 +1711,7 @@ def open_close_brackets(difficulty: int):
     return right_answers, input_message, prompt
 
 def linear_equation_collect_terms(difficulty: int):
-    d = abs(difficulty)
+    d = difficulty
     """
     nax + nbx + ncx + nd + ne + nf = ngx + nhx + njx + nk + nm + np
     
@@ -1727,13 +1728,15 @@ def linear_equation_collect_terms(difficulty: int):
     right_answers, input_message, prompt = None, None, None
 
     n_coefs = random.randint(1, 3 + d)
-    n_consts = random.randint(1, 3 + d)
     n_coefs_left = random.randint(0, n_coefs)
     n_coefs_right = n_coefs - n_coefs_left
-    # n_consts_left = random.randint(0, n_consts)
-    # n_consts_right = n_consts - n_consts_left
-    left_coefs = list(np.random.randint(1, 6 + d, n_coefs_left) * np.random.choice([-1, 1], n_coefs_left))
-    right_coefs = list(np.random.randint(1, 6 + d, n_coefs_right) * np.random.choice([-1, 1], n_coefs_right))
+    
+    okay = False
+    while not okay:
+        left_coefs = list(np.random.randint(1, 6 + d, n_coefs_left) * np.random.choice([-1, 1], n_coefs_left))
+        right_coefs = list(np.random.randint(1, 6 + d, n_coefs_right) * np.random.choice([-1, 1], n_coefs_right))
+        if sum(left_coefs) != sum(right_coefs):
+            okay = True
     x = random.randint(-(7+d), 7+d)
     effective_coef = sum(left_coefs) - sum(right_coefs)
     effective_const = x * effective_coef
