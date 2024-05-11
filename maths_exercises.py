@@ -1723,7 +1723,7 @@ def linear_equation_collect_terms(difficulty: int):
     
     x = effective_const/effective_coef
     
-    x is pre-defined integer
+    x is a pre-defined integer
     """
     right_answers, input_message, prompt = None, None, None
 
