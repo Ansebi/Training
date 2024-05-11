@@ -1737,7 +1737,7 @@ def linear_equation_collect_terms(difficulty: int):
         right_coefs = list(np.random.randint(1, 6 + d, n_coefs_right) * np.random.choice([-1, 1], n_coefs_right))
         if sum(left_coefs) != sum(right_coefs):
             okay = True
-    x = random.randint(-(7+d), 7+d)
+    x = random.randint(-(7 + d), 7 + d)
     effective_coef = sum(left_coefs) - sum(right_coefs)
     effective_const = x * effective_coef
     sum_left_cts, sum_right_cts = generate_target_sum(effective_const, 2, 6 + d**2)
