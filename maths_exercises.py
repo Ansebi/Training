@@ -356,7 +356,20 @@ def lowest_common_multiple(difficulty: int):
         b = np.product(b_difference)   
         return a, b
     a, b = generate_ab_differences(difficulty)
-    if a == b:
+    conditions = [
+        a == b,
+        not (a % b),
+        not (b % a)
+    ]
+    if any(conditions):
+        a, b = generate_ab_differences(difficulty)
+    """do twice:"""
+    conditions = [
+        a == b,
+        not (a % b),
+        not (b % a)
+    ]
+    if any(conditions):
         a, b = generate_ab_differences(difficulty)
     lcm = hcf * a * b
     right_answers = [lcm]
