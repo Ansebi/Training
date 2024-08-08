@@ -157,37 +157,37 @@
     "Complete square (easy)": {
         "function": "complete_square_easy",
         "default_difficulty": 0,
-        "standard_completion_time_sec": 5},
+        "standard_completion_time_sec": 10},
 
     "Complete square A1": {
         "function": "complete_square_a1",
         "default_difficulty": 0,
-        "standard_completion_time_sec": 5},
+        "standard_completion_time_sec": 30},
 
     "Complete square A2 (easy)": {
         "function": "complete_square_a2_easy",
         "default_difficulty": 0,
-        "standard_completion_time_sec": 5},
+        "standard_completion_time_sec": 10},
 
     "Complete square A2": {
         "function": "complete_square_a2",
         "default_difficulty": 0,
-        "standard_completion_time_sec": 5},
+        "standard_completion_time_sec": 30},
 
     "Complete square A3": {
         "function": "complete_square_a3",
         "default_difficulty": 0,
-        "standard_completion_time_sec": 5},
+        "standard_completion_time_sec": 30},
 
     "Complete square A4": {
         "function": "complete_square_a4",
         "default_difficulty": 0,
-        "standard_completion_time_sec": 5},
+        "standard_completion_time_sec": 30},
 
     "Complete square A5": {
         "function": "complete_square_a5",
         "default_difficulty": 0,
-        "standard_completion_time_sec": 5},
+        "standard_completion_time_sec": 45},
 
     "Star count (easy)": {
         "function": "star_count_easy",
