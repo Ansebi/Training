@@ -3092,6 +3092,7 @@ function makeQuestion() {
     const result = exerciseFunction(difficulty);
     return {
         answers: [].concat(result.right_answers).map(String),
+        prompt: result.prompt,
         text: result.input_message
     };
 }
@@ -3161,7 +3162,8 @@ function nextQuestion() {
     }
 
     if(mode===3)say(`target score: ${target}`);
-
+    
+    say(question.prompt);
     say(question.text);
     state="answer";
     handler=null;

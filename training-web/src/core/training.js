@@ -36,7 +36,8 @@ function nextQuestion() {
     }
 
     if(mode===3)say(`target score: ${target}`);
-
+    
+    say(question.prompt);
     say(question.text);
     state="answer";
     handler=null;

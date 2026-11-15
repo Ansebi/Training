@@ -17,6 +17,7 @@ function makeQuestion() {
     const result = exerciseFunction(difficulty);
     return {
         answers: [].concat(result.right_answers).map(String),
+        prompt: result.prompt,
         text: result.input_message
     };
 }
