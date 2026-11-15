@@ -1,4 +1,7 @@
+
 // MENUS
+
+const random = arr => arr[Math.floor(Math.random()*arr.length)];
 
 function menuSubject() {
     clearScreen();
@@ -10,16 +13,13 @@ function menuSubject() {
 
     ask("Choose subject: ",v=>{
         const n=Number(v);
-        const picked=Number.isInteger(n)&&n>=1&&n<=subjects.length
+        subject=Number.isInteger(n)&&n>=1&&n<=subjects.length
             ?subjects[n-1]
-            :subjects.find(s=>s===v.trim().toLowerCase());
+            :subjects.includes(v.trim().toLowerCase())
+                ?v.trim().toLowerCase()
+                :random(subjects);
 
-        if(!picked) {
-            say("Invalid choice.");
-            return menuSubject();
-        }
-
-        subject=picked;
+        say(`Selected: ${label(subject)}`);
         menuExercise();
     });
 }
@@ -33,16 +33,15 @@ function menuExercise() {
     say(`${label(subject)} exercises:`);
     available.forEach((e,i)=>say(`${i+1}. ${e.name}`));
 
-    ask("Choose exercise: ",v=>{
+    ask("Choose exercise (random if empty/invalid): ",v=>{
         const n=Number(v);
+        const picked=Number.isInteger(n)&&n>=1&&n<=available.length
+            ?available[n-1]
+            :available.find(e=>e.name.toLowerCase()===v.trim().toLowerCase())
+                ||random(available);
 
-        if(!Number.isInteger(n)||n<1||n>available.length) {
-            say("Invalid choice.");
-            return menuExercise();
-        }
-
-        exercise=available[n-1].name;
-        exerciseId=available[n-1].id;
+        exercise=picked.name;
+        exerciseId=picked.id;
         menuDifficulty();
     });
 }
@@ -51,38 +50,35 @@ function menuDifficulty() {
     clearScreen();
 
     say(`Selected: ${exercise}`);
-    say('Set difficulty with "set N" (1–4).');
-    say("Default is Normal.");
+    say('Difficulty: set 1–4 (default: Normal)');
     say("1. Fixed number of tasks");
     say("2. Fixed time");
     say("3. Target score");
 
-    ask("Choose training mode (or set N): ",v=>{
+    ask("Training mode (random if empty/invalid): ",v=>{
         if(/^set\s+\d+$/i.test(v)) {
             difficulty=Math.max(1,Math.min(4,Number(v.split(/\s+/)[1])));
-            say(`Difficulty set to ${difficulty}.`);
+            say(`Difficulty: ${difficulty}`);
             return menuDifficulty();
         }
 
-        if(!["1","2","3"].includes(v)) {
-            say("Please enter 1, 2, or 3.");
-            return menuDifficulty();
-        }
+        mode=["1","2","3"].includes(v.trim())
+            ?Number(v.trim())
+            :1+Math.floor(Math.random()*3);
 
-        mode=Number(v);
+        const defaults={1:15,2:1,3:100};
+        const messages={
+            1:"Number of tasks",
+            2:"Time in minutes",
+            3:"Target score"
+        };
 
-        const message=mode===1
-            ?"Number of tasks (default 15): "
-            :mode===2
-                ?"Time in minutes (default 1): "
-                :"Target score (default 100): ";
+        ask(`${messages[mode]} (default ${defaults[mode]}): `,v=>{
+            const n=Number(v.trim());
+            const valid=v.trim()!==""&&Number.isFinite(n)&&n>0;
 
-        ask(message,n=>{
-            n=n.trim();
-
-            if(mode===1)target=n?Math.max(1,parseInt(n,10)||15):15;
-            if(mode===2)target=(n?Math.max(.1,Number(n)||1):1)*60;
-            if(mode===3)target=n?Math.max(1,parseInt(n,10)||100):100;
+            const value=valid?n:defaults[mode];
+            target=mode===2?value*60:value;
 
             begin();
         });
