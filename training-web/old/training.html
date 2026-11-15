@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CMD Game</title>
+
+    <style>
+        body {
+            background: black;
+            color: #33ff33;
+            font-family: "Courier New", monospace;
+            font-size: 18px;
+            padding: 20px;
+        }
+
+        #screen {
+            white-space: pre-wrap;
+        }
+
+        input {
+            background: black;
+            color: #33ff33;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: inherit;
+            width: 200px;
+            caret-color: #33ff33;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="screen"></div>
+
+<script>
+    const screen = document.getElementById("screen");
+
+    let correctAnswer;
+    let showingResult = false;
+
+    function newRound() {
+        correctAnswer = Math.floor(Math.random() * 9000) + 1000;
+        showingResult = false;
+
+        screen.innerHTML = `
+            ${correctAnswer}
+
+            <br><br>
+            > <input id="answer" autofocus>
+        `;
+
+        document.getElementById("answer").focus();
+    }
+
+    function checkAnswer(value) {
+        showingResult = true;
+
+        const userAnswer = value;
+
+        screen.innerHTML = "";
+
+        if (userAnswer === String(correctAnswer)) {
+            screen.textContent = "Yeap";
+        } else {
+            screen.innerHTML =
+                "Nope.<br>" +
+                "Your answer: " + escapeHTML(userAnswer) + "<br>" +
+                "Correct answer: " + correctAnswer;
+        }
+
+        screen.innerHTML += "<br><br>> Press Enter";
+    }
+
+    function escapeHTML(text) {
+        return text.replace(/[&<>"']/g, char => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        })[char]);
+    }
+
+    document.addEventListener("keydown", function(event) {
+        if (event.key !== "Enter") return;
+
+        event.preventDefault();
+
+        if (showingResult) {
+            newRound();
+        } else {
+            const input = document.getElementById("answer");
+
+            if (input) {
+                checkAnswer(input.value);
+            }
+        }
+    });
+
+    newRound();
+</script>
+
+
+</body>
+</html>

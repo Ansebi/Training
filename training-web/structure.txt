@@ -1,0 +1,15 @@
+Training/
+├── assemble.py
+├── README.md
+├── src/
+│   ├── template.html
+│   ├── style.css
+│   ├── core.js
+│   ├── config/
+│   │   ├── existing_exercise.json
+│   │   └── ...
+│   └── exercises/
+│       ├── existing_exercise.js
+│       └── ...
+└── dist/
+    └── training.html
