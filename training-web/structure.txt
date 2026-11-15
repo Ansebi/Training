@@ -1,12 +1,13 @@
 Training/
-├── assemble.py              # builds dist/training.html
+├── assemble.py               # builds dist/training.html
 ├── README.md
 ├── src/
-│   ├── template.html        # page shell with {{STYLE}}, {{EXERCISES}}, {{CORE}}
+│   ├── template.html         # page shell with {{STYLE}}, {{EXERCISES}}, {{CORE}}
 │   ├── style.css
-│   ├── core.js              # manifest: "// @include <name>" lines set load order
+│   ├── core.js               # manifest: "// @include <name>" lines set load order
 │   ├── core/
 │   │   ├── pycompat.js
+│   │   ├── support_module.js # helper functions used in exercises
 │   │   ├── terminal.js
 │   │   ├── sound.js
 │   │   ├── ascii.js

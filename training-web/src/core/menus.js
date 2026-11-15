@@ -33,7 +33,7 @@ function menuExercise() {
     say(`${label(subject)} exercises:`);
     available.forEach((e,i)=>say(`${i+1}. ${e.name}`));
 
-    ask("Choose exercise (random if empty/invalid): ",v=>{
+    ask("Choose exercise: ",v=>{
         const n=Number(v);
         const picked=Number.isInteger(n)&&n>=1&&n<=available.length
             ?available[n-1]
@@ -55,7 +55,7 @@ function menuDifficulty() {
     say("2. Fixed time");
     say("3. Target score");
 
-    ask("Training mode (random if empty/invalid): ",v=>{
+    ask("Training mode: ",v=>{
         if(/^set\s+\d+$/i.test(v)) {
             difficulty=Math.max(1,Math.min(4,Number(v.split(/\s+/)[1])));
             say(`Difficulty: ${difficulty}`);

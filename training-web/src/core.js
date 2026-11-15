@@ -24,6 +24,7 @@ let audio=null;
 // CORE MODULES (src/core/<name>.js)
 // ---------------------------------------------------------------
 // @include pycompat
+// @include support_module
 // @include terminal
 // @include sound
 // @include ascii

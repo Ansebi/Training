@@ -60,6 +60,132 @@ input {
 
 window.TrainingExercises = window.TrainingExercises || {};
 
+function add_decimals(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    let n, m;
+    const switch_ = P.randint(1, 5);
+    if (switch_ > 3) {
+        n = P.randint(0, 10 * (1 + difficulty));
+    } else if ([2, 3].includes(switch_)) {
+        n = P.randint(0, 10 * (1 + difficulty)) / 10;
+    } else {
+        n = P.randint(10 * (1 + difficulty), 100 * (1 + difficulty)) / (10 ** 2);
+    }
+    const n_sign = P.randint(1, 10) > 4 ? -1 : 1;
+
+    if (P.randint(1, 3) === 1 && n % 1 !== 0) {
+        m = P.randint(0, 10 * (1 + difficulty));
+    } else {
+        m = P.choice(
+            [
+                P.randint(10, 100 * (1 + difficulty)) / 10,
+                P.randint(10 * (1 + difficulty), 100 * (1 + difficulty)) / 100
+            ]
+        );
+    }
+    const m_sign = P.randint(1, 10) > 3 ? -1 : 1;
+
+    n = n * n_sign;
+    m = m * m_sign;
+
+    if (P.randint(0, 1)) {
+        [n, m] = [m, n];
+    }
+
+    let right_answer = P.round(n + m, 2);
+
+    if (n % 1 === 0) {
+        n = P.int(n);
+    }
+    if (m % 1 === 0) {
+        m = P.int(m);
+    }
+
+    let m_string;
+    if (m >= 0) {
+        m_string = "+" + P.numStr(m);
+    } else {
+        m_string = P.numStr(m);
+    }
+
+    input_message = P.numStr(n) + m_string + " = ";
+
+    if (right_answer % 1 === 0) {
+        right_answer = P.int(right_answer);
+    }
+    right_answer = P.numStr(right_answer);
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.add_decimals = add_decimals;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function add_decimals_easy(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    let n, m;
+    if (P.randint(1, 5) > 2) {
+        n = P.randint(0, 10);
+    } else {
+        n = P.randint(10, 100) / 10;
+    }
+    const n_sign = P.randint(1, 10) > 4 ? -1 : 1;
+
+    if (P.randint(1, 3) === 1 && n % 1 !== 0) {
+        m = P.randint(0, 10);
+    } else {
+        m = P.randint(10, 100) / 10;
+    }
+    const m_sign = P.randint(1, 10) > 3 ? -1 : 1;
+
+    n = n * n_sign;
+    m = m * m_sign;
+
+    let right_answer = P.round(n + m, 2);
+
+    if (n % 1 === 0) {
+        n = P.int(n);
+    }
+    if (m % 1 === 0) {
+        m = P.int(m);
+    }
+
+    let m_string;
+    if (m >= 0) {
+        m_string = "+" + P.numStr(m);
+    } else {
+        m_string = P.numStr(m);
+    }
+
+    input_message = P.numStr(n) + m_string + " = ";
+
+    if (right_answer % 1 === 0) {
+        right_answer = P.int(right_answer);
+    }
+    right_answer = P.numStr(right_answer);
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.add_decimals_easy = add_decimals_easy;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
 function add_negatives(difficulty) {
     const P = window.TrainingPy;
     let right_answers, input_message, prompt;
@@ -81,6 +207,927 @@ function add_negatives(difficulty) {
 }
 
 window.TrainingExercises.add_negatives = add_negatives;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function adding_fractions_easy(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const S = window.TrainingSupport;
+    const threshold = (difficulty + 1) * 10;
+    let okay = false;
+    const mode = P.choice(['+', '+', '*', ':']);
+    let n11, n12, n21, n22, numerator, denominator, top, bottom, right_answer;
+    if (mode === '+') {
+        while (!okay) {
+            n11 = P.randint(1, 13);
+            n12 = P.randint(1, 13);
+            n21 = P.randint(1, 13);
+            n22 = P.randint(1, 13);
+
+            numerator = n11 * n22 + n21 * n12;
+            denominator = n12 * n22;
+            [top, bottom] = S.crossout(S.factorize(numerator), S.factorize(denominator));
+            if (top + bottom < threshold) {
+                okay = true;
+                right_answer = S.fraction_simplifier(numerator, denominator);
+            }
+        }
+        input_message = `${n11}/${n12} + ${n21}/${n22} = `;
+        right_answers = [right_answer];
+    } else if (mode === '*') {
+        while (!okay) {
+            n11 = P.randint(1, 13);
+            n12 = P.randint(1, 13);
+            n21 = P.randint(1, 13);
+            n22 = P.randint(1, 13);
+
+            numerator = n11 * n21;
+            denominator = n12 * n22;
+            [top, bottom] = S.crossout(S.factorize(numerator), S.factorize(denominator));
+            if (top + bottom < threshold) {
+                okay = true;
+                right_answer = S.fraction_simplifier(numerator, denominator);
+            }
+        }
+        input_message = `${n11}/${n12} * ${n21}/${n22} = `;
+        right_answers = [right_answer];
+    } else if (mode === ':') {
+        while (!okay) {
+            n11 = P.randint(1, 13);
+            n12 = P.randint(1, 13);
+            n21 = P.randint(1, 13);
+            n22 = P.randint(1, 13);
+
+            numerator = n11 * n22;
+            denominator = n12 * n21;
+            [top, bottom] = S.crossout(S.factorize(numerator), S.factorize(denominator));
+            if (top + bottom < threshold) {
+                okay = true;
+                right_answer = S.fraction_simplifier(numerator, denominator);
+            }
+        }
+        input_message = `${n11}/${n12} : ${n21}/${n22} = `;
+        right_answers = [right_answer];
+    } else {
+        // (the original has an unreachable subtraction branch after this raise)
+        throw new Error('wrong mode');
+    }
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.adding_fractions_easy = adding_fractions_easy;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function compare_two_numbers_easy(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const POW10_NEG = { "-4": 0.0001, "-3": 0.001, "-2": 0.01, "-1": 0.1 };
+
+    function make_option(rand_low, rand_high, exp_low, exp_high) {
+        const r = P.randint(rand_low, rand_high);
+        const e = P.randint(exp_low, exp_high);
+        if (e >= 0) {
+            return { value: P.round(r * 10 ** e, 6), is_float: false };
+        }
+        return { value: P.round(r * POW10_NEG[String(e)], 6), is_float: true };
+    }
+
+    const to_str = o => o.is_float ? P.floatStr(o.value) : String(o.value);
+
+    let option1 = make_option(-1000, 1000, -4, 4);
+    let option2 = make_option(-100, 100, -4, 3);
+    const n1 = P.choice([option1, option2]);
+
+    option1 = make_option(-1000, 1000, -4, 4);
+    option2 = make_option(-100, 100, -4, 3);
+    const n2 = P.choice([option1, option2]);
+
+    let right_answer;
+    if (n1.value < n2.value) {
+        right_answer = "<";
+    } else if (n1.value > n2.value) {
+        right_answer = ">";
+    } else {
+        right_answer = "=";
+    }
+
+    prompt = to_str(n1) + " ... " + to_str(n2);
+    input_message = to_str(n1) + " ";
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.compare_two_numbers_easy = compare_two_numbers_easy;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function complete_square_a1(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const n1 = P.randint(1, 13);
+    const n1_string = n1 !== 1 ? String(n1) : "";
+    const n1_square_string = n1 !== 1 ? String(n1 ** 2) : "";
+    const n2 = P.randint(1, 13);
+
+    const the_sign = P.choice(['+', '-']);
+
+    const right_answer = '(' + n1_string + 'x' + the_sign + String(n2) + ')2';
+    input_message = (n1_square_string + 'x2' +
+                     the_sign +
+                     String(2 * n1 * n2) + 'x' +
+                     '+' + '...' + ' = ');
+
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.complete_square_a1 = complete_square_a1;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function complete_square_a2(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // (a+b)2=a2+2ab+b2
+
+    const n1 = P.randint(1, 13);
+    const n1_string = n1 !== 1 ? String(n1) : "";
+    const n1_square_string = n1 !== 1 ? String(n1 ** 2) : "";
+    const n2 = P.randint(1, 13);
+
+    const the_noise_v1 = 10 * P.randint(-10, 10);
+    const the_noise_v2 = P.randint(-20, 20);
+    let the_noise = P.choice([the_noise_v1, the_noise_v2]);
+
+    const the_sign = P.choice(['+', '-']);
+
+    let b2 = n2 ** 2 + the_noise;
+    if (b2 < 0) {
+        b2 = String(b2);
+    } else if (b2 === 0) {
+        b2 = '';
+    } else {
+        b2 = '+' + String(b2);
+    }
+
+    if (the_noise < 0) {
+        the_noise = String(the_noise);
+    } else if (the_noise === 0) {
+        the_noise = '';
+    } else {
+        the_noise = '+' + String(the_noise);
+    }
+
+    const right_answer = '(' + n1_string + 'x' + the_sign + String(n2) + ')2' + the_noise;
+    input_message = (n1_square_string + 'x2' +
+                     the_sign +
+                     String(2 * n1 * n2) + 'x' + b2 + ' = ');
+    prompt = 'HINT: answer in the form of (a+b)2+n';
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.complete_square_a2 = complete_square_a2;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function complete_square_a2_easy(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // (a+b)2=a2+2ab+b2
+
+    const n1 = P.randint(1, 13);
+    const n1_string = n1 !== 1 ? String(n1) : "";
+    const n1_square_string = n1 !== 1 ? String(n1 ** 2) : "";
+    const n2 = P.randint(1, 13);
+
+    const the_noise_v1 = 10 * P.randint(-10, 10);
+    const the_noise_v2 = P.randint(-20, 20);
+    let the_noise = P.choice([the_noise_v1, the_noise_v2]);
+
+    const the_sign = P.choice(['+', '-']);
+
+    let b2 = n2 ** 2 + the_noise;
+    if (b2 < 0) {
+        b2 = String(b2);
+    } else if (b2 === 0) {
+        b2 = '';
+    } else {
+        b2 = '+' + String(b2);
+    }
+
+    if (the_noise < 0) {
+        the_noise = String(the_noise);
+    } else if (the_noise === 0) {
+        the_noise = '';
+    } else {
+        the_noise = '+' + String(the_noise);
+    }
+
+    const right_answer = the_noise;
+    input_message = (n1_square_string + 'x2' +
+                     the_sign +
+                     String(2 * n1 * n2) + 'x' + b2 + ' = ');
+    input_message += '(' + n1_string + 'x' + the_sign + String(n2) + ')2';
+    prompt = 'HINT: answer in the form of (a+b)2+n';
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.complete_square_a2_easy = complete_square_a2_easy;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function complete_square_a3(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const the_multiplier = P.randint(2, 5);
+
+    const n2 = P.randint(1, 13);
+
+    const the_sign = P.choice(['+', '-']);
+
+    const right_answer = String(the_multiplier) + '(x' + the_sign + String(n2) + ')2';
+
+    input_message = (String(the_multiplier) + 'x2' +
+                     the_sign +
+                     String(the_multiplier * 2 * n2) + 'x' +
+                     '+' + String((n2 ** 2) * the_multiplier) + ' = ');
+
+    right_answers = [right_answer];
+    prompt = 'represent as: a(x+b)2';
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.complete_square_a3 = complete_square_a3;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function complete_square_a4(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const the_multiplier = P.randint(2, 5);
+
+    const n2 = P.randint(1, 13);
+
+    const the_sign = P.choice(['+', '-']);
+
+    const right_answer = String(the_multiplier) + '(x' + the_sign + String(n2) + ')2';
+
+    input_message = (String(the_multiplier) + 'x2' +
+                     the_sign +
+                     String(the_multiplier * 2 * n2) + 'x' +
+                     '+' + '...' + ' = ');
+
+    right_answers = [right_answer];
+    prompt = 'represent as: a(x+b)2';
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.complete_square_a4 = complete_square_a4;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function complete_square_a5(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const the_multiplier = P.randint(2, 5);
+
+    const n2 = P.randint(1, 13);
+
+    const the_noise_v1 = P.randint(-20, 20);
+    const the_noise_v2 = 10 * P.randint(-5, 5);
+    const the_noise = P.choice([the_noise_v1, the_noise_v2]);
+    let the_noise_string;
+    if (the_noise > 0) {
+        the_noise_string = '+' + String(the_noise);
+    } else if (the_noise === 0) {
+        the_noise_string = '';
+    } else {
+        the_noise_string = String(the_noise);
+    }
+
+    const the_sign = P.choice(['+', '-']);
+
+    const right_answer = String(the_multiplier) + '(x' + the_sign + String(n2) + ')2' + the_noise_string;
+
+    input_message = (String(the_multiplier) + 'x2' +
+                     the_sign +
+                     String(the_multiplier * 2 * n2) + 'x' +
+                     '+' + String((n2 ** 2) * the_multiplier + the_noise) + ' = ');
+
+    right_answers = [right_answer];
+
+    prompt = 'represent as: a(x+b)2+c';
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.complete_square_a5 = complete_square_a5;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function complete_square_easy(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const n1 = P.randint(1, 13);
+    const n1_string = n1 !== 1 ? String(n1) : "";
+    const n1_square_string = n1 !== 1 ? String(n1 ** 2) : "";
+    const n2 = P.randint(1, 13);
+
+    const the_sign = P.choice(['+', '-']);
+
+    const right_answer = '(' + n1_string + 'x' + the_sign + String(n2) + ')2';
+    input_message = (n1_square_string + 'x2' +
+                     the_sign +
+                     String(2 * n1 * n2) + 'x' +
+                     '+' + String(n2 ** 2) + ' = ');
+
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.complete_square_easy = complete_square_easy;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function complex_roots(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const primes_list = [2, 3, 5, 7, 11, 13, 17, 19, 23];
+    let proper_condition = false;
+    let prime, to_be_squarred, squarred, msg;
+    while (proper_condition === false) {
+        const prime_option_1 = P.choice(primes_list.slice(0, 3));
+        const prime_option_2 = P.choice(primes_list);
+        prime = P.choice([prime_option_1, prime_option_2]);
+        to_be_squarred = P.randint(2, 12);
+        squarred = to_be_squarred ** 2;
+        msg = squarred * prime;
+        if (prime === prime_option_1) {
+            proper_condition = true;
+        }
+        if (msg < 200) {
+            proper_condition = true;
+        }
+        if (msg > 360) {
+            proper_condition = false;
+        }
+    }
+
+    input_message = 'r2(' + String(msg) + ') = ';
+    let right_answer = String(to_be_squarred);
+    right_answer += 'r2(' + String(prime) + ')';
+    right_answers = [right_answer];
+
+    // prompt='type r2(x) of square root of x'
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.complex_roots = complex_roots;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function convert_units(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const S = window.TrainingSupport;
+    const DELTA_RANGE = 10;  // a power of 10 the range between the units to convert
+    let MAX_ZEROS = 7;
+    const MAX_ZEROS_EASY = 5;
+    const MAX_SIGNIFICANT_FIGURES = 100;
+
+    // Python mixes ints and floats in these lists; the type decides how str(n * k) prints
+    const I = v => ({ v, is_int: true });
+    const F = v => ({ v, is_int: false });
+    let magnitudes = [F(0.000001), F(0.000005),
+                      F(0.00001), F(0.00005),
+                      F(0.0005), F(0.005), F(0.01), F(0.5),
+                      F(0.0001), F(0.001), F(0.01), F(0.1),
+                      I(1), I(5), I(10), I(50), I(100), I(500),
+                      I(1000), I(5000), I(10000), I(50000)];
+    const magnitudes_EASY = [F(0.005), F(0.01), F(0.5),
+                             F(0.001), F(0.01), F(0.1),
+                             I(1), I(5), I(10), I(50), I(100), I(500),
+                             I(1000), I(5000)];
+
+    let prefixes_dict = { 'p': -12, 'n': -9, 'mc': -6, 'm': -3,
+                          'c': -2, 'd': -1, 'u': 0,
+                          'k': 3, 'M': 6, 'G': 9, 'T': 12 };
+    const prefixes_dict_RUS = { 'м': -3, 'c': -2, 'д': -1, 'u': 0, 'к': 3 };
+
+    let units = ['g', 'm', 's', 'N', 'J', 'W', 'A', 'Hz'];
+    const units_RUS = ['м'];
+
+    if (!difficulty) {
+        units = units_RUS;
+        prefixes_dict = prefixes_dict_RUS;
+        magnitudes = magnitudes_EASY;
+        MAX_ZEROS = MAX_ZEROS_EASY;
+    }
+
+    const prefixes = Object.keys(prefixes_dict);
+    prefixes.splice(prefixes.indexOf('u'), 1);
+
+    const unit = P.choice(units);
+
+    const n = P.randint(1, MAX_SIGNIFICANT_FIGURES);
+    const k = P.choice(magnitudes);
+
+    let value = k.is_int ? String(n * k.v) : P.floatStr(n * k.v);   // str(n * k)
+    const e_remover = S.e_remover;
+    value = e_remover(value);
+
+    const fixer = S.re_based_decimal_fixer_zero;
+    const auto_round = S.auto_round;
+    value = e_remover(auto_round(fixer(value)));
+
+    let okay = false;
+    let prefix_1, prefix_2, right_answer;
+    while (!okay) {
+        prefix_1 = P.choice(prefixes);
+        prefix_2 = P.choice(prefixes);
+        if (prefix_2 !== prefix_1) {
+            const delta = prefixes_dict[prefix_1] - prefixes_dict[prefix_2];
+            if (Math.abs(delta) < DELTA_RANGE) {
+                // 10 ** delta: int for delta >= 0, float for delta < 0
+                const power_of_ten = delta >= 0 ? 10 ** delta : Number("1e" + delta);
+                right_answer = Number(value) * power_of_ten;   // a float
+                if (!e_remover(right_answer).includes('0'.repeat(MAX_ZEROS))) {
+                    okay = true;
+                }
+            }
+        }
+    }
+
+    right_answer =
+        e_remover(
+            fixer(
+                e_remover(
+                    auto_round(
+                        e_remover(
+                            right_answer
+                        )))));
+
+    right_answers = [right_answer];
+    if (prefix_1 === 'u') {
+        prefix_1 = '';
+    }
+    if (prefix_2 === 'u') {
+        prefix_2 = '';
+    }
+
+    prompt = 'Convert the following values to the new units:';
+    input_message = String(value) + ' ' + prefix_1 + unit + ' = ... ' + prefix_2 + unit + '\n';
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.convert_units = convert_units;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function division_mixed_fractions(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const S = window.TrainingSupport;
+
+    // composing appropriate numbers
+    const divident = P.choice(
+        [P.randint(80, 160),
+         P.randint(80, 480),
+         P.randint(80, 800)]
+    );
+    const divisor = Math.floor(divident / P.randint(1, 10));
+
+    const [top, bottom] = S.crossout(S.factorize(divident), S.factorize(divisor));
+    const fraction_reduced = S.fraction_simplifier(top, bottom);
+
+    // converting fraction to a mixed number
+    let right_answer;
+    if (top < bottom || bottom === 1) {
+        right_answer = fraction_reduced;
+    } else {
+        const whole = Math.floor(top / bottom);
+        const fraction_top = top % bottom;
+        right_answer = `${whole} ${fraction_top}/${bottom}`;
+    }
+    // end converting fraction to a mixed number
+    input_message = `${divident}/${divisor} = `;
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.division_mixed_fractions = division_mixed_fractions;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function division_mixed_fractions_easy(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const S = window.TrainingSupport;
+
+    // composing apropriate numbers
+    const n1 = P.choice([1, P.choice([2, 3, 5])]);
+    let n2 = P.choice([1, 10, P.choice([2, 3, 5])]);
+    let n3 = P.choice([1, 1, 1, P.choice([2, 3, 5, 7, 11])]);
+    let n4 = P.choice([2, 3, 5, 7, 11, 13]);
+    const divident = n1 * n2 * n3 * n4;
+
+    n2 = P.choice([1, P.choice([2, 3, 5])]);
+    n3 = P.choice([1, 1, P.choice([2, 3, 5, 7, 11])]);
+    n4 = P.choice([2, 3, 5, 7, 11, 13]);
+    const divisor = n2 * n3 * n4;
+
+    const [top, bottom] = S.crossout(S.factorize(divident), S.factorize(divisor));
+    const fraction_reduced = S.fraction_simplifier(top, bottom);
+
+    // converting fraction to a mixed number
+    let right_answer;
+    if (top < bottom || bottom === 1) {
+        right_answer = fraction_reduced;
+    } else {
+        const whole = Math.floor(top / bottom);
+        const fraction_top = top % bottom;
+        right_answer = `${whole} ${fraction_top}/${bottom}`;
+    }
+    // end converting fraction to a mixed number
+    input_message = `${divident}/${divisor} = `;
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.division_mixed_fractions_easy = division_mixed_fractions_easy;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function division_remainders(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const divisor = P.randint(1, 11);
+    const remainder = P.randint(0, divisor - 1);
+    const quotient = P.randint(0, 9);
+    const divident = divisor * quotient + remainder;
+    let right_answer;
+    if (remainder > 0) {
+        if (quotient !== 0) {
+            right_answer = String(quotient) + "r" + String(remainder);
+        } else {
+            right_answer = "0r" + String(remainder);
+        }
+    } else {
+        if (quotient !== 0) {
+            right_answer = String(quotient);
+        } else {
+            right_answer = String(0);
+        }
+    }
+
+    input_message = String(divident) + ":" + String(divisor) + " = ";
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.division_remainders = division_remainders;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function estimate(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const total_n = P.randint(3, 8);
+    const max_species = 4;
+    const bottom = 100;
+    const ceiling = 800;
+    const min_repeat = 1;
+    const max_repeat = 5;
+
+    const g = { items_remaining: total_n, question: '', estimate: 0 };   // "it's a global costyl"
+
+    function item_n(bottom, ceiling, max_repeat, i) {
+        const item_i = P.randint(bottom, ceiling);
+        let n_item_i;
+        if (g.items_remaining > 0) {
+            n_item_i = P.randint(min_repeat, g.items_remaining);
+            g.items_remaining -= n_item_i;
+        } else {
+            n_item_i = 0;
+        }
+
+        g.question += (String(item_i) + '   ').repeat(n_item_i);
+        const the_order = 10 ** (String(item_i).length - 1);
+        const item_i_estimate = P.int(P.round(item_i / the_order, 0)) * the_order;
+        g.estimate += item_i_estimate * n_item_i;
+    }
+
+    for (let i = 1; i < max_species + 1; i++) {
+        item_n(bottom, ceiling, max_repeat, i);
+    }
+
+    input_message = g.question + '\n'.repeat(2);
+    const right_answer = String(g.estimate);
+    right_answers = [right_answer];
+    prompt = 'Estimate the sum, 1 s.f. each:';
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.estimate = estimate;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function factoring_quadratics(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const S = window.TrainingSupport;
+    const quadratics_composer = S.quadratics_composer;
+    let x1 = 0;
+    let x2 = 0;
+    let a = 1, b, c;
+    while (x1 === 0 || x2 === 0 || a === 1) {
+        const total_set = quadratics_composer();
+        const the_particular_set = P.choice(total_set);
+
+        a = the_particular_set[0];
+        b = the_particular_set[1];
+        c = the_particular_set[2];
+        x1 = the_particular_set[3];
+        x2 = the_particular_set[4];
+    }
+
+    x1 = -x1;  // (x-x1) requires the opposite sign
+    x2 = -x2;  // (x-x2) requires the opposite sign
+    let str_x1, str_x2;
+    if (x1 < 0) {
+        str_x1 = String(x1);
+    } else {
+        str_x1 = '+' + String(x1);
+    }
+    if (x2 < 0) {
+        str_x2 = String(x2);
+    } else {
+        str_x2 = '+' + String(x2);
+    }
+
+    a = String(a);
+    if (a === '1') {
+        a = '';
+    }
+    if (a === '-1') {
+        a = '-';
+    }
+    const ax2 = a + 'x2';
+
+    let b_sign;
+    if (b > 0) {
+        b_sign = '+';
+    } else {
+        b_sign = '';
+    }
+    b = String(b);
+    let bx = b + 'x';
+    if (b === '0') {
+        bx = '';
+    }
+    if (b === '1') {
+        bx = 'x';
+    }
+    if (b === '-1') {
+        bx = '-x';
+    }
+    bx = b_sign + bx;
+
+    let c_sign;
+    if (c > 0) {
+        c_sign = '+';
+    } else {
+        c_sign = '';
+    }
+    c = String(c);
+    if (c === '0') {
+        c = '';
+    }
+    c = c_sign + c;
+
+    const right_answer1 = a + '(x' + str_x1 + ')(x' + str_x2 + ')';
+    const right_answer2 = a + '(x' + str_x2 + ')(x' + str_x1 + ')';
+    right_answers = [right_answer1, right_answer2];
+    if (x1 === x2) {
+        right_answers.push(a + '(x' + str_x1 + ')2');
+    }
+
+    input_message = ax2 + bx + c + '=';
+    prompt = 'HINT: a(x-x1)(x-x2)';
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.factoring_quadratics = factoring_quadratics;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function factorization(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const factorize = window.TrainingSupport.factorize;   // provisional, see core/support_module.js
+
+    const prime_numbers_up_to_100 = [
+        2, 3, 5, 7, 11, 13, 17, 19, 23,
+        29, 31, 37, 41, 43, 47, 53, 59,
+        61, 67, 71, 73, 79, 83, 89, 97
+    ];
+
+    const n_1 = P.choice(prime_numbers_up_to_100.slice(0, 3));
+    let n_2, n_3, n_4, n_5, n_6;
+    if (P.randint(0, 1)) {
+        n_2 = P.choice(prime_numbers_up_to_100.slice(0, 3));
+    } else {
+        n_2 = 1;
+    }
+    if (P.randint(0, 1)) {
+        n_3 = P.choice(prime_numbers_up_to_100.slice(0, 3));
+    } else {
+        n_3 = 1;
+    }
+    if (P.randint(0, 1)) {
+        n_4 = P.choice(prime_numbers_up_to_100.slice(0, 3));
+    } else {
+        n_4 = 1;
+    }
+    if (P.randint(0, 1)) {
+        n_5 = P.choice(prime_numbers_up_to_100.slice(0, 4));
+    } else {
+        n_5 = 1;
+    }
+    if (P.randint(0, 1)) {
+        n_6 = P.choice(prime_numbers_up_to_100.slice(0, 6));
+    } else {
+        n_6 = 1;
+    }
+
+    const n = n_1 * n_2 * n_3 * n_4 * n_5 * n_6;
+
+    const prime_multiples_list = factorize(n);
+    const right_answer = prime_multiples_list.map(i => String(i)).join("*");
+    right_answers = [right_answer];
+    input_message = `${n} = `;
+    prompt = "Factorize a number (reveal ascending prime multiples).";
+    prompt += "\n";
+    prompt += "Example: 60 = 2*2*3*5";
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.factorization = factorization;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function factorizing_square_of_sum(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const alphabet_small = ['a', 'b', 'c', 'd', 'e', 'f', 'g',
+                            'h', 'i', 'j', 'k', 'l', 'm', 'n',
+                            'o', 'q', 'r', 's', 't', 'u', 'v',
+                            'w', 'x', 'y', 'z'];
+    let switch_ = 'NOT OKAY';
+
+    const n1 = P.randint(1, 13);
+    const n1_string = n1 !== 1 ? String(n1) : "";
+    const n1_square_string = n1 !== 1 ? String(n1 ** 2) : "";
+    const n2 = P.randint(1, 13);
+    const n2_string = n2 !== 1 ? String(n2) : "";
+    const n2_square_string = n2 !== 1 ? String(n2 ** 2) : "";
+
+    const the_sign = P.choice(['+', '-']);
+
+    // list.pop(index)
+    const pop = (arr, idx) => arr.splice(idx, 1)[0];
+
+    let letter1, letter1_power, letter2, letter2_power;
+    while (switch_ === 'NOT OKAY') {
+        letter1 = P.choice([pop(alphabet_small, P.randint(0, alphabet_small.length - 1)), ""]);
+        letter1_power = letter1 !== "" ? '2' : "";
+        letter2 = P.choice([pop(alphabet_small, P.randint(0, alphabet_small.length - 1)), ""]);
+        letter2_power = letter2 !== "" ? '2' : "";
+        switch_ = (letter1 !== letter2 && letter1 !== n1_string && letter2 !== n2_string) ? 'OKAY, GO' : 'NOT OKAY';
+    }
+
+    const right_answer = '(' + n1_string + letter1 + the_sign + n2_string + letter2 + ')2';
+    input_message = (n1_square_string + letter1 + letter1_power +
+                     the_sign +
+                     String(2 * n1 * n2) + letter1 + letter2 +
+                     '+' + n2_square_string + letter2 + letter2_power + ' = ');
+
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.factorizing_square_of_sum = factorizing_square_of_sum;
 })();
 
 (() => {
@@ -115,6 +1162,511 @@ function find_sum(difficulty) {
 }
 
 window.TrainingExercises.find_sum = find_sum;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function fraction_reduction(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const S = window.TrainingSupport;
+    const common_factor = P.randint(1, 11);
+    const n_1 = P.randint(1, 13);
+    const n_2 = P.randint(1, 13);
+    let right_answer;
+    if (!(n_1 % n_2)) {
+        right_answer = P.int(n_1 / n_2);   // a number here, a string in the else branch (as in the Python)
+    } else {
+        const numerator = n_1 * common_factor;
+        const denominator = n_2 * common_factor;
+        right_answer = S.fraction_simplifier(numerator, denominator);
+    }
+    input_message = String(n_1 * common_factor) + "/" + String(n_2 * common_factor) + "= ";
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.fraction_reduction = fraction_reduction;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function fractions_to_decimals(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // generating numerator
+    let numerator, denominator;
+    const switch_ = P.randint(0, 2);
+    if (switch_ === 0) {
+        numerator = P.randint(1, 9);
+    } else if (switch_ === 1) {
+        numerator = P.randint(1, 1000);
+    } else {
+        numerator = P.randint(1, 100);
+    }
+    // end generating numerator
+
+    // generating denominator
+    if (P.randint(0, 2) === 0) {
+        denominator = 10 ** P.int(P.round(P.triangular(1, 6, 2), 0));
+    } else {
+        denominator = 100;
+    }
+    // end generating denominator
+
+    const right_answer = numerator / denominator;
+    right_answers = [right_answer];   // a number, as in the Python original
+    input_message = "convert to decimals:" + String(numerator) + "/" + String(denominator) + "= ";
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.fractions_to_decimals = fractions_to_decimals;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function highest_common_factor(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const primes = [2, 3, 5, 7, 11, 13];
+    let okay = false;
+    let hcf, sum_powers;
+    while (!okay) {
+        hcf = 1;
+        sum_powers = 0;
+        for (const i of primes) {
+            let power = P.choice([0, 1]);
+            if (power) {
+                const from_ = 0;
+                let to_;
+                if (i === 2) {
+                    to_ = 8 + difficulty;
+                } else if (i === 3) {
+                    to_ = 5;
+                } else {
+                    to_ = 1;
+                }
+                power = P.randint(from_, to_);
+            }
+            if (sum_powers >= 8 + difficulty) {
+                break;
+            }
+            hcf *= i ** power;
+            sum_powers += power;
+        }
+        if (2 + difficulty <= sum_powers && sum_powers <= 8 + difficulty) {
+            okay = true;
+        }
+    }
+
+    okay = false;
+
+    function generate_ab_parts() {
+        const small_primes = primes.slice(0, -2);
+        const random_bools = () => Array.from({ length: 4 }, () => P.randint(0, 1) === 1);
+        let a_scheme = random_bools();
+        a_scheme[0] = true;
+        P.shuffle(a_scheme);
+        let b_scheme = a_scheme.map(x => !x);
+        let mask = random_bools();
+        a_scheme = a_scheme.map((x, k) => x && mask[k]);
+        mask = random_bools();
+        b_scheme = b_scheme.map((x, k) => x && mask[k]);
+        // primes[:-2] ** np.random.randint(1, 2 + difficulty, 4), then *= scheme, zeros -> 1
+        const a_difference = small_primes.map((p, k) => a_scheme[k] ? p ** P.npRandint(1, 2 + difficulty) : 1);
+        const b_difference = small_primes.map((p, k) => b_scheme[k] ? p ** P.npRandint(1, 2 + difficulty) : 1);
+        const a = a_difference.reduce((x, y) => x * y, 1);
+        const b = b_difference.reduce((x, y) => x * y, 1);
+        return [a, b];
+    }
+
+    function generate_ab(hcf, difficulty) {
+        const [a_part, b_part] = generate_ab_parts();
+        return [hcf * a_part, hcf * b_part];
+    }
+    let [a, b] = generate_ab(hcf, difficulty);
+    if (a === b) {
+        [a, b] = generate_ab(hcf, difficulty);
+    }
+    right_answers = [hcf];   // NOTE: a number, not a string (as in the Python original)
+    input_message = `Find HCF for ${a} and ${b}:\n`;
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.highest_common_factor = highest_common_factor;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function large_division(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // c = a * b
+    let ok = false;
+    let a, b;
+    while (!ok) {
+        const d = P.randint(1, difficulty + 1);
+        const a1 = P.choice([1, 1, 1, 5, 10, 100, 101, 1001]);
+        const a2 = P.randint(1, 101);
+        const a3 = P.randint(1, 10);
+        a = a1 * a2 * a3 * d;
+        const b1 = P.randint(1, 100);
+        const b2 = P.choice([1, 1, 1, 5, 10, 100, 101]);
+        b = b1 * b2;
+        if (500 < a && a < 10000) {
+            if (90 < b && b < 1000) {
+                ok = true;
+            }
+        }
+    }
+    const c = a * b;
+    prompt = 'Divide the following, the answer is a whole number:';
+    input_message = `${c} / ${b} = ... \n`;
+    right_answers = [a];   // a number, as in the Python original
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.large_division = large_division;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function linear_equation(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // ax+b=c
+    let a = P.randint(1, 9);
+    const a_sign = P.randint(0, 1) > 0 ? 1 : -1;
+    a = a * a_sign;
+
+    let right_answer = P.randint(0, 11);
+    const right_answer_sign = P.randint(0, 1) > 0 ? 1 : -1;
+    right_answer = P.int(right_answer * right_answer_sign);
+
+    const b = P.int(P.round(P.triangular(-50, 50, 0), 0));
+
+    const c = a * right_answer + b;
+
+    let a_input_message, b_input_message;
+    if (a === 1) {
+        a_input_message = "";
+    } else if (a === -1) {
+        a_input_message = "-";
+    } else {
+        a_input_message = String(a);
+    }
+
+    if (b !== 0) {
+        b_input_message = b > 0 ? "+" + String(b) : String(b);
+    } else {
+        b_input_message = "";
+    }
+
+    input_message = a_input_message + "x" + b_input_message + "=" + String(c) + "\nx = ";
+    right_answers = [right_answer];   // a number, as in the Python original
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.linear_equation = linear_equation;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function linear_equation_collect_terms(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const S = window.TrainingSupport;
+    const d = difficulty;
+    /*
+    nax + nbx + ncx + nd + ne + nf = ngx + nhx + njx + nk + nm + np
+
+    solved as
+    n(a+b+c-g-h-j)x = n(k+m+p-d-e-f)
+    (a+b+c-g-h-j)x = k+m+p-d-e-f
+    or
+    effective_coef * x = effective_const
+
+    x = effective_const/effective_coef
+
+    x is a pre-defined integer
+    */
+    const sum = arr => arr.reduce((p, q) => p + q, 0);
+    // list(np.random.randint(1, 6 + d, n) * np.random.choice([-1, 1], n))
+    const random_coefs = n => {
+        const mags = Array.from({ length: n }, () => P.npRandint(1, 6 + d));
+        const signs = Array.from({ length: n }, () => P.choice([-1, 1]));
+        return mags.map((v, k) => v * signs[k]);
+    };
+
+    const n_coefs = P.randint(1, 3 + d);
+    const n_coefs_left = P.randint(0, n_coefs);
+    const n_coefs_right = n_coefs - n_coefs_left;
+
+    let okay = false;
+    let left_coefs, right_coefs;
+    while (!okay) {
+        left_coefs = random_coefs(n_coefs_left);
+        right_coefs = random_coefs(n_coefs_right);
+        if (sum(left_coefs) !== sum(right_coefs)) {
+            okay = true;
+        }
+    }
+    const x = P.randint(-(7 + d), 7 + d);
+    const effective_coef = sum(left_coefs) - sum(right_coefs);
+    const effective_const = x * effective_coef;
+    let [sum_left_cts, sum_right_cts] = S.generate_target_sum(effective_const, 2, 6 + d ** 2);
+    sum_left_cts = P.int(sum_left_cts * -1);
+    const left_cts = S.generate_target_sum(sum_left_cts, P.randint(1, 2 + d), 5 + d ** 2);
+    const right_cts = S.generate_target_sum(sum_right_cts, P.randint(1, 2 + d), 5 + d ** 2);
+    const left_xs = left_coefs.map(i => `${i}x`);
+    const right_xs = right_coefs.map(i => `${i}x`);
+    let left = [...left_xs, ...left_cts].filter(i => i);
+    let right = [...right_xs, ...right_cts].filter(i => i);
+    P.shuffle(left);
+    P.shuffle(right);
+    if (!left.length) {
+        left = [0];
+    }
+    if (!right.length) {
+        right = [0];
+    }
+    left = S.list_to_str(left);
+    right = S.list_to_str(right);
+    input_message = `${left} = ${right}\nx = `;
+    right_answers = [x];   // a number, as in the Python original
+    prompt = 'Collect the terms and find x.';
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.linear_equation_collect_terms = linear_equation_collect_terms;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function linear_equation_lvl_2(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // ax/d + b=c
+    let a, b, c, d;
+    let right_answer = 0.1;
+    while (right_answer % 1 !== 0) {
+        a = P.randint(1, 10) * P.choice([-1, 1]);
+        b = P.int(P.round(P.triangular(-50, 50, 0), 0));
+        c = b + P.randint(-13, 13);
+        d = P.randint(1, 13) * P.choice([-1, 1]);
+        right_answer = d * (c - b) / a;
+    }
+    right_answer = String(P.int(right_answer));
+
+    let a_input_message, b_input_message;
+    if (a === 1) {
+        a_input_message = "";
+    } else if (a === -1) {
+        a_input_message = "-";
+    } else {
+        a_input_message = String(a);
+    }
+
+    if (b !== 0) {
+        b_input_message = b > 0 ? "+" + String(b) : String(b);
+    } else {
+        b_input_message = "";
+    }
+
+    input_message = a_input_message + "x/" + String(d) + " " + b_input_message + "=" + String(c) + "\nx = ";
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.linear_equation_lvl_2 = linear_equation_lvl_2;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function logs(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    let power, right_answer;
+    const mode = P.randint(1, 3);
+    const base = P.randint(2, 13);
+    if (mode < 3) {
+        // proper powers
+        if (base === 2) {
+            power = P.randint(0, 14);
+        } else if (base < 6) {
+            power = P.randint(0, 9 - base);
+        } else if (base < 9) {
+            power = P.randint(0, 3);
+        } else {
+            power = P.randint(0, 2);
+        }
+        // end(proper powers)
+    } else {
+        if (base === 2) {
+            power = P.randint(1, 14);
+        } else if (base < 6) {
+            power = P.randint(1, 9 - base);
+        } else if (base < 9) {
+            power = P.randint(1, 3);
+        } else {
+            power = P.randint(1, 2);
+        }
+    }
+
+    const number = base ** power;
+
+    if (mode === 1) {
+        // log a (b) = x
+        right_answer = power;
+        input_message = "log " + String(base) + " (" + String(number) + ") = ";
+    } else if (mode === 2) {
+        // log a (x) = c
+        right_answer = number;
+        input_message = "log " + String(base) + " (x) = " + String(power) + "\nx = ";
+    } else {
+        // log x (b) = c
+        right_answer = base;
+        input_message = "log x (" + String(number) + ") = " + String(power) + "\nx = ";
+    }
+
+    right_answer = String(right_answer);
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.logs = logs;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function lowest_common_multiple(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const primes = [2, 3, 5, 7, 11, 13];
+    let okay = false;
+    let hcf, sum_powers;
+    while (!okay) {
+        hcf = 1;
+        sum_powers = 0;
+        for (const i of primes) {
+            let power = P.choice([0, 1]);
+            if (power) {
+                const from_ = 0;
+                let to_;
+                if (i === 2) {
+                    to_ = 4 + difficulty;
+                } else if (i === 3) {
+                    to_ = 5;
+                } else {
+                    to_ = 1;
+                }
+                power = P.randint(from_, to_);
+            }
+            if (sum_powers >= 4 + difficulty) {
+                break;
+            }
+            hcf *= i ** power;
+            sum_powers += power;
+        }
+        if (2 + difficulty <= sum_powers && sum_powers <= 4 + difficulty) {
+            okay = true;
+        }
+    }
+
+    okay = false;
+
+    function generate_ab_parts() {
+        const small_primes = primes.slice(0, -2);
+        const random_bools = () => Array.from({ length: 4 }, () => P.randint(0, 1) === 1);
+        let a_scheme = random_bools();
+        a_scheme[0] = true;
+        P.shuffle(a_scheme);
+        let b_scheme = a_scheme.map(x => !x);
+        let mask = random_bools();
+        a_scheme = a_scheme.map((x, k) => x && mask[k]);
+        mask = random_bools();
+        b_scheme = b_scheme.map((x, k) => x && mask[k]);
+        // primes[:-2] ** np.random.randint(1, 2 + difficulty, 4), then *= scheme, zeros -> 1
+        const a_difference = small_primes.map((p, k) => a_scheme[k] ? p ** P.npRandint(1, 2 + difficulty) : 1);
+        const b_difference = small_primes.map((p, k) => b_scheme[k] ? p ** P.npRandint(1, 2 + difficulty) : 1);
+        const a = a_difference.reduce((x, y) => x * y, 1);
+        const b = b_difference.reduce((x, y) => x * y, 1);
+        return [a, b];
+    }
+
+    function generate_ab_differences(difficulty) {
+        return generate_ab_parts();
+    }
+    let [a, b] = generate_ab_differences(difficulty);
+    let conditions = [
+        a === b,
+        !(a % b),
+        !(b % a)
+    ];
+    if (conditions.some(Boolean)) {
+        [a, b] = generate_ab_differences(difficulty);
+    }
+    /* do twice: */
+    conditions = [
+        a === b,
+        !(a % b),
+        !(b % a)
+    ];
+    if (conditions.some(Boolean)) {
+        [a, b] = generate_ab_differences(difficulty);
+    }
+    const lcm = hcf * a * b;
+    right_answers = [lcm];   // NOTE: a number, not a string (as in the Python original)
+    input_message = `Find LCM for ${a * hcf} and ${b * hcf}:\n`;
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.lowest_common_multiple = lowest_common_multiple;
 })();
 
 (() => {
@@ -233,17 +1785,511 @@ function multiply_two_digits(difficulty) {
     const P = window.TrainingPy;
     let right_answers, input_message, prompt;
 
-    // n * m
-    const n = P.randint(10, 100);
-    const m = P.randint(2, 11);
-    const right_answer = n * m;
-    right_answers = [String(right_answer)];
-    input_message = String(n) + " * " + String(m) + " = ";
+    // NOTE: this is the LATER of two definitions in the Python file, so it is the one that wins there
+    let n1, n2;
+    if (P.randint(0, 1) === 1) {
+        n1 = P.randint(3, 13);
+        n2 = P.randint(3, 13);
+    } else {
+        n1 = P.int(P.round(P.triangular(1, 99, 25), 0));
+        n2 = P.randint(0, 10);
+    }
+
+    const right_answer = String(n1 * n2);
+    right_answers = [right_answer];
+    input_message = String(n1) + " * " + String(n2) + " = ";
 
     return { right_answers, input_message, prompt };
 }
 
 window.TrainingExercises.multiply_two_digits = multiply_two_digits;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function open_close_brackets(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    /*
+    forward: n(ax + by) = nax + nby
+    backward: nax + nby = n(ax + by)
+    */
+    const S = window.TrainingSupport;
+    const alphabet = 'abcdefghijkmnpqrstuvwxyz';
+    const d = Math.abs(difficulty);
+    const mode = P.choice(['forward', 'backward']);
+    // np.random.choice(list, k, replace=False): k distinct items, in random order
+    const choice_without_replacement = (arr, k) => {
+        const rest = arr.slice();
+        const picked = [];
+        for (let j = 0; j < k; j++) picked.push(rest.splice(P.randint(0, rest.length - 1), 1)[0]);
+        return picked;
+    };
+    const [x, y] = choice_without_replacement(Array.from(alphabet), 2);
+    let a, b, n;
+    if (mode === 'forward') {
+        let okay = false;
+        while (!okay) {
+            // np.random.randint(1, 6 + d, 3) * np.random.choice([-1, 1], 3)
+            const mags = Array.from({ length: 3 }, () => P.npRandint(1, 6 + d));
+            const signs = Array.from({ length: 3 }, () => P.choice([-1, 1]));
+            [a, b, n] = mags.map((v, k) => v * signs[k]);
+            const conditions = [Math.abs(a) !== Math.abs(b), Math.abs(n) !== 1];
+            okay = conditions.every(Boolean) ? true : false;
+        }
+    } else {
+        const primes = [1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
+        const picked = choice_without_replacement(primes.slice(0, Math.max(d, 6)), 2);
+        const signs = Array.from({ length: 2 }, () => P.choice([-1, 1]));
+        [a, b] = picked.map((v, k) => v * signs[k]);
+        n = P.randint(2, 12) * P.choice([-1, 1]);
+    }
+    const na = S.num_to_str(n * a, false, true);
+    const nb = S.num_to_str(n * b, true, true);
+    a = S.num_to_str(a, false, true);
+    b = S.num_to_str(b, true, true);
+    const n_str = S.num_to_str(n, false, true);
+    let state0 = `${n_str}(${a}${x} ${b}${y})`;
+    let state1 = `${na}${x} ${nb}${y}`;
+    prompt = 'Open the brackets. Example: 5(x + 2y) = 5x + 10y';
+    if (mode === 'backward') {
+        [state0, state1] = [state1, state0];
+        const factor_sign = n < 0 ? 'NEGATIVE (-)' : 'POSITIVE (+)';
+        prompt = 'Factorize the following. Example: 5x + 10y = 5(x + 2y)';
+        prompt += `\nThe factor is ${factor_sign}`;
+    }
+    input_message = `${state0} = `;
+    right_answers = [state1];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.open_close_brackets = open_close_brackets;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function percent_change(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    let n, percent, percent_delta;
+    const switch_ = P.randint(1, 7);
+    if (switch_ <= 4) {
+        n = P.randint(1, 100) * 10 ** P.randint(0, 2);
+        percent = P.randint(1, 20) * 5;
+        percent_delta = n * percent / 100;
+    } else if (switch_ === 5) {
+        percent_delta = 0.1;
+        while (percent_delta % 1 !== 0) {
+            n = P.randint(1, 600);
+            percent = P.randint(0, 100);
+            percent_delta = n * percent / 100;
+        }
+    // the following two are up to 600%
+    } else if (switch_ === 6) {
+        n = P.randint(1, 100);
+        percent = P.randint(1, 60) * 10;
+        percent_delta = n * percent / 100;
+    } else {
+        percent_delta = 0.1;
+        percent = 100;
+        while (percent_delta % 1 !== 0 || percent === 100) {
+            n = P.randint(1, 600);
+            percent = P.randint(0, 600);
+            percent_delta = n * percent / 100;
+        }
+    }
+    // end(the following two are up to 600%)
+
+    let percent_delta_sign, crease;
+    if (P.randint(0, 4) <= 3 && switch_ <= 5) {
+        percent_delta_sign = -1;
+        crease = "Decrease ";
+    } else {
+        percent_delta_sign = 1;
+        crease = "Increase ";
+    }
+
+    let right_answer = n + percent_delta * percent_delta_sign;
+    if (!(right_answer % 1)) {
+        right_answer = P.int(right_answer);
+    }
+    right_answers = [right_answer];   // a number, as in the Python original
+    input_message = "It was " + String(n) + "." + crease + String(percent) + "%. Now it equals ";
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.percent_change = percent_change;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function percent_of(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    let n, percent, right_answer;
+    const switch_ = P.randint(1, 7);
+    if (switch_ <= 4) {
+        n = 10 * P.randint(20, 100);
+        percent = P.randint(1, 20) * 5;
+        right_answer = n * percent / 100;
+    } else if (switch_ === 5) {
+        n = P.randint(1, 100);
+        percent = P.randint(1, 60) * 10;
+        right_answer = n * percent / 100;
+    } else if (switch_ === 6) {
+        right_answer = 0.1;
+        while (right_answer % 1 !== 0) {
+            n = P.randint(1, 600);
+            percent = P.randint(0, 100);
+            right_answer = n * percent / 100;
+        }
+    } else {
+        right_answer = 0.1;
+        percent = 100;
+        while (right_answer % 1 !== 0 || percent === 100) {
+            n = P.randint(1, 600);
+            percent = P.randint(0, 600);
+            right_answer = n * percent / 100;
+        }
+    }
+
+    input_message = String(percent) + "% of " + String(n) + " = ";
+    if (right_answer % 1 === 0) {
+        right_answer = P.int(right_answer);
+    }
+    right_answer = P.numStr(right_answer);
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.percent_of = percent_of;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function percent_of_no_calculation(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    let n, percent;
+    const switch_ = P.randint(1, 5);
+    if (switch_ <= 4) {
+        n = 10 * P.randint(20, 100);
+        percent = P.randint(1, 20) * 5;
+    } else if (switch_ === 5) {
+        n = P.randint(1, 100);
+        percent = P.randint(1, 60) * 10;
+    } else if (switch_ === 6) {   // unreachable in the original too (switch is 1..5)
+        n = P.randint(1, 600);
+        percent = P.randint(0, 100);
+    } else {                      // unreachable in the original too
+        n = P.randint(1, 600);
+        percent = P.randint(0, 600);
+    }
+
+    let coeff = percent / 100;
+    if (coeff % 1 === 0) {
+        coeff = P.int(coeff);
+    }
+    coeff = P.numStr(coeff);
+
+    const right_answer = String(n) + "*" + coeff;
+    right_answers = [right_answer];
+    input_message = String(percent) + "% of " + String(n) + " = ";
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.percent_of_no_calculation = percent_of_no_calculation;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function powers(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // constants:
+    const low = 0, high = 15, mode = 2, how_narrow_is_option_2 = 3, option_2_probability = 70;
+
+    const option_1 = Math.trunc(P.round(P.triangular(low, high, mode), 0));
+
+    const option_2 = Math.trunc(P.round(
+        P.triangular(
+            mode - (mode - low) / how_narrow_is_option_2,
+            mode + (high - mode) / how_narrow_is_option_2,
+            mode),
+        0));
+
+    let n, m;
+    if (P.randint(1, 100) > option_2_probability) {
+        n = option_1;
+    } else {
+        n = option_2;
+    }
+    // adjusting the power according to the base, excluding 0**0
+    if (n !== 0) {
+        m = n < 8 ? P.randint(0, 9 - n) : P.randint(0, 2);
+    } else {
+        m = n < 8 ? P.randint(1, 9 - n) : P.randint(1, 2);
+    }
+    // adjusting the power according to the base, excluding 0**0 end
+    const right_answer = String(n ** m);
+    right_answers = [right_answer];
+    input_message = String(String(n) + " to the power of " + String(m) + " = ");
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.powers = powers;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function quadratic_equation_calculator(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const a1 = P.randint(-10, -1);
+    const a2 = P.randint(1, 10);
+    let a = P.choice([a1, a2]);
+    const b1 = P.randint(-10, -1);
+    const b2 = P.randint(1, 10);
+    let b = P.choice([b1, b2]);
+    const c1 = P.randint(-10, -1);
+    const c2 = P.randint(1, 10);
+    let c = P.choice([c1, c2]);
+    const D = b ** 2 - 4 * a * c;
+    if (D < 0) {
+        right_answers = [''];
+    } else if (D === 0) {
+        let x = -b / (2 * a);
+        x = P.round(x, 1);
+        if (x % 1 === 0) {
+            x = P.int(x);
+        }
+        right_answers = [P.numStr(x)];
+    } else {
+        let x1 = (-b + Math.sqrt(D)) / (2 * a);
+        x1 = P.round(x1, 1);
+        if (x1 % 1 === 0) {
+            x1 = P.int(x1);
+        }
+        let x2 = (-b - Math.sqrt(D)) / (2 * a);
+        x2 = P.round(x2, 1);
+        if (x2 % 1 === 0) {
+            x2 = P.int(x2);
+        }
+        const right_answer1 = P.numStr(x1) + ',' + P.numStr(x2);
+        const right_answer2 = P.numStr(x2) + ',' + P.numStr(x1);
+        right_answers = [right_answer1, right_answer2];
+    }
+
+    a = String(a);
+    if (a === '1') {
+        a = '';
+    }
+    if (a === '-1') {
+        a = '-';
+    }
+    const ax2 = a + 'x2';
+
+    let b_sign;
+    if (b > 0) {
+        b_sign = '+';
+    } else {
+        b_sign = '';
+    }
+    b = String(b);
+    let bx = b + 'x';
+    if (b === '0') {
+        bx = '';
+    }
+    if (b === '1') {
+        bx = 'x';
+    }
+    if (b === '-1') {
+        bx = '-x';
+    }
+    bx = b_sign + bx;
+
+    let c_sign;
+    if (c > 0) {
+        c_sign = '+';
+    } else {
+        c_sign = '';
+    }
+    c = String(c);
+    if (c === '0') {
+        c = '';
+    }
+    c = c_sign + c;
+
+    prompt = 'give your answers rounded to 1d.p.';
+
+    // input_message=prompt
+    // input_message+='\n'
+    input_message = ax2 + bx + c + '=0\n';
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.quadratic_equation_calculator = quadratic_equation_calculator;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function quadratic_equation_easy(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const S = window.TrainingSupport;
+    const quadratics_composer = S.quadratics_composer;
+    const total_set = quadratics_composer();
+    const the_particular_set = P.choice(total_set);
+
+    let a = the_particular_set[0];
+    let b = the_particular_set[1];
+    let c = the_particular_set[2];
+    const x1 = the_particular_set[3];
+    const x2 = the_particular_set[4];
+
+    const right_answer1 = String(x1) + ',' + String(x2);
+    const right_answer2 = String(x2) + ',' + String(x1);
+    right_answers = [right_answer1, right_answer2];
+    if (x1 === x2) {
+        right_answers = [right_answer1, String(x1)];
+    }
+
+    a = String(a);
+    if (a === '1') {
+        a = '';
+    }
+    if (a === '-1') {
+        a = '-';
+    }
+    const ax2 = a + 'x2';
+
+    let b_sign;
+    if (b > 0) {
+        b_sign = '+';
+    } else {
+        b_sign = '';
+    }
+    b = String(b);
+    let bx = b + 'x';
+    if (b === '0') {
+        bx = '';
+    }
+    if (b === '1') {
+        bx = 'x';
+    }
+    if (b === '-1') {
+        bx = '-x';
+    }
+    bx = b_sign + bx;
+
+    let c_sign;
+    if (c > 0) {
+        c_sign = '+';
+    } else {
+        c_sign = '';
+    }
+    c = String(c);
+    if (c === '0') {
+        c = '';
+    }
+    c = c_sign + c;
+
+    input_message = ax2 + bx + c + '=0\n';
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.quadratic_equation_easy = quadratic_equation_easy;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function roots(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // constants:
+    const low = 0, high = 17, mode = 2, how_narrow_is_option_2 = 3, option_2_probability = 40;
+
+    const option_1 = P.int(P.round(P.triangular(low, high, mode), 0));
+
+    const option_2 = P.int(P.round(
+        P.triangular(5, 20, 11), 0));
+
+    let right_answer, power;
+    if (P.randint(1, 100) > option_2_probability) {
+        right_answer = option_1;
+    } else {
+        right_answer = option_2;
+    }
+
+    // proper powers
+    if (right_answer === 2) {
+        power = P.randint(2, 14);
+    } else if (right_answer < 6) {
+        power = P.randint(2, 9 - right_answer);
+    } else if (right_answer < 9) {
+        power = P.randint(2, 3);
+    } else {
+        power = 2;
+    }
+    // end(proper powers)
+
+    const n = right_answer ** power;
+
+    let degree_of_the_root;
+    if (power === 2) {
+        degree_of_the_root = "square";
+    } else if (power === 3) {
+        degree_of_the_root = "cubic";
+    } else {
+        degree_of_the_root = String(power) + "th";
+    }
+
+    input_message = String(degree_of_the_root + " root of " + String(n) + " = ");
+    right_answers = [right_answer];   // a number, as in the Python original
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.roots = roots;
 })();
 
 (() => {
@@ -304,6 +2350,83 @@ window.TrainingExercises.round_whole_numbers = round_whole_numbers;
 
 window.TrainingExercises = window.TrainingExercises || {};
 
+function simultaneous_equations_3(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    /*
+    ax + by = n1
+    cy + dz = n2
+    ez + fx = n3
+    */
+    const S = window.TrainingSupport;
+
+    // np.random.randint(1, 11, 9) * np.random.choice([-1, 1], 9)
+    const magnitudes = Array.from({ length: 9 }, () => P.npRandint(1, 11));
+    const signs = Array.from({ length: 9 }, () => P.choice([-1, 1]));
+    const [a, b, c, d, e, f, x, y, z] = magnitudes.map((v, k) => v * signs[k]);
+
+    const n1 = a * x + b * y;
+    const n2 = c * y + d * z;
+    const n3 = e * z + f * x;
+
+    const line1 = `${S.num_to_str(a, false, true)}x ${S.num_to_str(b, true, true)}y = ${n1}`;
+    const line2 = `${S.num_to_str(c, false, true)}y ${S.num_to_str(d, true, true)}z = ${n2}`;
+    const line3 = `${S.num_to_str(e, false, true)}z ${S.num_to_str(f, true, true)}x = ${n3}`;
+
+    input_message = [line1, line2, line3].join("\n") + "\n";
+    prompt = "Find x y z. Response Example: 5 -5 10";
+    right_answers = [`${x} ${y} ${z}`, `${x}, ${y}, ${z}`, ` ${x} ${y} ${z}`, ` ${x} ${y} ${z} `];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.simultaneous_equations_3 = simultaneous_equations_3;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function star_count_easy(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const max_n = 9;
+    const max_len = 20;
+    let n1, n2, product;
+    input_message = ' '.repeat(max_len + 1);
+    while (input_message.length > max_len) {
+        n1 = P.randint(1, max_n);
+        if (n1 > 2) {
+            n2 = P.randint(2, (max_n - n1 + 3));
+        } else {
+            n2 = P.randint(4, 9);
+        }
+        n2 = n2 === 0 ? 1 : n2;
+        product = n1 * n2;
+        if (product < 4) {
+            n1 = P.randint(5, 7);
+            n2 = P.randint(3, 5);
+            product = n1 * n2;
+        }
+        input_message = ('*'.repeat(n1) + '\n').repeat(n2) + ' = ';
+    }
+    const right_answer = String(product);
+    right_answers = [right_answer];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.star_count_easy = star_count_easy;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
 function test(difficulty) {
     const P = window.TrainingPy;
     let right_answers, input_message, prompt;
@@ -317,6 +2440,86 @@ function test(difficulty) {
 
 window.TrainingExercises.test = test;
 })();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function value_function_quadratic(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const x_v1 = P.randint(-9, 9);
+    const x_v2 = P.randint(-2, 0);
+    const x_v3 = P.randint(-5, -1);
+    const x_v4 = P.randint(-3, -1);
+    const x = P.choice([x_v1, x_v2, x_v3, x_v4]);
+    const a1 = P.randint(-10, -1);
+    const a2 = P.randint(1, 10);
+    let a = P.choice([a1, a2]);
+    const b1 = P.randint(-10, -1);
+    const b2 = P.randint(1, 10);
+    let b = P.choice([b1, b2]);
+    const c1 = P.randint(-10, -1);
+    const c2 = P.randint(1, 10);
+    let c = P.choice([c1, c2]);
+    const fx = a * (x ** 2) + b * x + c;
+    right_answers = [String(fx)];
+
+    a = String(a);
+    if (a === '1') {
+        a = '';
+    }
+    if (a === '-1') {
+        a = '-';
+    }
+    const ax2 = a + 'x2';
+
+    let b_sign;
+    if (b > 0) {
+        b_sign = '+';
+    } else {
+        b_sign = '';
+    }
+    b = String(b);
+    let bx = b + 'x';
+    if (b === '0') {
+        bx = '';
+    }
+    if (b === '1') {
+        bx = 'x';
+    }
+    if (b === '-1') {
+        bx = '-x';
+    }
+    bx = b_sign + bx;
+
+    let c_sign;
+    if (c > 0) {
+        c_sign = '+';
+    } else {
+        c_sign = '';
+    }
+    c = String(c);
+    if (c === '0') {
+        c = '';
+    }
+    c = c_sign + c;
+
+    prompt = 'find the value of the function:';
+
+    // input_message=prompt
+    // input_message+='\n'
+    input_message = 'f(x)=' + ax2 + bx + c;
+    input_message += '\n';
+    input_message += 'f(' + String(x) + ')=';
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.value_function_quadratic = value_function_quadratic;
+})();
 (() => {
 "use strict";
 
@@ -329,7 +2532,7 @@ const EXIT=["bye","see ya","exit","goodbye","hasta la vista",
 "i am batman","i'll be back","nooooo"];
 
 // Injected by assemble.py from the enabled src/config/*.json files.
-const exercises=[{"id": "add_negatives", "name": "Add negatives", "subjects": ["maths"]}, {"id": "find_sum", "name": "Find sum", "subjects": ["maths"]}, {"id": "multiplication_table", "name": "Multiplication Table", "subjects": ["maths"]}, {"id": "multiply_decimals", "name": "Multiply decimals", "subjects": ["maths"]}, {"id": "multiply_hundreds", "name": "Multiply hundreds", "subjects": ["maths"]}, {"id": "multiply_two_digits", "name": "Multiply two digits", "subjects": ["maths"]}, {"id": "round_decimals", "name": "Round decimals", "subjects": ["maths"]}, {"id": "round_whole_numbers", "name": "Round whole numbers", "subjects": ["maths"]}, {"id": "test", "name": "Test", "subjects": ["english"]}];
+const exercises=[{"id": "add_decimals", "name": "Add decimals", "subjects": ["maths"]}, {"id": "add_decimals_easy", "name": "Add decimals (easy)", "subjects": ["maths"]}, {"id": "add_negatives", "name": "Add negatives", "subjects": ["maths"]}, {"id": "adding_fractions_easy", "name": "Adding fractions (easy)", "subjects": ["maths"]}, {"id": "compare_two_numbers_easy", "name": "Compare two numbers (easy)", "subjects": ["maths"]}, {"id": "complete_square_a1", "name": "Complete square A1", "subjects": ["maths"]}, {"id": "complete_square_a2", "name": "Complete square A2", "subjects": ["maths"]}, {"id": "complete_square_a2_easy", "name": "Complete square A2 (easy)", "subjects": ["maths"]}, {"id": "complete_square_a3", "name": "Complete square A3", "subjects": ["maths"]}, {"id": "complete_square_a4", "name": "Complete square A4", "subjects": ["maths"]}, {"id": "complete_square_a5", "name": "Complete square A5", "subjects": ["maths"]}, {"id": "complete_square_easy", "name": "Complete square (easy)", "subjects": ["maths"]}, {"id": "complex_roots", "name": "Complex roots", "subjects": ["maths"]}, {"id": "convert_units", "name": "Convert Units", "subjects": ["maths"]}, {"id": "division_mixed_fractions", "name": "Division: mixed fractions", "subjects": ["maths"]}, {"id": "division_mixed_fractions_easy", "name": "Division: mixed fractions (easy)", "subjects": ["maths"]}, {"id": "division_remainders", "name": "Division: remainders", "subjects": ["maths"]}, {"id": "estimate", "name": "Estimate sum", "subjects": ["maths"]}, {"id": "factoring_quadratics", "name": "Factoring Quadratics", "subjects": ["maths"]}, {"id": "factorization", "name": "Factorization", "subjects": ["maths"]}, {"id": "factorizing_square_of_sum", "name": "Factorizing square of sum", "subjects": ["maths"]}, {"id": "find_sum", "name": "Find sum", "subjects": ["maths"]}, {"id": "fraction_reduction", "name": "Fraction reduction", "subjects": ["maths"]}, {"id": "fractions_to_decimals", "name": "Fractions to decimals", "subjects": ["maths"]}, {"id": "highest_common_factor", "name": "Highest Common Factor (HCF)", "subjects": ["maths"]}, {"id": "large_division", "name": "Large Division", "subjects": ["maths"]}, {"id": "linear_equation", "name": "Linear equation", "subjects": ["maths"]}, {"id": "linear_equation_collect_terms", "name": "Linear equation: The Gathering", "subjects": ["maths"]}, {"id": "linear_equation_lvl_2", "name": "Linear equation: level 2", "subjects": ["maths"]}, {"id": "logs", "name": "Logs", "subjects": ["maths"]}, {"id": "lowest_common_multiple", "name": "Lowest Common Multiple (LCM)", "subjects": ["maths"]}, {"id": "multiplication_table", "name": "Multiplication Table", "subjects": ["maths"]}, {"id": "multiply_decimals", "name": "Multiply decimals", "subjects": ["maths"]}, {"id": "multiply_hundreds", "name": "Multiply hundreds", "subjects": ["maths"]}, {"id": "multiply_two_digits", "name": "Multiply two digits", "subjects": ["maths"]}, {"id": "open_close_brackets", "name": "Open brackets | Close brackets", "subjects": ["maths"]}, {"id": "percent_change", "name": "Percent change", "subjects": ["maths"]}, {"id": "percent_of", "name": "Percent of", "subjects": ["maths"]}, {"id": "percent_of_no_calculation", "name": "Percent of (no calculation)", "subjects": ["maths"]}, {"id": "powers", "name": "Powers", "subjects": ["maths"]}, {"id": "quadratic_equation_calculator", "name": "Quadratic equation (calculator required)", "subjects": ["maths"]}, {"id": "quadratic_equation_easy", "name": "Quadratic equation (easy)", "subjects": ["maths"]}, {"id": "roots", "name": "Roots", "subjects": ["maths"]}, {"id": "round_decimals", "name": "Round decimals", "subjects": ["maths"]}, {"id": "round_whole_numbers", "name": "Round whole numbers", "subjects": ["maths"]}, {"id": "simultaneous_equations_3", "name": "Simultaneous equations 3 (easy)", "subjects": ["maths"]}, {"id": "star_count_easy", "name": "Star count (easy)", "subjects": ["maths"]}, {"id": "test", "name": "Test", "subjects": ["english"]}, {"id": "value_function_quadratic", "name": "Value of function: Quadratic", "subjects": ["maths"]}];
 const subjects=[...new Set(exercises.flatMap(e=>e.subjects))].sort();
 const label=s=>s.charAt(0).toUpperCase()+s.slice(1);
 
@@ -351,6 +2554,7 @@ let audio=null;
 
 // random.randint(a, b): inclusive on both ends
 function randint(a, b) {
+    if (a > b) throw new Error("empty range for randint(" + a + ", " + b + ")");   // Python raises ValueError
     return Math.floor(Math.random() * (b - a + 1)) + a;
 }
 
@@ -367,10 +2571,38 @@ function shuffle(arr) {
     }
 }
 
-// round(x, ndigits) for ndigits >= 0 and float x: exact-value rounding, ties to even
-// (Math.round rounds ties up and works on x * 10^n, so it differs from Python)
-function round(x, nd = 0) {
-    if (!Number.isFinite(x) || x === 0 || Math.abs(x) >= 1e21) return x; // keeps -0
+// np.random.randint(low, high): high is EXCLUSIVE; raises if low >= high (like numpy)
+function npRandint(low, high) {
+    if (low >= high) throw new Error("low >= high");
+    return randint(low, high - 1);
+}
+
+// random.triangular(low, high, mode): same formula as CPython
+function triangular(low, high, mode) {
+    let u = Math.random();
+    if (high === low) return low;                    // CPython: ZeroDivisionError -> return low
+    let c = (mode - low) / (high - low);
+    if (u > c) {
+        u = 1.0 - u;
+        c = 1.0 - c;
+        const t = low; low = high; high = t;
+    }
+    return low + (high - low) * Math.sqrt(u * c);
+}
+
+// int(x): truncation toward zero; never returns -0 (Python ints have no negative zero)
+function int(x) {
+    return Math.trunc(x) + 0;
+}
+
+// str(x) where Python holds an int when x is integer-valued and a float otherwise
+function numStr(x) {
+    return Number.isInteger(x) ? String(x) : floatStr(x);
+}
+
+// "{:.{nd}f}".format(x) for nd >= 0: exact-value rounding, ties to even
+function fixed(x, nd) {
+    if (!Number.isFinite(x) || Math.abs(x) >= 1e21 || nd > 99) return x.toFixed(Math.min(nd, 100));
     if (Number.isInteger(x * Math.pow(2, nd + 1))) {
         // x is exactly representable with nd+1 decimals, so toFixed(nd+1) is exact
         const s = x.toFixed(nd + 1);
@@ -381,10 +2613,28 @@ function round(x, nd = 0) {
             if (q % 2n === 1n) q += 1n;
             const t = q.toString().padStart(nd + 1, "0");
             const res = nd > 0 ? t.slice(0, -nd) + "." + t.slice(-nd) : t;
-            return Number((neg ? "-" : "") + res);
+            return (neg ? "-" : "") + res;
         }
     }
-    return Number(x.toFixed(nd));                    // non-tie: correctly rounded
+    return x.toFixed(nd);                            // non-tie: correctly rounded
+}
+
+// round(x, ndigits) for float x (ndigits may be negative): exact-value rounding, ties to even
+// (Math.round rounds ties up and works on x * 10^n, so it differs from Python)
+function round(x, nd = 0) {
+    if (!Number.isFinite(x) || x === 0) return x;    // keeps -0
+    if (nd >= 0) {
+        if (nd > 99 || Math.abs(x) >= 1e21) return x;
+        return Number(fixed(x, nd));
+    }
+    // negative ndigits: round to a multiple of 10^-nd
+    const neg = x < 0, ax = Math.abs(x);
+    const whole = BigInt(Math.floor(ax)), frac = ax - Math.floor(ax);
+    const p = 10n ** BigInt(-nd);
+    let q = whole / p;
+    const twice = 2n * (whole % p);
+    if (twice > p || (twice === p && (frac > 0 || q % 2n === 1n))) q += 1n;
+    return (neg ? -1 : 1) * Number(q * p);
 }
 
 // str(x) for a Python float (repr): "3.0", "-0.0", "1e-05", ...
@@ -402,7 +2652,330 @@ function floatStr(x) {
     return s.includes(".") ? s : s + ".0";
 }
 
-window.TrainingPy = { randint, choice, shuffle, round, floatStr };
+window.TrainingPy = { randint, choice, shuffle, npRandint, triangular, int, numStr, fixed, round, floatStr };
+})();
+
+// ---- core/support_module.js ----
+(() => {
+"use strict";
+
+// Port of support_module.py (all but flatten, which no converted exercise uses).
+// Helpers from window.TrainingPy are used lazily, inside the functions.
+
+// generate proper multiples to form a number for further factorization
+// Literal port: like the Python, it never returns for n == 0 (infinite loop).
+function factorize(n) {
+    const results = [];
+    let divisor = 2;
+    while (Math.abs(n) > 1) {
+        if (n % divisor === 0) {
+            results.push(divisor);
+            n = n / divisor;
+            divisor = 2;
+        } else {
+            divisor += 1;
+        }
+    }
+    return results;
+}
+
+function lists_equal(a, b) {
+    return a.length === b.length && a.every((x, i) => x === b[i]);
+}
+
+// NOTE: like the Python, this mutates the lists it is given
+function crossout(a, b) {
+    if (lists_equal(a, b)) {
+        a = [1]; b = [1];
+    } else {
+        let a_count = 0;
+        while (a_count >= 0 && a_count < a.length) {
+            let switch_ = 0;
+            let b_count = 0;
+            while (b_count >= 0 && b_count < b.length) {
+                if (b[b_count] === a[a_count]) {
+                    b.splice(b_count, 1);
+                    b_count = b.length + 1;
+                    a.splice(a_count, 1);
+                    switch_ = 1;
+                } else {
+                    b_count += 1;
+                }
+            }
+            if (switch_ === 0) {
+                a_count += 1;
+            }
+            if (!a.length) {
+                a = [1];
+            }
+            if (!b.length) {
+                b = [1];
+            }
+        }
+    }
+    let c = 1;
+    for (const i of a) c = c * i;
+    a = c;
+    c = 1;
+    for (const i of b) c = c * i;
+    b = c;
+    return [a, b];
+}
+
+function fraction_simplifier(numerator, denominator) {
+    const [top, bottom] = crossout(factorize(numerator), factorize(denominator));
+    if (bottom === 1) {
+        return String(top);
+    } else {
+        return `${top}/${bottom}`;
+    }
+}
+
+// 5 in the middle of the line turns into '+ 5'; -1.0 turns into '-1'
+function num_to_str(n, in_middle = true, remove_one = false) {
+    const P = window.TrainingPy;
+    if (!(n % 1)) {
+        n = P.int(n);
+    }
+    const s = P.numStr(n);
+    let n_str;
+    if (n < 0) {
+        n_str = s;
+    } else {
+        n_str = in_middle ? `+ ${s}` : s;
+    }
+    if (remove_one) {
+        if (Math.abs(n) === 1) {
+            n_str = n_str.split("1").join("");
+        }
+    }
+    return n_str;
+}
+
+
+// all (a, b, c, x1, x2) with integer roots, a in [-10, 9], b in [-13, 12], c in [-100, 99]
+// Literal port, including a quirk: for a == 0 the Python division raises ZeroDivisionError,
+// is swallowed by try/except, and x1 / x2 keep their values from an earlier iteration.
+function quadratics_composer() {
+    const P = window.TrainingPy;
+    const total_set = [];
+    let counter = 0;
+    let x1, x2;
+    for (let a = -10; a < 10; a++) {
+        for (let b = -13; b < 13; b++) {
+            for (let c = -100; c < 100; c++) {
+                const D = b ** 2 - 4 * a * c;
+                if (D >= 0) {
+                    const r2D = Math.sqrt(D);
+                    if (2 * a !== 0) x1 = (-b + r2D) / (2 * a);       // try / except: pass
+                    if (x1 % 1 === 0) {
+                        if (2 * a !== 0) x2 = (-b - r2D) / (2 * a);   // try / except: pass
+                        if (x2 % 1 === 0) {
+                            counter += 1;
+                            total_set.push([a, b, c, P.int(x1), P.int(x2)]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return total_set;
+}
+
+// Converts fractions like 6.25000007 (4 zeros or above) to the normal form like 6.25. Takes and returns a string.
+function re_based_decimal_fixer_zero(input_number_string) {
+    const P = window.TrainingPy;
+    let result = false;
+    const z0 = /[1-9]+\.(000)+0*[1-9]*/.test(input_number_string);
+    if (z0) {
+        result = String(P.int(P.round(Number(input_number_string), 0)));   // str(round(float(s)))
+    }
+
+    if (!result) {
+        for (let i = 1; i < input_number_string.length + 1; i++) {
+            const str_i = input_number_string.slice(0, i);
+            if (/\.[1-9]+(000)/.test(str_i)) {
+                result = str_i.slice(0, -3);
+                break;
+            }
+        }
+    }
+
+    if (!result) {
+        for (let i = 1; i < input_number_string.length + 1; i++) {
+            const str_i = input_number_string.slice(0, i);
+            if (/\.[1-9]*0+[1-9]+0+/.test(str_i)) {
+                result = str_i.slice(0, -1);
+                break;
+            }
+        }
+    }
+
+    if (!result) {
+        result = input_number_string;
+    }
+
+    return result;
+}
+
+// value: a string, or a JS number standing for a Python float.
+// Returns a string (string_output = true). With string_output = false the raw value is returned
+// (a number there means a Python int when it came out of the int() step).
+function e_remover(value, string_output = true) {
+    const P = window.TrainingPy;
+    let kind = typeof value === "string" ? "str" : "float";
+    if ((kind === "str" ? value : P.floatStr(value)).includes("e")) {
+        value = P.fixed(Number(value), 16);
+        kind = "str";
+        let fixed = false;
+        while (!fixed) {
+            if (value[value.length - 1] === "0") {
+                value = value.slice(0, -1);
+            } else {
+                fixed = true;
+            }
+        }
+    }
+    if (!(Number(value) % 1)) {
+        value = P.int(Number(value));
+        kind = "int";
+    }
+    if (string_output) {
+        value = kind === "str" ? value : kind === "int" ? String(value) : P.floatStr(value);
+    }
+    return value;
+}
+
+// accepts strings like 0.369999999997654, returns adequate versions
+function auto_round(number, ignore_zeros = true, string_output = true, restrict = false) {
+    const P = window.TrainingPy;
+    const MAX_REPS = 4;
+
+    if (restrict) {
+        const v = Number(number);
+        if (!(1e-14 < v && v < 1e14)) {
+            throw new Error("the value has to be between 10**-14 and 10**14");
+        }
+    }
+
+    const number_string = typeof number === "string" ? number : P.floatStr(number);
+
+    let prev_digit = "";
+    let counter = 1;
+    let round_pos = number_string.length;
+    let round_pos_change = false;
+    let hit_a_cluster = false;
+    let point_pos = number_string.length;
+    let round_pos_i;
+
+    const zero_condition = ignore_zeros ? (x => x !== "0") : (x => true);
+
+    for (let i = 0; i < number_string.length; i++) {
+        const digit = number_string[i];
+        if (digit === ".") {
+            point_pos = i;
+        }
+        if (digit === prev_digit && zero_condition(digit)) {
+            if (!hit_a_cluster) {
+                hit_a_cluster = true;
+                round_pos_i = i - 1;
+            }
+            counter += 1;
+        } else {
+            if (digit !== ".") {
+                counter = 1;
+                hit_a_cluster = false;
+                prev_digit = digit;
+            }
+        }
+        if (counter >= MAX_REPS) {
+            round_pos = round_pos_i;
+            round_pos_change = true;
+        }
+    }
+    let result, result_is_float;
+    if (round_pos_change) {
+        result = P.round(Number(number), round_pos - point_pos);
+        result_is_float = true;
+    } else {
+        result = number;
+        result_is_float = typeof number !== "string";
+    }
+
+    if (P.round(Number(result), 0) === Number(result)) {
+        result = P.round(Number(number), round_pos - point_pos);
+        result_is_float = true;
+    }
+
+    if (string_output) {
+        result = result_is_float ? P.floatStr(result) : String(result);
+    }
+
+    return result;
+}
+
+// ' .,-0123456789' are the numeric characters; everything from the first other char on is the variable part
+function get_var_chars(nx) {
+    const num_chars = " .,-0123456789";
+    let var_region = false;
+    let var_part = "";
+    for (const ch of nx) {
+        if (!num_chars.includes(ch)) {
+            var_region = true;
+        }
+        if (var_region) {
+            var_part += ch;
+        }
+    }
+    return var_part;
+}
+
+// ['8', '-5x', 2] returns '8 -5x + 2'
+function list_to_str(raw_list) {
+    const processed_list = [];
+    raw_list.forEach((i, n) => {
+        const var_char = get_var_chars(String(i));
+        const contains_variable = var_char ? true : false;
+        if (contains_variable) {
+            i = i.split(var_char).join("");
+        }
+        const text = String(i).trim();
+        if (!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(text)) {      // float(i) would raise
+            let warning = `Wrong data type of the element: ${i}.\n`;
+            warning += "Must be a float or an integer, a numeric string at least.\n";
+            warning += "Or something like '5x' or '-4a'. These are supported and are a reason to make this function.";
+            console.log(warning);
+            throw new TypeError("unsupported operand for %: 'str' and 'int'");   // what Python does next
+        }
+        i = Number(text);
+        const in_middle = n ? true : false;
+        i = num_to_str(i, in_middle, contains_variable) + var_char;
+        processed_list.push(i);
+    });
+    return processed_list.join(" ");
+}
+
+// given the target 5 and n=2 it would propose e.g. [2, 3] which add up to 5
+// spread controls the deviation of the generated addends
+function generate_target_sum(target, n, spread) {
+    const P = window.TrainingPy;
+    if (n <= 0) {
+        throw new Error("n must be a positive integer, or a zero to return an empty list");
+    }
+    // (np.random.randint(1, max(1, spread+1), n) * np.random.choice([1, -1], n) + target / n).astype(int)
+    const magnitudes = Array.from({ length: n }, () => P.npRandint(1, Math.max(1, spread + 1)));
+    const signs = Array.from({ length: n }, () => P.choice([1, -1]));
+    const addends = magnitudes.map((m, k) => P.int(m * signs[k] + target / n));
+    const delta = target - addends.reduce((x, y) => x + y, 0);
+    for (let i = 0; i < Math.abs(delta); i++) {
+        addends[i % n] += Math.floor(delta / Math.abs(delta));
+    }
+    return addends;
+}
+
+window.TrainingSupport = Object.assign(window.TrainingSupport || {},
+    { factorize, crossout, fraction_simplifier, num_to_str, quadratics_composer,
+      re_based_decimal_fixer_zero, e_remover, auto_round, get_var_chars, list_to_str, generate_target_sum });
 })();
 
 // ---- core/terminal.js ----
@@ -695,7 +3268,7 @@ function menuExercise() {
     say(`${label(subject)} exercises:`);
     available.forEach((e,i)=>say(`${i+1}. ${e.name}`));
 
-    ask("Choose exercise (random if empty/invalid): ",v=>{
+    ask("Choose exercise: ",v=>{
         const n=Number(v);
         const picked=Number.isInteger(n)&&n>=1&&n<=available.length
             ?available[n-1]
@@ -717,7 +3290,7 @@ function menuDifficulty() {
     say("2. Fixed time");
     say("3. Target score");
 
-    ask("Training mode (random if empty/invalid): ",v=>{
+    ask("Training mode: ",v=>{
         if(/^set\s+\d+$/i.test(v)) {
             difficulty=Math.max(1,Math.min(4,Number(v.split(/\s+/)[1])));
             say(`Difficulty: ${difficulty}`);
