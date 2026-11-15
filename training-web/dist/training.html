@@ -6,10 +6,18 @@
 <title>Training CMD</title>
 <style>
 body {
-    background:#030805;
+    background:radial-gradient(#06150b,#010402 75%);
     color:#39ff65;
     font:16px/1.45 "Courier New",monospace;
     padding:20px;
+    text-shadow:0 0 6px currentColor;
+    animation:flicker 5s infinite;
+}
+body::after {
+    content:"";
+    position:fixed;inset:0;
+    pointer-events:none;
+    background:repeating-linear-gradient(0deg,#0004 0 1px,transparent 1px 3px);
 }
 #terminal {
     max-width:900px;
@@ -17,19 +25,24 @@ body {
     margin:auto;
     padding:22px;
     border:1px solid #17602d;
-    background:#041009;
-    box-shadow:0 0 28px #0b2a14;
+    border-radius:6px;
+    background:#041009cc;
+    box-shadow:0 0 40px #0b2a14,inset 0 0 60px #000a;
 }
 #output {white-space:pre-wrap;overflow-wrap:anywhere}
 #entry {display:flex;gap:10px;margin-top:8px}
 #prompt {white-space:pre}
 input {
     flex:1;min-width:0;border:0;outline:0;
-    background:transparent;color:#39ff65;
-    font:inherit;caret-color:#39ff65;
+    background:transparent;color:inherit;
+    font:inherit;text-shadow:inherit;
+    caret-color:#39ff65;caret-shape:block;
 }
+::selection {background:#39ff65;color:#000;text-shadow:none}
 .good {color:#a0ffad}
 .bad {color:#ff8585}
+@keyframes flicker {0%,100%{opacity:1} 50%{opacity:.96} 52%{opacity:1} 90%{opacity:.98}}
+@media (prefers-reduced-motion:reduce) {body{animation:none}}
 </style>
 </head>
 <body>
@@ -42,8 +55,6 @@ input {
 </div>
 
 <script>
-// JavaScript equivalent of the supplied add_negatives(difficulty) exercise.
-// The difficulty argument is retained; the supplied Python implementation does not use it.
 (() => {
 "use strict";
 
@@ -91,7 +102,10 @@ let exercise="",exerciseId="",subject="",mode=1,target=15,difficulty=0;
 let correct=0,wrong=0,started=0,question=null,task=0,score=0;
 let audio=null;
 
-// Injected by assemble.py from src/core/*.js (sorted by file name).
+// ---------------------------------------------------------------
+// CORE MODULES (src/core/<name>.js)
+// ---------------------------------------------------------------
+// ---- core/terminal.js ----
 // TERMINAL
 
 function clearScreen() {
@@ -121,6 +135,7 @@ function ask(message,fn) {
     setPrompt();
 }
 
+// ---- core/sound.js ----
 // SOUND
 
 function beep(freq,duration,delay=0) {
@@ -160,6 +175,7 @@ function failureSound() {
     beep(120,1100,750);
 }
 
+// ---- core/ascii.js ----
 // ASCII
 
 function yay() {
@@ -183,6 +199,7 @@ function boo() {
     say("    *         *","bad");
 }
 
+// ---- core/maths.js ----
 // MATHS
 
 function rand(a,b) {
@@ -206,6 +223,7 @@ function makeQuestion() {
     };
 }
 
+// ---- core/scoring.js ----
 // SCORING
 
 function accuracy() {
@@ -231,6 +249,7 @@ function stats() {
     say(`time: ${Math.floor(seconds/60)}m ${seconds%60}s`);
 }
 
+// ---- core/training.js ----
 // TRAINING
 
 function begin() {
@@ -300,6 +319,7 @@ function submitAnswer(value) {
     setPrompt();
 }
 
+// ---- core/results.js ----
 // RESULTS
 
 function finish() {
@@ -339,6 +359,7 @@ function finish() {
     setPrompt();
 }
 
+// ---- core/menus.js ----
 // MENUS
 
 function menuSubject() {
@@ -430,6 +451,7 @@ function menuDifficulty() {
     });
 }
 
+// ---- core/start.js ----
 // START
 
 function boot() {
@@ -453,6 +475,8 @@ function boot() {
         }
     );
 }
+
+
 
 // INPUT
 

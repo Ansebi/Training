@@ -1,0 +1,25 @@
+Training/
+├── assemble.py              # builds dist/training.html
+├── README.md
+├── src/
+│   ├── template.html        # page shell with {{STYLE}}, {{EXERCISES}}, {{CORE}}
+│   ├── style.css
+│   ├── core.js              # manifest: "// @include <name>" lines set load order
+│   ├── core/
+│   │   ├── terminal.js
+│   │   ├── sound.js
+│   │   ├── ascii.js
+│   │   ├── maths.js
+│   │   ├── scoring.js
+│   │   ├── training.js
+│   │   ├── results.js
+│   │   ├── menus.js
+│   │   └── start.js
+│   ├── config/
+│   │   ├── add_negatives.json   # the filename is the id
+│   │   └── ...
+│   └── exercises/
+│       ├── add_negatives.js     # registers window.TrainingExercises.add_negatives
+│       └── ...
+└── dist/
+    └── training.html        # generated, do not edit by hand

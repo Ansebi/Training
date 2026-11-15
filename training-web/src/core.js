@@ -20,8 +20,19 @@ let exercise="",exerciseId="",subject="",mode=1,target=15,difficulty=0;
 let correct=0,wrong=0,started=0,question=null,task=0,score=0;
 let audio=null;
 
-// Injected by assemble.py from src/core/*.js (sorted by file name).
-{{CORE_MODULES}}
+// ---------------------------------------------------------------
+// CORE MODULES (src/core/<name>.js)
+// ---------------------------------------------------------------
+// @include terminal
+// @include sound
+// @include ascii
+// @include maths
+// @include scoring
+// @include training
+// @include results
+// @include menus
+// @include start
+
 
 // INPUT
 

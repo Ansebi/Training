@@ -1,5 +1,3 @@
-// JavaScript equivalent of the supplied add_negatives(difficulty) exercise.
-// The difficulty argument is retained; the supplied Python implementation does not use it.
 (() => {
 "use strict";
 
