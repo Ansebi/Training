@@ -1,0 +1,10 @@
+{
+  "name": "unknown",
+  "subjects": [
+    "unknown"
+  ],
+  "enabled": false,
+  "default_difficulty": 0,
+  "standard_completion_time_sec": 1,
+  "custom_args": []
+}

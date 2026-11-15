@@ -61,24 +61,261 @@ input {
 window.TrainingExercises = window.TrainingExercises || {};
 
 function add_negatives(difficulty) {
+    const P = window.TrainingPy;
     let right_answers, input_message, prompt;
 
-    const n = Math.floor(Math.random() * (100 - 10 + 1)) + 10;
-    const n_sign = Math.floor(Math.random() * 2) === 1 ? -1 : 1;
+    const n = P.randint(10, 100);
+    const n_sign = P.randint(0, 1) === 1 ? -1 : 1;
 
-    const m = Math.floor(Math.random() * (100 - 10 + 1)) + 10;
-    const m_sign = Math.floor(Math.random() * 2) === 1 ? -1 : 1;
+    const m = P.randint(10, 100);
+    const m_sign = P.randint(0, 1) === 1 ? -1 : 1;
 
     let right_answer = n * n_sign + m * m_sign;
     right_answer = String(right_answer);
     right_answers = [right_answer];
-    input_message = String(n * n_sign) + (m_sign === 1 ? "+" : "") +
-        String(m * m_sign) + " = ";
+    input_message = m_sign === 1
+        ? String(n * n_sign) + "+" + String(m * m_sign) + " = "
+        : String(n * n_sign) + String(m * m_sign) + " = ";
 
     return { right_answers, input_message, prompt };
 }
 
 window.TrainingExercises.add_negatives = add_negatives;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function find_sum(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    input_message = "";
+    let right_answer = 0;
+
+    const n = [], n_quantity = [], input_message_raw = [];
+    for (let i = 0; i < 3; i++) {
+        n.push(P.randint(-50, 50));
+        n_quantity.push(P.randint(0, 6));
+        right_answer += n[i] * n_quantity[i];
+        for (let counter = 0; counter < n_quantity[i]; counter++) {
+            input_message_raw.push(n[i]);
+        }
+        P.shuffle(input_message_raw);
+    }
+    for (let counter = 0; counter < input_message_raw.length; counter++) {
+        input_message += " " + String(input_message_raw[counter]) + " ";
+    }
+    input_message = "sum(" + input_message + ")= ";
+    right_answers = [String(right_answer)];
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.find_sum = find_sum;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function multiplication_table(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // n*m
+    const n = P.randint(1, 11);
+    const m = P.randint(1, 11);
+    const right_answer = n * m;
+    right_answers = [String(right_answer)];
+    input_message = String(n) + " * " + String(m) + " = ";
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.multiplication_table = multiplication_table;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function multiply_decimals(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const n_sign = P.randint(0, 1) === 1 ? -1 : 1;
+
+    // np.random.randint(0, 9, size) -> digits 0..8; int("".join(...))
+    // size < 0 or size == 0 raises in Python (numpy ValueError / int("") ValueError)
+    function random_digits_to_int(size) {
+        if (size < 0) throw new Error("negative dimensions are not allowed");
+        let s = "";
+        for (let i = 0; i < size; i++) s += String(P.randint(0, 8));
+        if (s === "") throw new Error("invalid literal for int() with base 10: \x27\x27");
+        return parseInt(s, 10);
+    }
+    // 10 ** randint(-3, -1) in Python is a float
+    const POW10_NEG = { "-3": 0.001, "-2": 0.01, "-1": 0.1 };
+
+    const whole_part_n = random_digits_to_int(difficulty + P.choice([0, -1]));
+    const whole_part_m = random_digits_to_int(difficulty + P.choice([0, -1]));
+
+    const n = P.round(whole_part_n * POW10_NEG[String(P.randint(-3, -1))], 4);
+    const m = P.round(whole_part_m * POW10_NEG[String(P.randint(-3, -1))], 4);
+
+    let right_answer = P.round(n_sign * n * m, 4);
+    let is_int = false;
+    if (!(right_answer % 1)) {
+        right_answer = Math.trunc(right_answer);
+        is_int = true;
+    }
+    if (!right_answer && n_sign < 0) {
+        right_answer = 0;
+        is_int = true;
+    }
+    right_answers = [is_int ? String(right_answer) : P.floatStr(right_answer)];
+    input_message = P.floatStr(n * n_sign) + " * " + P.floatStr(m) + " = ";
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.multiply_decimals = multiply_decimals;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function multiply_hundreds(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // 26.05.2018 edition
+    let m = 1, n = 1;
+    if (P.choice([0, 0, 1, 1, 1]) === 0) {
+        n = P.randint(0, 13) * 10 ** P.randint(0, 4);
+        m = P.randint(1, 13) * 10 ** P.randint(0, 4);
+    } else {
+        while (m * n % 10 !== 0) {
+            n = P.choice([P.randint(2, 9), P.randint(11, 13)]);
+            m = P.choice([P.randint(2, 9), P.randint(11, 13)]);
+        }
+    }
+    n = n * 10 ** P.randint(0, 4);
+    m = m * 10 ** P.randint(0, 4);
+    const n_sign = P.choice([-1, 1]);
+    const m_sign = P.choice([-1, 1]);
+
+    const right_answer = n_sign * n * m_sign * m;
+    right_answers = [String(right_answer)];
+    input_message = m_sign === 1
+        ? String(n * n_sign) + " * " + String(m) + " = "
+        : String(n * n_sign) + " * (" + String(m * m_sign) + ") = ";
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.multiply_hundreds = multiply_hundreds;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function multiply_two_digits(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // n * m
+    const n = P.randint(10, 100);
+    const m = P.randint(2, 11);
+    const right_answer = n * m;
+    right_answers = [String(right_answer)];
+    input_message = String(n) + " * " + String(m) + " = ";
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.multiply_two_digits = multiply_two_digits;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function round_decimals(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    // random.uniform(a, b) == a + (b - a) * random()
+    const n = P.round(-1000 + (1000 - -1000) * Math.random(), P.randint(5, 7));
+    const dp = P.randint(0, 4);
+    let right_answer = P.round(n, dp);
+    if (!dp) {
+        right_answer = String(Math.trunc(right_answer));   // int(...)
+    } else {
+        right_answer = P.floatStr(right_answer);
+    }
+    right_answers = [right_answer];
+    // Python: 10 ** (-dp) is int 1 for dp == 0, float otherwise
+    const step = dp === 0 ? "1" : P.floatStr(Math.pow(10, -dp));
+    input_message = P.floatStr(n) + " rounded by " + step + "(" + String(dp) + " d.p.) = ";
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.round_decimals = round_decimals;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function round_whole_numbers(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const n = P.randint(1, 1000000);
+    const n_sign = P.randint(0, 1) === 1 ? -1 : 1;
+
+    const m = 10 ** P.randint(1, 5);
+    let right_answer = n_sign * Math.trunc(P.round(n / m, 0) * m);
+    right_answer = String(right_answer);
+    right_answers = [right_answer];
+    input_message = String(n * n_sign) + " rounded by " + String(m) + " = ";
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.round_whole_numbers = round_whole_numbers;
+})();
+
+(() => {
+"use strict";
+
+window.TrainingExercises = window.TrainingExercises || {};
+
+function test(difficulty) {
+    const P = window.TrainingPy;
+    let right_answers, input_message, prompt;
+
+    const right_answer = "test";
+    right_answers = [right_answer];
+    input_message = "test: ";
+
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.test = test;
 })();
 (() => {
 "use strict";
@@ -92,7 +329,7 @@ const EXIT=["bye","see ya","exit","goodbye","hasta la vista",
 "i am batman","i'll be back","nooooo"];
 
 // Injected by assemble.py from the enabled src/config/*.json files.
-const exercises=[{"id": "add_negatives", "name": "Add Negatives", "subjects": ["maths"]}];
+const exercises=[{"id": "add_negatives", "name": "Add negatives", "subjects": ["maths"]}, {"id": "find_sum", "name": "Find sum", "subjects": ["maths"]}, {"id": "multiplication_table", "name": "Multiplication Table", "subjects": ["maths"]}, {"id": "multiply_decimals", "name": "Multiply decimals", "subjects": ["maths"]}, {"id": "multiply_hundreds", "name": "Multiply hundreds", "subjects": ["maths"]}, {"id": "multiply_two_digits", "name": "Multiply two digits", "subjects": ["maths"]}, {"id": "round_decimals", "name": "Round decimals", "subjects": ["maths"]}, {"id": "round_whole_numbers", "name": "Round whole numbers", "subjects": ["maths"]}, {"id": "test", "name": "Test", "subjects": ["english"]}];
 const subjects=[...new Set(exercises.flatMap(e=>e.subjects))].sort();
 const label=s=>s.charAt(0).toUpperCase()+s.slice(1);
 
@@ -105,6 +342,69 @@ let audio=null;
 // ---------------------------------------------------------------
 // CORE MODULES (src/core/<name>.js)
 // ---------------------------------------------------------------
+// ---- core/pycompat.js ----
+(() => {
+"use strict";
+
+// Python-compatible helpers so converted exercises keep Python's exact behaviour.
+// Exercises must call these lazily (inside the exercise function), via window.TrainingPy.
+
+// random.randint(a, b): inclusive on both ends
+function randint(a, b) {
+    return Math.floor(Math.random() * (b - a + 1)) + a;
+}
+
+// random.choice(list)
+function choice(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// random.shuffle(list): in place, same algorithm as CPython
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+}
+
+// round(x, ndigits) for ndigits >= 0 and float x: exact-value rounding, ties to even
+// (Math.round rounds ties up and works on x * 10^n, so it differs from Python)
+function round(x, nd = 0) {
+    if (!Number.isFinite(x) || x === 0 || Math.abs(x) >= 1e21) return x; // keeps -0
+    if (Number.isInteger(x * Math.pow(2, nd + 1))) {
+        // x is exactly representable with nd+1 decimals, so toFixed(nd+1) is exact
+        const s = x.toFixed(nd + 1);
+        if (s.endsWith("5")) {                       // exact tie -> round half to even
+            const neg = s[0] === "-";
+            const digits = s.replace("-", "").replace(".", "").slice(0, -1);
+            let q = BigInt(digits);
+            if (q % 2n === 1n) q += 1n;
+            const t = q.toString().padStart(nd + 1, "0");
+            const res = nd > 0 ? t.slice(0, -nd) + "." + t.slice(-nd) : t;
+            return Number((neg ? "-" : "") + res);
+        }
+    }
+    return Number(x.toFixed(nd));                    // non-tie: correctly rounded
+}
+
+// str(x) for a Python float (repr): "3.0", "-0.0", "1e-05", ...
+function floatStr(x) {
+    if (Number.isNaN(x)) return "nan";
+    if (!Number.isFinite(x)) return x > 0 ? "inf" : "-inf";
+    if (Object.is(x, -0)) return "-0.0";
+    if (x === 0) return "0.0";
+    const [mant, expStr] = x.toExponential().split("e");
+    const e = parseInt(expStr, 10);
+    if (e < -4 || e >= 16) {
+        return mant + "e" + (e < 0 ? "-" : "+") + String(Math.abs(e)).padStart(2, "0");
+    }
+    const s = String(x);
+    return s.includes(".") ? s : s + ".0";
+}
+
+window.TrainingPy = { randint, choice, shuffle, round, floatStr };
+})();
+
 // ---- core/terminal.js ----
 // TERMINAL
 
@@ -373,7 +673,7 @@ function menuSubject() {
     say("Available subjects:");
     subjects.forEach((s,i)=>say(`${i+1}. ${label(s)}`));
 
-    ask("Choose subject (random if empty/invalid): ",v=>{
+    ask("Choose subject: ",v=>{
         const n=Number(v);
         subject=Number.isInteger(n)&&n>=1&&n<=subjects.length
             ?subjects[n-1]

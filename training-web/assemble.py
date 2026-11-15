@@ -17,54 +17,57 @@ INCLUDE_RE = re.compile(
 
 
 def enabled_exercises():
-    """Return (configs, module_sources) for every enabled exercise.
-
-    An exercise is identified by its file stem: config/<id>.json pairs with
-    exercises/<id>.js, and the module must register window.TrainingExercises.<id>.
-    """
+    """Return (configs, module_sources) for enabled exercise scripts."""
     configs = []
     modules = []
-    config_ids = set()
 
-    for config_path in sorted((SRC / "config").glob("*.json")):
-        exercise_id = config_path.stem
-        config_ids.add(exercise_id)
-        config = json.loads(config_path.read_text(encoding="utf-8"))
+    config_dir = SRC / "config"
+    default_path = config_dir / "default.json"
 
-        if "id" in config and config["id"] != exercise_id:
-            raise ValueError(
-                f"{config_path.name}: 'id' {config['id']!r} does not match "
-                f"filename; remove the 'id' field"
+    default_config = None
+    if default_path.is_file():
+        default_config = json.loads(default_path.read_text(encoding="utf-8"))
+
+    for module_path in sorted((SRC / "exercises").glob("*.js")):
+        exercise_id = module_path.stem
+
+        if not EXERCISE_ID_RE.match(exercise_id):
+            print(f"warning: invalid exercise ID: {module_path.name}")
+            continue
+
+        config_path = config_dir / f"{exercise_id}.json"
+
+        if config_path.is_file():
+            config = json.loads(config_path.read_text(encoding="utf-8"))
+        elif default_config is not None:
+            print(
+                f"warning: {config_path.name} missing; "
+                "using default.json"
             )
+            config = default_config
+        else:
+            print(
+                f"warning: {config_path.name} and default.json missing; "
+                "skipping"
+            )
+            continue
 
         if not config.get("enabled", False):
             continue
 
-        if not EXERCISE_ID_RE.match(exercise_id):
-            raise ValueError(
-                f"{config_path.name}: filename must be a valid identifier "
-                f"(letters, digits, underscores; not starting with a digit)"
-            )
-
-        module_path = SRC / "exercises" / f"{exercise_id}.js"
-        if not module_path.is_file():
-            raise FileNotFoundError(
-                f"Enabled exercise {exercise_id!r} has no module: {module_path}"
-            )
         source = module_path.read_text(encoding="utf-8").rstrip()
+
         if not re.search(
-            rf"window\.TrainingExercises\.{re.escape(exercise_id)}\s*=", source
+            rf"window\.TrainingExercises\.{re.escape(exercise_id)}\s*=",
+            source
         ):
-            raise ValueError(
-                f"{module_path.name} never assigns "
-                f"window.TrainingExercises.{exercise_id}"
-            )
+            print(f"warning: {module_path.name} does not register its exercise")
+            continue
 
         subjects = config.get("subjects")
         if not isinstance(subjects, list) or not subjects:
-            raise ValueError(
-                f"Exercise {exercise_id!r} needs a non-empty 'subjects' list"
-            )
+            print(f"warning: {exercise_id} has no valid subjects; skipping")
+            continue
 
         configs.append({
             "id": exercise_id,
@@ -72,10 +75,6 @@ def enabled_exercises():
             "subjects": [str(s).strip().lower() for s in subjects],
         })
         modules.append(source)
-
-    for module_path in sorted((SRC / "exercises").glob("*.js")):
-        if module_path.stem not in config_ids:
-            print(f"warning: {module_path.name} has no config/{module_path.stem}.json")
 
     return configs, modules
 

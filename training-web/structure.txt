@@ -6,6 +6,7 @@ Training/
 │   ├── style.css
 │   ├── core.js              # manifest: "// @include <name>" lines set load order
 │   ├── core/
+│   │   ├── pycompat.js
 │   │   ├── terminal.js
 │   │   ├── sound.js
 │   │   ├── ascii.js
