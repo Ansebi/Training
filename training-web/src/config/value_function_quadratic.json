@@ -1,0 +1,10 @@
+{
+  "name": "Value of function: Quadratic",
+  "subjects": [
+    "maths"
+  ],
+  "enabled": true,
+  "default_difficulty": 0,
+  "standard_completion_time_sec": 5,
+  "custom_args": []
+}

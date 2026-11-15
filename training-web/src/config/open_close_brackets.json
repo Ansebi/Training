@@ -1,0 +1,10 @@
+{
+  "name": "Open brackets | Close brackets",
+  "subjects": [
+    "maths"
+  ],
+  "enabled": true,
+  "default_difficulty": 6,
+  "standard_completion_time_sec": 15,
+  "custom_args": []
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Simultaneous equations 3 (easy)",
+  "subjects": [
+    "maths"
+  ],
+  "enabled": true,
+  "default_difficulty": 0,
+  "standard_completion_time_sec": 300,
+  "custom_args": []
+}

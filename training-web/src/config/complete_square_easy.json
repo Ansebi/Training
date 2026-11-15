@@ -1,0 +1,10 @@
+{
+  "name": "Complete square (easy)",
+  "subjects": [
+    "maths"
+  ],
+  "enabled": true,
+  "default_difficulty": 0,
+  "standard_completion_time_sec": 10,
+  "custom_args": []
+}

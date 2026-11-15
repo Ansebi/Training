@@ -1,0 +1,10 @@
+{
+  "name": "Linear equation: The Gathering",
+  "subjects": [
+    "maths"
+  ],
+  "enabled": true,
+  "default_difficulty": 0,
+  "standard_completion_time_sec": 30,
+  "custom_args": []
+}

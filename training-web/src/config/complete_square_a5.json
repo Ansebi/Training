@@ -1,0 +1,10 @@
+{
+  "name": "Complete square A5",
+  "subjects": [
+    "maths"
+  ],
+  "enabled": true,
+  "default_difficulty": 0,
+  "standard_completion_time_sec": 45,
+  "custom_args": []
+}

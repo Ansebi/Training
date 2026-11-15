@@ -1,0 +1,10 @@
+{
+  "name": "Lowest Common Multiple (LCM)",
+  "subjects": [
+    "maths"
+  ],
+  "enabled": true,
+  "default_difficulty": 0,
+  "standard_completion_time_sec": 60,
+  "custom_args": []
+}

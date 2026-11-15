@@ -1,0 +1,10 @@
+{
+  "name": "Large Division",
+  "subjects": [
+    "maths"
+  ],
+  "enabled": true,
+  "default_difficulty": 0,
+  "standard_completion_time_sec": 120,
+  "custom_args": []
+}
