@@ -1,132 +1,25 @@
-:root {
-  color-scheme: dark;
-
-  --bg: #080b08;
-  --panel: #0d130d;
-  --green: #55ff75;
-  --dim: #279b42;
-  --white: #d7f5d7;
-  --red: #ff5555;
-  --yellow: #ffe66d;
-}
-
-* {
-  box-sizing: border-box;
-}
-
 body {
-  margin: 0;
-  min-height: 100vh;
-  padding: 24px;
-
-  background: #030503;
-  color: var(--green);
-
-  font-family: Consolas, "Courier New", monospace;
-
-  display: grid;
-  place-items: center;
+    background:#030805;
+    color:#39ff65;
+    font:16px/1.45 "Courier New",monospace;
+    padding:20px;
 }
-
 #terminal {
-  width: min(900px, 100%);
-  min-height: 580px;
-
-  background: var(--bg);
-  border: 1px solid var(--dim);
-
-  box-shadow: 0 0 28px #174b2470;
-
-  display: flex;
-  flex-direction: column;
+    max-width:900px;
+    min-height:85vh;
+    margin:auto;
+    padding:22px;
+    border:1px solid #17602d;
+    background:#041009;
+    box-shadow:0 0 28px #0b2a14;
 }
-
-.terminal-header {
-  display: flex;
-  justify-content: space-between;
-
-  padding: 12px 16px;
-
-  background: var(--panel);
-  border-bottom: 1px solid var(--dim);
-
-  font-size: 13px;
-  letter-spacing: 1px;
+#output {white-space:pre-wrap;overflow-wrap:anywhere}
+#entry {display:flex;gap:10px;margin-top:8px}
+#prompt {white-space:pre}
+input {
+    flex:1;min-width:0;border:0;outline:0;
+    background:transparent;color:#39ff65;
+    font:inherit;caret-color:#39ff65;
 }
-
-#status {
-  color: var(--yellow);
-}
-
-#screen {
-  flex: 1;
-  padding: 24px;
-
-  overflow-y: auto;
-  white-space: pre-wrap;
-  line-height: 1.65;
-}
-
-#command-form {
-  display: flex;
-  gap: 10px;
-
-  padding: 14px 16px;
-
-  border-top: 1px solid var(--dim);
-  background: var(--panel);
-}
-
-#command-form label {
-  white-space: nowrap;
-}
-
-#command-input {
-  min-width: 0;
-  flex: 1;
-
-  border: 0;
-  outline: 0;
-
-  background: transparent;
-  color: var(--green);
-
-  font: inherit;
-  caret-color: var(--green);
-}
-
-.line {
-  margin: 0 0 7px;
-}
-
-.dim {
-  color: var(--dim);
-}
-
-.correct {
-  color: var(--green);
-}
-
-.wrong {
-  color: var(--red);
-}
-
-.highlight {
-  color: var(--yellow);
-}
-
-@media (max-width: 600px) {
-  body {
-    padding: 0;
-  }
-
-  #terminal {
-    min-height: 100vh;
-    border-left: 0;
-    border-right: 0;
-  }
-
-  #screen {
-    padding: 18px;
-  }
-}
+.good {color:#a0ffad}
+.bad {color:#ff8585}

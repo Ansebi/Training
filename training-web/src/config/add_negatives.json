@@ -1,17 +1,9 @@
-
 {
   "id": "add_negatives",
   "name": "Add Negatives",
   "subjects": ["maths"],
   "enabled": true,
   "default_difficulty": 1,
-  "min_difficulty": 1,
-  "max_difficulty": 10,
-  "increase_on_correct": true,
-  "decrease_on_wrong": true,
   "standard_completion_time_sec": 8,
-  "settings": {
-    "min_value": -10,
-    "max_value": 10
-  }
+  "custom_args": []
 }

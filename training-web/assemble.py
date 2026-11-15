@@ -1,284 +1,76 @@
+#!/usr/bin/env python3
+"""Assemble the modular Training CMD project into dist/training.html."""
 
+from pathlib import Path
 import json
 import re
-from pathlib import Path
-
 
 ROOT = Path(__file__).resolve().parent
-
 SRC = ROOT / "src"
-CONFIG_DIR = SRC / "config"
-EXERCISES_DIR = SRC / "exercises"
-
-TEMPLATE_FILE = SRC / "template.html"
-CSS_FILE = SRC / "style.css"
-CORE_FILE = SRC / "core.js"
-
-DIST_DIR = ROOT / "dist"
-OUTPUT_FILE = DIST_DIR / "training.html"
-
-# This marker separates the registration API from the rest of core.js.
-# Exercise modules must be inserted between these two sections.
-CORE_INSERTION_MARKER = "// CONFIGURATION"
 
 
-def read_text(path):
-    if not path.is_file():
-        raise FileNotFoundError(f"Missing file: {path}")
-
-    return path.read_text(encoding="utf-8")
-
-
-def load_config(path):
-    try:
-        data = json.loads(read_text(path))
-    except json.JSONDecodeError as error:
-        raise ValueError(
-            f"Invalid JSON in {path.name}: {error}"
-        )
-
-    if not isinstance(data, dict):
-        raise ValueError(
-            f"{path.name} must contain a JSON object."
-        )
-
-    return data
-
-
-def discover_configs():
-    if not CONFIG_DIR.is_dir():
-        raise FileNotFoundError(
-            f"Configuration folder not found: {CONFIG_DIR}"
-        )
-
-    files = sorted(CONFIG_DIR.rglob("*.json"))
-
-    if not files:
-        raise RuntimeError("No configuration files found.")
-
+def enabled_exercises():
+    """Return (configs, module_sources) for every enabled exercise."""
     configs = []
-
-    for path in files:
-        config = load_config(path)
-
-        exercise_id = config.get("id")
-
-        if not isinstance(exercise_id, str) or not exercise_id:
-            raise ValueError(
-                f"{path.name}: missing or invalid 'id'."
+    modules = []
+    for config_path in sorted((SRC / "config").glob("*.json")):
+        config = json.loads(config_path.read_text(encoding="utf-8"))
+        if not config.get("enabled", False):
+            continue
+        exercise_id = config["id"]
+        module_path = SRC / "exercises" / f"{exercise_id}.js"
+        if not module_path.is_file():
+            raise FileNotFoundError(
+                f"Enabled exercise {exercise_id!r} has no module: {module_path}"
             )
-
-        if not re.fullmatch(r"[a-zA-Z0-9_-]+", exercise_id):
-            raise ValueError(
-                f"{path.name}: invalid exercise ID '{exercise_id}'."
-            )
-
-        if path.stem != exercise_id:
-            raise ValueError(
-                f"{path.name}: filename must match ID "
-                f"'{exercise_id}'."
-            )
-
-        if not isinstance(config.get("name"), str):
-            raise ValueError(
-                f"{path.name}: missing exercise name."
-            )
-
         subjects = config.get("subjects")
-
-        if (
-            not isinstance(subjects, list)
-            or not subjects
-            or not all(
-                isinstance(subject, str) and subject.strip()
-                for subject in subjects
-            )
-        ):
+        if not isinstance(subjects, list) or not subjects:
             raise ValueError(
-                f"{path.name}: subjects must be a non-empty "
-                f"array of strings."
+                f"Exercise {exercise_id!r} needs a non-empty 'subjects' list"
             )
-
-        if len(set(subjects)) != len(subjects):
-            raise ValueError(
-                f"{path.name}: duplicate subject entries."
-            )
-
-        configs.append(config)
-
-    return configs
+        configs.append({
+            "id": exercise_id,
+            "name": config.get("name", exercise_id),
+            "subjects": [str(s).strip().lower() for s in subjects],
+        })
+        modules.append(module_path.read_text(encoding="utf-8").rstrip())
+    return configs, modules
 
 
-def discover_exercises():
-    if not EXERCISES_DIR.is_dir():
-        raise FileNotFoundError(
-            f"Exercise folder not found: {EXERCISES_DIR}"
-        )
-
-    files = sorted(EXERCISES_DIR.rglob("*.js"))
-
-    if not files:
-        raise RuntimeError("No exercise modules found.")
-
-    return files
+def core_modules():
+    """Return the sources of src/core/*.js, ordered by file name."""
+    paths = sorted((SRC / "core").glob("*.js"))
+    if not paths:
+        raise FileNotFoundError(f"No core modules found in {SRC / 'core'}")
+    return [p.read_text(encoding="utf-8").rstrip() for p in paths]
 
 
-def validate_pairing(configs, exercise_files):
-    config_ids = {config["id"] for config in configs}
-    module_ids = {path.stem for path in exercise_files}
+def main():
+    template = (SRC / "template.html").read_text(encoding="utf-8")
+    configs, modules = enabled_exercises()
 
-    missing_modules = config_ids - module_ids
-    missing_configs = module_ids - config_ids
-
-    if missing_modules:
-        raise RuntimeError(
-            "Missing JavaScript modules for: "
-            + ", ".join(sorted(missing_modules))
-        )
-
-    if missing_configs:
-        raise RuntimeError(
-            "Missing JSON configurations for: "
-            + ", ".join(sorted(missing_configs))
-        )
-
-    if len(module_ids) != len(exercise_files):
-        raise RuntimeError(
-            "Duplicate exercise IDs found in module filenames."
-        )
-
-    if len(config_ids) != len(configs):
-        raise RuntimeError(
-            "Duplicate exercise IDs found in configurations."
-        )
-
-
-def split_core(core):
-    """
-    Split core.js into two sections:
-
-    1. Registration API:
-       Defines Training.registerExercise() and the registry.
-
-    2. Game core:
-       Loads configurations and starts the game.
-
-    Exercise modules are inserted between these sections.
-    """
-
-    if core.count(CORE_INSERTION_MARKER) != 1:
-        raise RuntimeError(
-            "core.js must contain exactly one "
-            f"'{CORE_INSERTION_MARKER}' marker."
-        )
-
-    core_prefix, marker, core_suffix = core.partition(
-        CORE_INSERTION_MARKER
-    )
-
-    if not marker:
-        raise RuntimeError(
-            "Could not find the core insertion marker."
-        )
-
-    return core_prefix, marker + core_suffix
-
-
-def embed_config(configs):
-    # Prevent JSON strings from accidentally terminating
-    # the surrounding HTML script element.
-    serialized = json.dumps(
-        configs,
-        ensure_ascii=False,
-        separators=(",", ":")
-    )
-
-    serialized = (
-        serialized
-        .replace("<", "\\u003c")
-        .replace(">", "\\u003e")
-        .replace("&", "\\u0026")
-    )
-
-    return f"window.TRAINING_CONFIG = {serialized};"
-
-
-def build_scripts(core, exercise_files):
-    core_prefix, core_suffix = split_core(core)
-
-    scripts = []
-
-    # 1. Start the core and define the Training API.
-    scripts.append(core_prefix)
-
-    # 2. Register every discovered exercise.
-    for path in exercise_files:
-        print(f"Adding module: {path.relative_to(ROOT)}")
-        scripts.append(read_text(path))
-
-    # 3. Continue the core: load configurations and start the game.
-    scripts.append(core_suffix)
-
-    return "\n\n".join(scripts)
-
-
-def assemble():
-    print("TRAINING BUILD")
-    print("-------------")
-
-    template = read_text(TEMPLATE_FILE)
-    css = read_text(CSS_FILE)
-    core = read_text(CORE_FILE)
-
-    configs = discover_configs()
-    exercise_files = discover_exercises()
-
-    validate_pairing(configs, exercise_files)
-
-    print(f"Configurations found: {len(configs)}")
-    print(f"Exercise modules found: {len(exercise_files)}")
-
-    # Build JavaScript in the correct execution order.
-    script_content = build_scripts(core, exercise_files)
+    # "</" is escaped so the JSON can never close the surrounding <script>.
+    config_json = json.dumps(configs, ensure_ascii=False).replace("</", "<\\/")
+    core = (SRC / "core.js").read_text(encoding="utf-8").rstrip()
+    core = core.replace("{{CORE_MODULES}}", "\n\n".join(core_modules()))
+    core = core.replace("{{EXERCISE_CONFIG}}", config_json)
 
     replacements = {
-        "/*__CSS__*/": css,
-        "/*__CONFIG__*/": embed_config(configs),
-        "/*__SCRIPTS__*/": script_content
+        "{{STYLE}}": (SRC / "style.css").read_text(encoding="utf-8").rstrip(),
+        "{{EXERCISES}}": "\n\n".join(modules),
+        "{{CORE}}": core,
     }
-
     html = template
-
-    for placeholder, content in replacements.items():
-        if placeholder not in html:
-            raise RuntimeError(
-                f"Template placeholder missing: {placeholder}"
-            )
-
-        html = html.replace(placeholder, content, 1)
-
-    # Ensure no placeholder was accidentally left behind.
-    for placeholder in replacements:
-        if placeholder in html:
-            raise RuntimeError(
-                f"Unresolved placeholder: {placeholder}"
-            )
-
-    DIST_DIR.mkdir(parents=True, exist_ok=True)
-
-    OUTPUT_FILE.write_text(html, encoding="utf-8")
-
-    print("")
-    print("BUILD SUCCESSFUL")
-    print(f"Output: {OUTPUT_FILE}")
-    print(f"Exercises: {len(configs)}")
+    for marker, content in replacements.items():
+        html = html.replace(marker, content)
+    unresolved = re.findall(r"\{\{[A-Z_]+\}\}", html)
+    if unresolved:
+        raise ValueError(f"Unresolved template markers: {unresolved}")
+    destination = ROOT / "dist" / "training.html"
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(html, encoding="utf-8")
+    print(f"Built {destination.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
-    try:
-        assemble()
-    except Exception as error:
-        print("")
-        print("BUILD FAILED")
-        print(error)
-        raise SystemExit(1)
+    main()

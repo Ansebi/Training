@@ -1,41 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#080b08">
-  <title>Training</title>
-
-  <style>
-    /*__CSS__*/
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Training CMD</title>
+<style>
+{{STYLE}}
+</style>
 </head>
 <body>
+<div id="terminal">
+    <div id="output"></div>
+    <div id="entry">
+        <span id="prompt">&gt;</span>
+        <input id="cmd" autocomplete="off" spellcheck="false" autofocus>
+    </div>
+</div>
 
-  <main id="terminal">
-    <header class="terminal-header">
-      <span>TRAINING.EXE</span>
-      <span id="status">BOOTING</span>
-    </header>
-
-    <section id="screen" aria-live="polite"></section>
-
-    <form id="command-form" autocomplete="off">
-      <label for="command-input">C:\TRAINING&gt;</label>
-      <input
-        id="command-input"
-        type="text"
-        spellcheck="false"
-        autocomplete="off"
-        autofocus
-      >
-    </form>
-  </main>
-
-  <script>
-    /*__CONFIG__*/
-
-    /*__SCRIPTS__*/
-  </script>
+<script>
+{{EXERCISES}}
+{{CORE}}
+</script>
 </body>
 </html>

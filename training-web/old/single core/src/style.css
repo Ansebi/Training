@@ -1,0 +1,25 @@
+body {
+    background:#030805;
+    color:#39ff65;
+    font:16px/1.45 "Courier New",monospace;
+    padding:20px;
+}
+#terminal {
+    max-width:900px;
+    min-height:85vh;
+    margin:auto;
+    padding:22px;
+    border:1px solid #17602d;
+    background:#041009;
+    box-shadow:0 0 28px #0b2a14;
+}
+#output {white-space:pre-wrap;overflow-wrap:anywhere}
+#entry {display:flex;gap:10px;margin-top:8px}
+#prompt {white-space:pre}
+input {
+    flex:1;min-width:0;border:0;outline:0;
+    background:transparent;color:#39ff65;
+    font:inherit;caret-color:#39ff65;
+}
+.good {color:#a0ffad}
+.bad {color:#ff8585}

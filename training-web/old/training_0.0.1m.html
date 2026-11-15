@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Training CMD</title>
+<style>
+body {
+    background:#030805;
+    color:#39ff65;
+    font:16px/1.45 "Courier New",monospace;
+    padding:20px;
+}
+#terminal {
+    max-width:900px;
+    min-height:85vh;
+    margin:auto;
+    padding:22px;
+    border:1px solid #17602d;
+    background:#041009;
+    box-shadow:0 0 28px #0b2a14;
+}
+#output {white-space:pre-wrap;overflow-wrap:anywhere}
+#entry {display:flex;gap:10px;margin-top:8px}
+#prompt {white-space:pre}
+input {
+    flex:1;min-width:0;border:0;outline:0;
+    background:transparent;color:#39ff65;
+    font:inherit;caret-color:#39ff65;
+}
+.good {color:#a0ffad}
+.bad {color:#ff8585}
+</style>
+</head>
+<body>
+<div id="terminal">
+    <div id="output"></div>
+    <div id="entry">
+        <span id="prompt">&gt;</span>
+        <input id="cmd" autocomplete="off" spellcheck="false" autofocus>
+    </div>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+const output=document.querySelector("#output");
+const cmd=document.querySelector("#cmd");
+const promptEl=document.querySelector("#prompt");
+
+const EXIT=["bye","see ya","exit","goodbye","hasta la vista",
+"farewell","dosviduli","off","finish","gg","home",
+"i am batman","i'll be back","nooooo"];
+
+const exercises=[
+"Add negatives",
+"Multiplication table",
+"Highest Common Factor (HCF)",
+"Lowest Common Multiple (LCM)"
+];
+
+let state="boot",handler=null;
+let user=localStorage.getItem("training.lastUser")||"";
+let exercise="",mode=1,target=15,difficulty=0;
+let correct=0,wrong=0,started=0,question=null,task=0,score=0;
+let audio=null;
+
+// TERMINAL
+
+function clearScreen() {
+    output.innerHTML="";
+}
+
+function say(text="",cls="") {
+    const d=document.createElement("div");
+    d.textContent=text;
+    if(cls)d.className=cls;
+    output.append(d);
+    window.scrollTo(0,document.body.scrollHeight);
+}
+
+function blank(){say()}
+
+function setPrompt(text="> ") {
+    promptEl.textContent=text;
+    cmd.value="";
+    cmd.disabled=false;
+    cmd.focus();
+}
+
+function ask(message,fn) {
+    say(message);
+    handler=fn;
+    setPrompt();
+}
+
+// SOUND
+
+function beep(freq,duration,delay=0) {
+    try {
+        const C=window.AudioContext||window.webkitAudioContext;
+        if(!C)return;
+
+        audio ||= new C();
+        if(audio.state==="suspended")audio.resume();
+
+        const oscillator=audio.createOscillator();
+        const gain=audio.createGain();
+        const t=audio.currentTime+delay/1000;
+
+        oscillator.type="square";
+        oscillator.frequency.value=freq;
+        gain.gain.setValueAtTime(.045,t);
+        gain.gain.exponentialRampToValueAtTime(
+            .001,t+duration/1000
+        );
+
+        oscillator.connect(gain);
+        gain.connect(audio.destination);
+        oscillator.start(t);
+        oscillator.stop(t+duration/1000);
+    } catch(e){}
+}
+
+function successSound() {
+    beep(1000,80);
+    beep(1200,50,95);
+}
+
+function failureSound() {
+    beep(200,300);
+    beep(170,400,320);
+    beep(120,1100,750);
+}
+
+// ASCII
+
+function yay() {
+    successSound();
+    say("      **   **","good");
+    say("      **   **","good");
+    say("");
+    say("    *         *","good");
+    say("     *       *","good");
+    say("      *******","good");
+}
+
+function boo() {
+    failureSound();
+    say("     * *   * *","bad");
+    say("      *     *","bad");
+    say("     * *   * *","bad");
+    say("");
+    say("      *******","bad");
+    say("     *       *","bad");
+    say("    *         *","bad");
+}
+
+// MATHS
+
+function rand(a,b) {
+    return Math.floor(Math.random()*(b-a+1))+a;
+}
+
+function gcd(a,b) {
+    while(b)[a,b]=[b,a%b];
+    return Math.abs(a);
+}
+
+function makeQuestion() {
+    let a,b,answer,text;
+    const factor=difficulty?Math.min(4,difficulty):1;
+
+    switch(exercise) {
+        case "Add negatives":
+            a=rand(10,50*factor)*(Math.random()<.5?-1:1);
+            b=rand(10,50*factor)*(Math.random()<.5?-1:1);
+            answer=a+b;
+            text=`${a}${b<0?"":"+"}${b} = `;
+            break;
+    }
+
+    return {answer:String(answer),text};
+}
+
+// SCORING
+
+function accuracy() {
+    return correct+wrong
+        ?Math.round(correct/(correct+wrong)*1000)/10
+        :0;
+}
+
+function getScore() {
+    const seconds=Math.max(1,Math.floor((Date.now()-started)/1000));
+    const speed=5*correct/seconds;
+
+    return Math.round(
+        (correct**2-wrong**2)*
+        (accuracy()/100)**2*speed
+    );
+}
+
+function stats() {
+    score=getScore();
+    const seconds=Math.floor((Date.now()-started)/1000);
+    say(`points: ${score}       accuracy: ${accuracy()}%`);
+    say(`time: ${Math.floor(seconds/60)}m ${seconds%60}s`);
+}
+
+// TRAINING
+
+function begin() {
+    clearScreen();
+
+    correct=0;
+    wrong=0;
+    score=0;
+    task=0;
+    started=Date.now();
+
+    say(`TRAINING: ${exercise}`,"good");
+    say(`Difficulty: ${difficulty||"Normal"}`);
+    nextQuestion();
+}
+
+function nextQuestion() {
+    if(mode===1&&task>=target)return finish();
+    if(mode===2&&(Date.now()-started)/1000>=target)return finish();
+    if(mode===3&&getScore()>=target)return finish();
+
+    // Clear the previous question and its feedback.
+    clearScreen();
+
+    task++;
+    question=makeQuestion();
+
+    stats();
+    blank();
+
+    if(mode===1)say(`tasks complete: ${task-1}/${target}`);
+
+    if(mode===2) {
+        const r=Math.max(0,target-Math.floor((Date.now()-started)/1000));
+        say(`time remaining: ${Math.floor(r/60)}:${String(r%60).padStart(2,"0")}`);
+    }
+
+    if(mode===3)say(`target score: ${target}`);
+
+    say(question.text);
+    state="answer";
+    handler=null;
+    setPrompt();
+}
+
+function submitAnswer(value) {
+    if(EXIT.includes(value.toLowerCase()))return finish();
+
+    if(value.trim()===question.answer) {
+        correct++;
+        say("Yeap — well done :)","good");
+        yay();
+    } else {
+        wrong++;
+        say("Nope.","bad");
+        boo();
+        say(`Your answer: ${value}`);
+        say(`The correct answer is: ${question.answer}`,"good");
+    }
+
+    stats();
+    blank();
+    say("Press ENTER for next task");
+
+    state="between";
+    handler=null;
+    setPrompt();
+}
+
+// RESULTS
+
+function finish() {
+    clearScreen();
+
+    const seconds=Math.floor((Date.now()-started)/1000);
+    score=getScore();
+
+    say("========== TRAINING RESULTS ==========","good");
+    say(exercise);
+    say(`${accuracy()}% accuracy`);
+    say(`${Math.floor(seconds/60)} min ${seconds%60} sec`);
+    say(`${correct} correct, ${wrong} incorrect`);
+    say(`Your score: ${score}`,"good");
+    blank();
+
+    const history=JSON.parse(
+        localStorage.getItem("training.history")||"[]"
+    );
+
+    history.push({
+        date:new Date().toISOString(),
+        user,exercise,difficulty,seconds,
+        correct,wrong,accuracy:accuracy(),score
+    });
+
+    localStorage.setItem(
+        "training.history",
+        JSON.stringify(history.slice(-300))
+    );
+
+    say("Session saved in this browser.");
+    say("Press ENTER to return to the menu.");
+
+    state="return";
+    handler=null;
+    setPrompt();
+}
+
+// MENUS
+
+function menuSubject() {
+    clearScreen();
+    state="subject";
+
+    say(`Welcome, ${user}.`);
+    say("Available subject: Maths");
+    say("1. Maths");
+
+    ask("Choose subject: ",v=>{
+        if(v!=="1"&&!/^maths$/i.test(v)) {
+            say("Only Maths is implemented.");
+            return menuSubject();
+        }
+        menuExercise();
+    });
+}
+
+function menuExercise() {
+    clearScreen();
+    state="exercise";
+
+    say("Maths exercises:");
+    exercises.forEach((e,i)=>say(`${i+1}. ${e}`));
+
+    ask("Choose exercise: ",v=>{
+        const n=Number(v);
+
+        if(!Number.isInteger(n)||n<1||n>exercises.length) {
+            say("Invalid choice.");
+            return menuExercise();
+        }
+
+        exercise=exercises[n-1];
+        menuDifficulty();
+    });
+}
+
+function menuDifficulty() {
+    clearScreen();
+
+    say(`Selected: ${exercise}`);
+    say('Set difficulty with "set N" (1–4).');
+    say("Default is Normal.");
+    say("1. Fixed number of tasks");
+    say("2. Fixed time");
+    say("3. Target score");
+
+    ask("Choose training mode (or set N): ",v=>{
+        if(/^set\s+\d+$/i.test(v)) {
+            difficulty=Math.max(1,Math.min(4,Number(v.split(/\s+/)[1])));
+            say(`Difficulty set to ${difficulty}.`);
+            return menuDifficulty();
+        }
+
+        if(!["1","2","3"].includes(v)) {
+            say("Please enter 1, 2, or 3.");
+            return menuDifficulty();
+        }
+
+        mode=Number(v);
+
+        const message=mode===1
+            ?"Number of tasks (default 15): "
+            :mode===2
+                ?"Time in minutes (default 1): "
+                :"Target score (default 100): ";
+
+        ask(message,n=>{
+            n=n.trim();
+
+            if(mode===1)target=n?Math.max(1,parseInt(n,10)||15):15;
+            if(mode===2)target=(n?Math.max(.1,Number(n)||1):1)*60;
+            if(mode===3)target=n?Math.max(1,parseInt(n,10)||100):100;
+
+            begin();
+        });
+    });
+}
+
+// START
+
+function boot() {
+    clearScreen();
+
+    say("TRAINING CMD");
+    say("============");
+    say("A little practice. A little pressure.");
+    blank();
+
+    ask(
+        user
+            ?`Welcome back, ${user}. Press ENTER or enter a new name: `
+            :"Sign in with your name: ",
+        v=>{
+            if(v.trim())user=v.trim();
+            if(!user)user="Fighter";
+
+            localStorage.setItem("training.lastUser",user);
+            menuSubject();
+        }
+    );
+}
+
+// INPUT
+
+cmd.addEventListener("keydown",event=>{
+    if(event.key!=="Enter")return;
+
+    event.preventDefault();
+
+    const value=cmd.value;
+    say(promptEl.textContent+value);
+
+    cmd.value="";
+    cmd.disabled=true;
+
+    if(handler) {
+        const fn=handler;
+        handler=null;
+        fn(value);
+        return;
+    }
+
+    if(state==="answer")submitAnswer(value);
+    else if(state==="between")nextQuestion();
+    else if(state==="return")menuSubject();
+});
+
+boot();
+
+})();
+</script>
+</body>
+</html>

@@ -1,26 +1,27 @@
-Training.registerExercise({
-  id: "add_negatives",
+// JavaScript equivalent of the supplied add_negatives(difficulty) exercise.
+// The difficulty argument is retained; the supplied Python implementation does not use it.
+(() => {
+"use strict";
 
-  generate(rand, difficulty, settings) {
-    const n = rand(10, 100);
-    const m = rand(10, 100);
+window.TrainingExercises = window.TrainingExercises || {};
 
-    const nSign = rand(0, 1) === 1 ? -1 : 1;
-    const mSign = rand(0, 1) === 1 ? -1 : 1;
+function add_negatives(difficulty) {
+    let right_answers, input_message, prompt;
 
-    const signedN = n * nSign;
-    const signedM = m * mSign;
+    const n = Math.floor(Math.random() * (100 - 10 + 1)) + 10;
+    const n_sign = Math.floor(Math.random() * 2) === 1 ? -1 : 1;
 
-    const answer = String(signedN + signedM);
+    const m = Math.floor(Math.random() * (100 - 10 + 1)) + 10;
+    const m_sign = Math.floor(Math.random() * 2) === 1 ? -1 : 1;
 
-    const prompt =
-      mSign === 1
-        ? `${signedN}+${signedM} = `
-        : `${signedN}${signedM} = `;
+    let right_answer = n * n_sign + m * m_sign;
+    right_answer = String(right_answer);
+    right_answers = [right_answer];
+    input_message = String(n * n_sign) + (m_sign === 1 ? "+" : "") +
+        String(m * m_sign) + " = ";
 
-    return {
-      prompt,
-      answer
-    };
-  }
-});
+    return { right_answers, input_message, prompt };
+}
+
+window.TrainingExercises.add_negatives = add_negatives;
+})();

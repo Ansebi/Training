@@ -1,0 +1,10 @@
+
+{
+  "id": "add_negatives",
+  "name": "Add Negatives",
+  "subjects": ["maths"],
+  "enabled": true,
+  "default_difficulty": 1,
+  "standard_completion_time_sec": 8,
+  "custom_args": []
+}
