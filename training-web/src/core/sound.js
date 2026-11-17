@@ -1,5 +1,5 @@
 // SOUND
-
+const VOLUME = 0.5
 function beep(freq,duration,delay=0) {
     try {
         const C=window.AudioContext||window.webkitAudioContext;
@@ -14,7 +14,7 @@ function beep(freq,duration,delay=0) {
 
         oscillator.type="square";
         oscillator.frequency.value=freq;
-        gain.gain.setValueAtTime(5.,t);
+        gain.gain.setValueAtTime(VOLUME,t);
         gain.gain.exponentialRampToValueAtTime(
             .001,t+duration/1000
         );

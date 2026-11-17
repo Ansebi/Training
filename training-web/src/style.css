@@ -14,7 +14,7 @@ body::after {
 }
 #terminal {
     max-width:900px;
-    min-height:85vh;
+    min-height:35vh;
     margin:auto;
     padding:22px;
     border:1px solid #17602d;

@@ -21,7 +21,7 @@ body::after {
 }
 #terminal {
     max-width:900px;
-    min-height:85vh;
+    min-height:35vh;
     margin:auto;
     padding:22px;
     border:1px solid #17602d;
@@ -3010,7 +3010,7 @@ function ask(message,fn) {
 
 // ---- core/sound.js ----
 // SOUND
-
+const VOLUME = 0.5
 function beep(freq,duration,delay=0) {
     try {
         const C=window.AudioContext||window.webkitAudioContext;
@@ -3025,7 +3025,7 @@ function beep(freq,duration,delay=0) {
 
         oscillator.type="square";
         oscillator.frequency.value=freq;
-        gain.gain.setValueAtTime(5.,t);
+        gain.gain.setValueAtTime(VOLUME,t);
         gain.gain.exponentialRampToValueAtTime(
             .001,t+duration/1000
         );
