@@ -9,7 +9,7 @@ body {
     margin:0;box-sizing:border-box;height:100dvh;overflow:hidden;
     background:radial-gradient(#0a2a14,#000 70%);
     color:#39ff65;
-    font:16px/1.45 "Courier New",monospace;
+    font:24px/1.45 "Courier New",monospace;
     padding:20px;
     text-shadow:0 0 2px,0 0 14px;
     animation:flicker 5s infinite;
@@ -21,14 +21,26 @@ body::after {
     background:radial-gradient(#0000 50%,#000c),repeating-linear-gradient(#0004 0 1px,#0000 0 3px);
 }
 #terminal {
+    position:relative;
     display:flex;flex-direction:column;box-sizing:border-box;height:100%;
     max-width:900px;
     margin:auto;
-    padding:22px;
+    padding:40px 28px;
     border:2px solid #39ff6544;
     border-radius:2%/3%;
     background:#0008;
     box-shadow:0 0 80px #39ff6522,inset 0 0 90px #000;
+}
+#terminal::before {
+    content:"";
+    position:absolute;inset:6px;
+    border-radius:inherit;
+    pointer-events:none;
+    background:
+        linear-gradient(#39ff65,#39ff65) 0 0/calc(var(--p,0)*98%) 15px no-repeat,
+        linear-gradient(#39ff65,#39ff65) 0 100%/calc(var(--p,0)*98%) 15px no-repeat;
+    filter:drop-shadow(0 0 5px #39ff65);
+    transition:background-size .3s linear;
 }
 #output {
     white-space:pre-wrap;overflow-wrap:anywhere;
@@ -3015,6 +3027,21 @@ function ask(message,fn) {
     handler=fn;
     setPrompt();
 }
+
+// PROGRESS BAR: one fraction, depending on the mode.
+function progress() {
+    let f=0;
+    if(state==="answer"||state==="between") {
+        const done=state==="answer"?task-1:task;
+        if(mode===1)f=done/target;
+        else if(mode===2)f=(Date.now()-started)/1000/target;
+        else if(mode===3)f=getScore()/target;
+    }
+    f=Math.min(1,Math.max(0,f||0));
+    document.body.style.setProperty("--p",f);
+}
+
+setInterval(progress,250);
 
 // ---- core/sound.js ----
 // SOUND
