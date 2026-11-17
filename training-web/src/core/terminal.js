@@ -9,7 +9,7 @@ function say(text="",cls="") {
     d.textContent=text;
     if(cls)d.className=cls;
     output.append(d);
-    window.scrollTo(0,document.body.scrollHeight);
+    output.scrollTop=output.scrollHeight;
 }
 
 function blank(){say()}
@@ -18,7 +18,7 @@ function setPrompt(text="> ") {
     promptEl.textContent=text;
     cmd.value="";
     cmd.disabled=false;
-    cmd.focus();
+    cmd.focus({preventScroll:true});
 }
 
 function ask(message,fn) {

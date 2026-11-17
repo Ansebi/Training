@@ -6,30 +6,38 @@
 <title>Training CMD</title>
 <style>
 body {
-    background:radial-gradient(#06150b,#010402 75%);
+    margin:0;box-sizing:border-box;height:100dvh;overflow:hidden;
+    background:radial-gradient(#0a2a14,#000 70%);
     color:#39ff65;
-    font:32px/1.45 "Courier New",monospace;
+    font:16px/1.45 "Courier New",monospace;
     padding:20px;
-    text-shadow:0 0 6px currentColor;
+    text-shadow:0 0 2px,0 0 14px;
     animation:flicker 5s infinite;
 }
 body::after {
     content:"";
     position:fixed;inset:0;
     pointer-events:none;
-    background:repeating-linear-gradient(0deg,#0004 0 1px,transparent 1px 3px);
+    background:radial-gradient(#0000 50%,#000c),repeating-linear-gradient(#0004 0 1px,#0000 0 3px);
 }
 #terminal {
+    display:flex;flex-direction:column;box-sizing:border-box;height:100%;
     max-width:900px;
-    min-height:85vh;
     margin:auto;
     padding:22px;
-    border:3px solid #17602d;
-    border-radius:6px;
-    background:#041009cc;
-    box-shadow:0 0 40px #0b2a14,inset 0 0 60px #000a;
+    border:2px solid #39ff6544;
+    border-radius:2%/3%;
+    background:#0008;
+    box-shadow:0 0 80px #39ff6522,inset 0 0 90px #000;
 }
-#output {white-space:pre-wrap;overflow-wrap:anywhere}
+#output {
+    white-space:pre-wrap;overflow-wrap:anywhere;
+    flex:1;min-height:0;overflow-y:auto;
+    scrollbar-width:thin;scrollbar-color:#39ff65 #39ff6511;
+}
+#output::-webkit-scrollbar {width:14px}
+#output::-webkit-scrollbar-track {background:#39ff6511}
+#output::-webkit-scrollbar-thumb {background:#39ff65;box-shadow:0 0 10px #39ff65}
 #entry {display:flex;gap:10px;margin-top:8px}
 #prompt {white-space:pre}
 input {
@@ -41,7 +49,7 @@ input {
 ::selection {background:#39ff65;color:#000;text-shadow:none}
 .good {color:#a0ffad}
 .bad {color:#ff8585}
-@keyframes flicker {0%,100%{opacity:1} 50%{opacity:.96} 52%{opacity:1} 90%{opacity:.98}}
+@keyframes flicker {0%,100%{opacity:1} 50%{opacity:.85} 52%{opacity:1} 90%{opacity:.9}}
 @media (prefers-reduced-motion:reduce) {body{animation:none}}
 </style>
 </head>
@@ -2990,7 +2998,7 @@ function say(text="",cls="") {
     d.textContent=text;
     if(cls)d.className=cls;
     output.append(d);
-    window.scrollTo(0,document.body.scrollHeight);
+    output.scrollTop=output.scrollHeight;
 }
 
 function blank(){say()}
@@ -2999,7 +3007,7 @@ function setPrompt(text="> ") {
     promptEl.textContent=text;
     cmd.value="";
     cmd.disabled=false;
-    cmd.focus();
+    cmd.focus({preventScroll:true});
 }
 
 function ask(message,fn) {
@@ -3373,6 +3381,12 @@ cmd.addEventListener("keydown",event=>{
     else if(state==="between")nextQuestion();
     else if(state==="return")menuSubject();
 });
+
+// Keep the terminal inside the visible area when the iPad keyboard opens.
+if(window.visualViewport)visualViewport.onresize=()=>{
+    document.body.style.height=visualViewport.height+"px";
+    scrollTo(0,0);
+};
 
 boot();
 

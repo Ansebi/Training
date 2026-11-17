@@ -61,6 +61,12 @@ cmd.addEventListener("keydown",event=>{
     else if(state==="return")menuSubject();
 });
 
+// Keep the terminal inside the visible area when the iPad keyboard opens.
+if(window.visualViewport)visualViewport.onresize=()=>{
+    document.body.style.height=visualViewport.height+"px";
+    scrollTo(0,0);
+};
+
 boot();
 
 })();
